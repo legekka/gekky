@@ -38,10 +38,13 @@ module.exports = (bot, message, cmdpref, callback) => {
         if (lower == cmdpref + 'inv') {
             message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
         }
+        /* TODO: Sankaku cache folder deleting
         if (lower == cmdpref + 'delcache') {
             code = execSync('rm -f ' + SankakuPath + '*');
             message.channel.sendMessage('Cache deleted.');
         }
+        */
+
         /* TODO: DELETE THIS
         if (message.content.startsWith(cmdpref + 'send')) {
             sendFile(message, message.content.substr(6));
