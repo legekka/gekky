@@ -23,7 +23,7 @@ bot.on('ready', function () {
 
 bot.on('message', (message) => {
     delete require.cache[require.resolve('./module/talk.js')];
-    require('./module/talk.js')(bot, message, tsun);
+    require('./module/talk.js')(bot, message, tsun, cmdpref);
 
     delete require.cache[require.resolve('./module/command.js')];
     require('./module/command.js')(bot, message, cmdpref, (response) => {

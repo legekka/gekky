@@ -49,7 +49,7 @@ function loadDialogs() {
 }
 
 loadDialogs();
-module.exports = (bot, message, tsun) => {
+module.exports = (bot, message, tsun, cmdpref) => {
     var lower = message.content.toLowerCase();
     delete require.cache[require.resolve('./blacklist.js')];
     if (!require('./blacklist.js').isBlacklisted(message)) {
@@ -146,6 +146,19 @@ module.exports = (bot, message, tsun) => {
                 }
                 if (lower.indexOf('ayy') >= 0) {
                     message.channel.sendMessage('Ayy ayy ayy...');
+                }
+                if (lower.startsWith(cmdpref) &&
+                    !lower.startsWith(cmdpref + 'news') &&
+                    !lower.startsWith(cmdpref + 'sankaku') &&
+                    !lower.startsWith(cmdpref + 'help') &&
+                    !lower.startsWith(cmdpref + 'touhou') &&
+                    !lower.startsWith(cmdpref + 'sanka5') &&
+                    !lower.startsWith(cmdpref + 'nhentai') &&
+                    !lower.startsWith(cmdpref + 'weather') &&
+                    !lower.startsWith(cmdpref + 'response') &&
+                    message.author.username != 'legekka') {
+                    message.channel.sendMessage(dg.random(dg.proba));
+                    messageConsoleLog(message, true);
                 }
             }
         }
