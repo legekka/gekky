@@ -1,6 +1,6 @@
 // blacklist.js
 // checking if message author or channel is blacklisted
-// updating lists realtime
+// updating lists in realtime
 
 var fs = require('fs');
 var path1 = '../data/blacklist.txt';

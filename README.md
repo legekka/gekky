@@ -4,7 +4,7 @@ Gekky [BOT]
 Parts:
 - Core - core.js
 - Talking parts (Tsundere included) - talk.js
-- Command handler
+- Command handler - command.js
 - Blacklists - blacklist.js
 - Friends
 
