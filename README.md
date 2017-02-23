@@ -1,5 +1,5 @@
-Gekky [BOT] v4.0
-----------------
+Gekky [BOT]
+-----------
 
 Parts:
 - Core - core.js
