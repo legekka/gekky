@@ -74,12 +74,29 @@ module.exports = (bot, message, cmdpref, callback) => {
             });
         }
         // blacklist commands
-        if (lower.startsWith(cmdpref + 'bluser') ) {
+        if (lower.startsWith(cmdpref + 'addbluser')) {
             delete require.cache[require.resolve('./blacklist.js')];
-            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>',''),(msg) => {
+            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.sendMessage(msg);
             });
-            
+        }
+        if (lower.startsWith(cmdpref + 'rembluser')) {
+            delete require.cache[require.resolve('./blacklist.js')];
+            require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                message.channel.sendMessage(msg);
+            });
+        }
+        if (lower.startsWith(cmdpref + 'addblchannel')) {
+            delete require.cache[require.resolve('./blacklist.js')];
+            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                message.channel.sendMessage(msg);
+            });
+        }
+        if (lower.startsWith(cmdpref + 'remblchannel')) {
+            delete require.cache[require.resolve('./blacklist.js')];
+            require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                message.channel.sendMessage(msg);
+            });
         }
         /* TODO: We have time for this part
         if (lower == cmdpref + 'cache') {
@@ -93,7 +110,7 @@ module.exports = (bot, message, cmdpref, callback) => {
         }
         if (lower == cmdpref + 'close') {
             exit(2);
-        }
+        }-
         */
     }
 }
