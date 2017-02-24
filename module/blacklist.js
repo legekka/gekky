@@ -27,17 +27,11 @@ module.exports = {
     },
     addUser: (id, callback) => {
         if (!isNaN(id)) {
-        text = fs.readFileSync(path1).toString().split('\n');
-        var contains = false;
-        for (i in text) {
-            if (text[i] == id) {
-                contains = true;
-            }
-        }
-        if (!contains) {
-            text.push(id);
-            var msg = id + ' userid hozzáadva a blacklisthez.';
-            fs.writeFileSync(path1, (text) => {
+            text = fs.readFileSync(path1).toString().split('\n');
+            var contains = false;
+            if (text.indexOf(id) < 0) {
+                text.push(id);
+                var msg = id + ' userid hozzáadva a blacklisthez.';
                 var i = 0;
                 var str = '';
                 while (i < text.length - 1) {
@@ -45,11 +39,10 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                return str;
-            });
-        } else {
-            var msg = id + ' userid már szerepel a blacklistben.';
-        }
+                fs.writeFileSync(path1, str);
+            } else {
+                var msg = id + ' userid már szerepel a blacklistben.';
+            }
         } else {
             var msg = 'Helytelen ID.'
         }
