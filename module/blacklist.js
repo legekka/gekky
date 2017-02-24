@@ -25,24 +25,44 @@ module.exports = {
         }
         return blacklisted;
     },
-    addUser: (id,callback) => {
-        // TODO: adding user id to blacklist.txt
+    addUser: (id, callback) => {
+        if (!isNaN(id)) {
         text = fs.readFileSync(path1).toString().split('\n');
         var contains = false;
         for (i in text) {
             if (text[i] == id) {
-                // INNEN
+                contains = true;
             }
         }
+        if (!contains) {
+            text.push(id);
+            var msg = id + ' userid hozzáadva a blacklisthez.';
+            fs.writeFileSync(path1, (text) => {
+                var i = 0;
+                var str = '';
+                while (i < text.length - 1) {
+                    str += text[i] + '\n';
+                    i++;
+                }
+                str += text[text.length - 1];
+                return str;
+            });
+        } else {
+            var msg = id + ' userid már szerepel a blacklistben.';
+        }
+        } else {
+            var msg = 'Helytelen ID.'
+        }
+        return callback(msg);
         // help: text.indexOf(id) < 0
     },
-    remUser: (id,callback) => {
+    remUser: (id, callback) => {
         // TODO: remove user id from blacklist.txt
     },
-    addChannel: (id,callback) => {
+    addChannel: (id, callback) => {
         // TODO: adding channel id to channel_blacklist.txt
     },
-    remChannel: (id,callback) => {
+    remChannel: (id, callback) => {
         // TODO: removing channel id from channel_blacklist.txt
     }
 }

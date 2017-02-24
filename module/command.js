@@ -76,7 +76,9 @@ module.exports = (bot, message, cmdpref, callback) => {
         // blacklist commands
         if (lower.startsWith(cmdpref + 'bluser') ) {
             delete require.cache[require.resolve('./blacklist.js')];
-            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>',''),)
+            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>',''),(msg) => {
+                message.channel.sendMessage(msg);
+            });
             
         }
         /* TODO: We have time for this part
