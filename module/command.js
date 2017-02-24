@@ -32,7 +32,7 @@ module.exports = (bot, message, cmdpref, callback) => {
         }
         */
         if (message.content.startsWith(cmdpref + 'motd')) {
-            motd = lower.substr(6);
+            motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
             bot.user.setGame(motd);
         }
         if (lower == cmdpref + 'inv') {

@@ -158,7 +158,6 @@ module.exports = (bot, message, tsun, cmdpref) => {
                     !lower.startsWith(cmdpref + 'response') &&
                     message.author.username != 'legekka') {
                     message.channel.sendMessage(dg.random(dg.proba));
-                    messageConsoleLog(message, true);
                 }
             }
         }
