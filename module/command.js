@@ -73,6 +73,12 @@ module.exports = (bot, message, cmdpref, callback) => {
                 'tsun': tsun
             });
         }
+        // blacklist commands
+        if (lower.startsWith(cmdpref + 'bluser') ) {
+            delete require.cache[require.resolve('./blacklist.js')];
+            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>',''),)
+            
+        }
         /* TODO: We have time for this part
         if (lower == cmdpref + 'cache') {
             checkCache(SankakuPath, 50, message);

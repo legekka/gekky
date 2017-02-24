@@ -27,6 +27,13 @@ module.exports = {
     },
     addUser: (id,callback) => {
         // TODO: adding user id to blacklist.txt
+        text = fs.readFileSync(path1).toString().split('\n');
+        var contains = false;
+        for (i in text) {
+            if (text[i] == id) {
+                // INNEN
+            }
+        }
         // help: text.indexOf(id) < 0
     },
     remUser: (id,callback) => {
