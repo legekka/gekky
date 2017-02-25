@@ -6,19 +6,15 @@ Parts:
 - Talking parts (Tsundere included) - talk.js
 - Command handler - command.js
 - Blacklists - blacklist.js
-- Friends
-
-- Reminders
-- Sankaku engine, nhentai engine
-- Weather part
-- Workdayinfo part
-
-- Updater
-
-- Prime game
-
+- Friends - friends.js
+- Reminders - reminders.js
+- Sankaku engine, nhentai engine - sankaku.js
+- Weather part - weather.js
+- Workdayinfo part - workdayinfo.js
+- Updater - frame.js
+- Prime game - primegame.js
 - Console I/O - console.js
-- Message logging
+- Message logging - log.js
 
 Core Part - core.js
 -------------------
