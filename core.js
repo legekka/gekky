@@ -38,7 +38,7 @@ bot.on('message', (message) => {
         }
     });
     // frame rész, egyenlőre nem tudtam másképp megoldani hogy működjön. Majd még gondolkozom rajta
-    if (message.channel.id == ch.main && message.author.id == '143399021740818432' && message.content.toLowerCase() == '!stop') {
+    if (message.channel.id == ch.main && message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
         process.exit(1);
     }
     if (message.channel.id == ch.main && message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {

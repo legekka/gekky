@@ -6,6 +6,8 @@ const Discord = require('discord.js');
 var exec = require('child_process').exec;
 var bot = new Discord.Client();
 
+var motd = '{Frame}';
+
 var isStarted = false;  // events
 var Reloading = false;
 var Starting = false;
@@ -20,9 +22,9 @@ bot.login(token);
 
 bot.on('ready', function () {
     if (!isStarted) {
-        bot.channels.get(main).sendMessage('{Frame}[online]');
-        console.log('{Frame}[online]');
-        bot.user.setGame('{Frame}');
+        bot.channels.get(main).sendMessage('{Frame} online');
+        console.log('{Frame} online');
+        bot.user.setGame(motd);
     }
 });
 
@@ -36,6 +38,8 @@ bot.on('message', (message) => {
             } else {
                 bot.channels.get(main).sendMessage('{Frame} Gekky is already running...');
             }
+        } else if ((lower == '!reload' || lower == '!close' || lower == '!stop') && !isStarted) {
+            bot.channels.get(main).sendMessage('{Frame} Gekky is not running...');
         }
     }
 })
@@ -49,8 +53,8 @@ function frame() {
     gekky.on('exit', (code) => {
         if (code == 1) {
             isStarted = false;
-            bot.channels.get(main).sendMessage('{Frame} Stopping gekky...');
-            bot.user.setGame('{Frame}');
+            bot.channels.get(main).sendMessage('{Frame} Gekky has been stopped...');
+            bot.user.setGame(motd);
         }
         if (code == 2) {
             Reloading = true;
