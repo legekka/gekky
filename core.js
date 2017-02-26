@@ -37,7 +37,6 @@ bot.on('message', (message) => {
             }
         }
     });
-    console.log(message.content);
     // frame rész, egyenlőre nem tudtam másképp megoldani hogy működjön. Majd még gondolkozom rajta
     if (message.channel.id == ch.main && message.author.id == '143399021740818432' && message.content.toLowerCase() == '!stop') {
         process.exit(1);

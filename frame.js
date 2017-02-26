@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 var exec = require('child_process').exec;
 var bot = new Discord.Client();
 
-var isStarted = false;
+var isStarted = false;  // events
 var Reloading = false;
 var Starting = false;
 
@@ -26,7 +26,6 @@ bot.on('ready', function () {
     }
 });
 
-
 bot.on('message', (message) => {
     if (message.channel.id == main && (message.author.id == '143399021740818432' || message.author.id == bot.user.id)) {
         var lower = message.content.toLowerCase();
@@ -40,7 +39,6 @@ bot.on('message', (message) => {
         }
     }
 })
-
 
 function frame() {
     isStarted = true;
