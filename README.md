@@ -2,6 +2,7 @@ Gekky [BOT]
 -----------
 
 Parts:
+- Frame - frame.js
 - Core - core.js
 - Talking parts (Tsundere included) - talk.js
 - Command handler - command.js
@@ -11,10 +12,18 @@ Parts:
 - Sankaku engine, nhentai engine - sankaku.js
 - Weather part - weather.js
 - Workdayinfo part - workdayinfo.js
-- Updater - frame.js
 - Prime game - primegame.js
 - Console I/O - console.js
 - Message logging - log.js
+
+Frame Part - frame.js
+---------------------
+
+- a core-t futtató keretrendszer
+- újraindítja a botot
+- lezárja a botot
+- elindítja a botot
+- frissíti
 
 Core Part - core.js
 -------------------
