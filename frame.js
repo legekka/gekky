@@ -3,14 +3,18 @@
 
 const fs = require('fs');
 const Discord = require('discord.js');
+var exec = require('child_process').exec;
 var bot = new Discord.Client();
-const clr = require('clear-require');
 
 var isStarted = false;
+var Reloading = false;
+var Starting = false;
 
 var token = fs.readFileSync('../data/profile.txt').toString();
 
 var main = '281188840084078594';
+
+var gekky;  // The child process
 
 bot.login(token);
 
@@ -22,53 +26,48 @@ bot.on('ready', function () {
     }
 });
 
+
 bot.on('message', (message) => {
-    if (message.channel.id == main && message.author.id == '143399021740818432') {
+    if (message.channel.id == main && (message.author.id == '143399021740818432' || message.author.id == bot.user.id)) {
         var lower = message.content.toLowerCase();
         if (lower == '!start') {
             if (!isStarted) {
-                isStarted = true;
-                message.channel.sendMessage('{Frame} Starting...').then(() => {
-                    bot.destroy().then(() => {
-                        require('./core.js')(bot, token);
-                        console.log(require.cache);
-                    });
-                });
+                bot.channels.get(main).sendMessage('{Frame} Starting gekky...');
+                Starting = true;
             } else {
-                message.channel.sendMessage('{Frame} Már fut gekky.');
-            }
-        }
-        if (lower == '!stop') {
-            if (isStarted) {
-                isStarted = false;
-                message.channel.sendMessage('{Frame} Stopping...');
-                shutdownAll();
-                console.log(require.cache);
-                bot.user.setGame('{Frame}');
-            } else {
-                message.channel.sendMessage('{Frame} Nincs elindítva gekky.');
-            }
-        }
-        if (lower == '!reload') {
-            if (isStarted) {
-                message.channel.sendMessage('{Frame} Reloading...').then(() => {
-                    bot.destroy().then(() => {
-                        shutdownAll();
-                        require('./core.js')(bot, token);
-                    });
-                });
-            } else {
-                message.channel.sendMessage('{Frame} Nincs elindítva gekky.');
+                bot.channels.get(main).sendMessage('{Frame} Gekky is already running...');
             }
         }
     }
 })
 
 
-function shutdownAll() {
-    clr('./core.js');   
-    clr('./module/command.js');
-    clr('./module/talk.js');
-    clr('./module/blacklist.js');
-    clr('./module/console.js'); 
+function frame() {
+    isStarted = true;
+    gekky = exec('node ./core.js');
+    gekky.stdout.on('data', function (data) {
+        console.log(data.substr(0, data.length - 1));
+    });
+    gekky.on('exit', (code) => {
+        if (code == 1) {
+            isStarted = false;
+            bot.channels.get(main).sendMessage('{Frame} Stopping gekky...');
+            bot.user.setGame('{Frame}');
+        }
+        if (code == 2) {
+            Reloading = true;
+            bot.channels.get(main).sendMessage('{Frame} Reloading gekky...');
+        }
+    });
 }
+
+setInterval(() => {
+    if (Starting) {
+        Starting = false;
+        frame();
+    }
+    if (Reloading) {
+        Reloading = false;
+        frame();
+    }
+},1000);
