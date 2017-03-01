@@ -9,6 +9,7 @@ Parts:
 - Blacklists - blacklist.js
 - Friends - friends.js
 - Reminders - reminders.js
+- Assistant mode - assistant.js
 - Sankaku engine, nhentai engine - sankaku.js
 - Weather part - weather.js
 - Workdayinfo part - workdayinfo.js

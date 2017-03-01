@@ -36,17 +36,22 @@ module.exports = (bot, message, cmdpref, callback) => {
             });
         }
         */
+        if (lower.startsWith(cmdpref + 'weather')) {
+            delete require.cache[require.resolve('./weather.js')];
+            require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
+                message.channel.sendEmbed(response);
+            });
+        }
         if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
             delete require.cache[require.resolve('./workdayinfo.js')];
             require('./workdayinfo.js')((response) => {
                 message.channel.sendEmbed(response);
             });
         }
-        /*
         if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
-            ohio(message);
+            delete require.cache[require.resolve('./assistant.js')];
+            require('./assistant.js').ohio(message);
         }
-        */
         if (message.content.startsWith(cmdpref + 'motd')) {
             motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
             bot.user.setGame(motd);
