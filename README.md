@@ -49,7 +49,39 @@ Command handler - command.js
 - TODO-ban minden nem működő parancs
 - tsundere switcher, cmdpref changer
 
+Blacklist - blacklist.js
+------------------------
+
+- channel és userid alapján
+- valósidejű ellenőrzés
+- bővíthető lista
+
+Assistant mode - assistant.js
+-----------------------------
+
+- későbbi projekt
+- ohio rész, reggeli összegző
+
+Weather Part - weather.js
+-------------------------
+
+- időjárás információk különböző városokról
+
+Workdayinfo Part - workdayinfo.js
+---------------------------------
+
+- munkahelyi időbeosztással kapcsolatos adatok
+- indulásig hátralévő idő
+
 Console I/O - console.js
 ------------------------
 
-- egyenlőre semmi, csak tesztelésre lett kialakítva
+- bezárás, újraindítás
+- egyenlőre ennyi, későbbiekben globális változók módosítása, üzenetküldés, stb
+
+Message logging - log.js
+------------------------
+
+- üzenet logolás konzolra
+- színes, parancsok szerinti kiíratás
+- logolás fájlba

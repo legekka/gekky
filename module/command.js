@@ -23,14 +23,18 @@ module.exports = (bot, message, cmdpref, callback) => {
                 var number = lower.split(' ')[1];
                 if (!isNaN(number)) {
                     var number = parseInt(number);
-                    message.channel.bulkDelete(number + 1).then(() => {
-                        message.channel.sendMessage(number + ' üzenet törölve.').then((message) => {
-                            var msg = message;
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 2000);
-                        })
-                    });
+                    if (number > 50) {
+                        message.channel.sendMessage('Maximum 50 üzenet törölhető.');
+                    } else {
+                        message.channel.bulkDelete(number + 1).then(() => {
+                            message.channel.sendMessage(number + ' üzenet törölve.').then((message) => {
+                                var msg = message;
+                                setTimeout(() => {
+                                    msg.delete();
+                                }, 2000);
+                            })
+                        });
+                    }
                 } else {
                     message.channel.sendMessage('Helytelen paraméter: ' + number);
                 }
