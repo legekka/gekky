@@ -18,6 +18,8 @@ var main = '281188840084078594';
 
 var gekky;  // The child process
 
+var inp = process.openStdin();  // for the child process inputs
+
 bot.login(token);
 
 bot.on('ready', function () {
@@ -83,3 +85,28 @@ setInterval(() => {
         frame();
     }
 }, 1000);
+
+inp.addListener('data', (d) => {
+    var cmd = d.toString().toLowerCase().trim();
+    if (!cmd.startsWith('!')) {
+        if (isStarted) {
+            gekky.stdin.write(d);
+        } else {
+            console.log('{Frame} Gekky is not started...');
+        }
+    } else {
+        // frame commands goes here
+        if (cmd == '!start') {
+            if (!isStarted) {
+                console.log('{Frame} Starting gekky...');
+                bot.channels.get(main).sendMessage('{Frame} Starting gekky...');
+                Starting = true;
+            } else {
+                console.log('{Frame} Gekky is already running...');
+            }
+        } else if (cmd == '!isstarted') {
+            isStarted = !isStarted;
+            console.log('{Frame} isStarted = ' + isStarted);
+        }
+    }
+})

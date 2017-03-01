@@ -5,6 +5,13 @@ var ownerid = '143399021740818432';
 
 module.exports = (bot, message, cmdpref, callback) => {
     var lower = message.content.toLowerCase();
+    
+    if (lower.startsWith(cmdpref + 'weather')) {
+        delete require.cache[require.resolve('./weather.js')];
+        require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
+            message.channel.sendEmbed(response);
+        });
+    }
 
     // legekka-only commands
     if (message.author.id == ownerid) {
@@ -36,12 +43,6 @@ module.exports = (bot, message, cmdpref, callback) => {
             });
         }
         */
-        if (lower.startsWith(cmdpref + 'weather')) {
-            delete require.cache[require.resolve('./weather.js')];
-            require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
-                message.channel.sendEmbed(response);
-            });
-        }
         if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
             delete require.cache[require.resolve('./workdayinfo.js')];
             require('./workdayinfo.js')((response) => {
