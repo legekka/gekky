@@ -4,7 +4,7 @@
 const fs = require('fs');
 const c = require('chalk');
 
-var path = './data/log.txt';
+var path = '../log.txt';
 
 module.exports = {
     messageConsoleLog: (bot, message, ch, is_a_command) => {
