@@ -4,135 +4,157 @@
 var ownerid = '143399021740818432';
 
 module.exports = (bot, message, cmdpref, callback) => {
-    var lower = message.content.toLowerCase();
+    delete require.cache[require.resolve('./blacklist.js')];
+    if (!require('./blacklist.js').isBlacklisted(message)) {
+        var lower = message.content.toLowerCase();
+        var is_a_command = false;
+        var mode;
+        if (lower.startsWith(cmdpref + 'weather')) {
+            delete require.cache[require.resolve('./weather.js')];
+            require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
+                message.channel.sendEmbed(response);
+            });
+            is_a_command = true;
+        }
+
+        // legekka-only commands
+        if (message.author.id == ownerid) {
+            if (lower.startsWith(cmdpref + 'del')) {
+                var number = lower.split(' ')[1];
+                if (!isNaN(number)) {
+                    var number = parseInt(number);
+                    message.channel.bulkDelete(number + 1);
+                    message.channel.sendMessage(number + ' üzenet törölve.').then((message) => {
+                        var msg = message;
+                        setTimeout(() => {
+                            msg.delete();
+                        }, 2000);
+                    })
+                } else {
+                    message.channel.sendMessage('Helytelen paraméter: ' + number);
+                }
+                is_a_command = true;
+            }
+            /* TODO: these modules
+            if (lower.startsWith(cmdpref + 'secret')) {
+                giveSecret(lower.split(' ')[1], lower.split(' ')[2], (response) => {
+                    message.channel.sendMessage(response);
+                });
+            }
     
-    if (lower.startsWith(cmdpref + 'weather')) {
-        delete require.cache[require.resolve('./weather.js')];
-        require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
-            message.channel.sendEmbed(response);
-        });
-    }
-
-    // legekka-only commands
-    if (message.author.id == ownerid) {
-        if (lower.startsWith(cmdpref + 'del')) {
-            var number = lower.split(' ')[1];
-            if (!isNaN(number)) {
-                var number = parseInt(number);
-                message.channel.bulkDelete(number + 1);
-                message.channel.sendMessage(number + ' üzenet törölve.').then((message) => {
-                    var msg = message;
-                    setTimeout(() => {
-                        msg.delete();
-                    }, 2000);
-                })
-            } else {
-                message.channel.sendMessage('Helytelen paraméter: ' + number);
+            if (lower.startsWith(cmdpref + 'remlist')) {
+                reminderLister(lower.substr(cmdpref.length + 'remlist'.length + 1), (response) => {
+                    message.channel.sendEmbed(response);
+                });
             }
-        }
-        /* TODO: these modules
-        if (lower.startsWith(cmdpref + 'secret')) {
-            giveSecret(lower.split(' ')[1], lower.split(' ')[2], (response) => {
-                message.channel.sendMessage(response);
-            });
-        }
-
-        if (lower.startsWith(cmdpref + 'remlist')) {
-            reminderLister(lower.substr(cmdpref.length + 'remlist'.length + 1), (response) => {
-                message.channel.sendEmbed(response);
-            });
-        }
-        */
-        if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
-            delete require.cache[require.resolve('./workdayinfo.js')];
-            require('./workdayinfo.js')((response) => {
-                message.channel.sendEmbed(response);
-            });
-        }
-        if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
-            delete require.cache[require.resolve('./assistant.js')];
-            require('./assistant.js').ohio(message);
-        }
-        if (message.content.startsWith(cmdpref + 'motd')) {
-            motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
-            bot.user.setGame(motd);
-        }
-        if (lower == cmdpref + 'inv') {
-            message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
-        }
-        /* TODO: Sankaku cache folder deleting
-        if (lower == cmdpref + 'delcache') {
-            code = execSync('rm -f ' + SankakuPath + '*');
-            message.channel.sendMessage('Cache deleted.');
-        }
-        */
-
-        /* TODO: DELETE THIS
-        if (message.content.startsWith(cmdpref + 'send')) {
-            sendFile(message, message.content.substr(6));
-        }
-        */
-        if (lower.startsWith(cmdpref + 'cmdpref')) {
-            cmdpref = message.content.substr(cmdpref.length + 'cmdpref'.length + 1);
-            if (cmdpref == '') {
-                cmdpref = '!';
+            */
+            if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
+                delete require.cache[require.resolve('./workdayinfo.js')];
+                require('./workdayinfo.js')((response) => {
+                    message.channel.sendEmbed(response);
+                });
+                is_a_command = true;
             }
-            message.channel.sendMessage('New prefix: `' + cmdpref + '`');
+            if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
+                delete require.cache[require.resolve('./assistant.js')];
+                require('./assistant.js').ohio(message);
+                is_a_command = true;
+            }
+            if (message.content.startsWith(cmdpref + 'motd')) {
+                motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
+                bot.user.setGame(motd);
+                is_a_command = true;
+            }
+            if (lower == cmdpref + 'inv') {
+                message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
+                is_a_command = true;
+            }
+            /* TODO: Sankaku cache folder deleting
+            if (lower == cmdpref + 'delcache') {
+                code = execSync('rm -f ' + SankakuPath + '*');
+                message.channel.sendMessage('Cache deleted.');
+            }
+            */
+
+            /* TODO: DELETE THIS
+            if (message.content.startsWith(cmdpref + 'send')) {
+                sendFile(message, message.content.substr(6));
+            }
+            */
+            if (lower.startsWith(cmdpref + 'cmdpref')) {
+                cmdpref = message.content.substr(cmdpref.length + 'cmdpref'.length + 1);
+                if (cmdpref == '') {
+                    cmdpref = '!';
+                }
+                message.channel.sendMessage('New prefix: `' + cmdpref + '`');
+                var mode = 'cmdpref';
+                is_a_command = true;
+            }
+            if (lower == cmdpref + 'tsun') {
+                tsun = !tsun;
+                if (tsun) {
+                    message.channel.sendMessage('Nah.');
+                } else {
+                    message.channel.sendMessage('O-okay.');
+                }
+                var mode = 'tsun';
+                is_a_command = true;
+            }
+            // blacklist commands
+            if (lower.startsWith(cmdpref + 'addbluser')) {
+                delete require.cache[require.resolve('./blacklist.js')];
+                require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                    message.channel.sendMessage(msg);
+                });
+                is_a_command = true;
+            }
+            if (lower.startsWith(cmdpref + 'rembluser')) {
+                delete require.cache[require.resolve('./blacklist.js')];
+                require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                    message.channel.sendMessage(msg);
+                });
+                is_a_command = true;
+            }
+            if (lower.startsWith(cmdpref + 'addblchannel')) {
+                delete require.cache[require.resolve('./blacklist.js')];
+                require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                    message.channel.sendMessage(msg);
+                });
+                is_a_command = true;
+            }
+            if (lower.startsWith(cmdpref + 'remblchannel')) {
+                delete require.cache[require.resolve('./blacklist.js')];
+                require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                    message.channel.sendMessage(msg);
+                });
+                is_a_command = true;
+            }
+            /* TODO: We have time for this part
+            if (lower == cmdpref + 'cache') {
+                checkCache(SankakuPath, 50, message);
+            }
+            */
+        }
+        if (mode != undefined) {
+            switch (mode) {
+                case 'cmdpref':
+                    return callback({
+                        'mode': 'cmdpref',
+                        'cmdpref': cmdpref,
+                        'is_a_command': is_a_command
+                    });
+                    break;
+                case 'tsun':
+                    return callback({
+                        'mode': 'tsun',
+                        'tsun': tsun,
+                        'is_a_command': is_a_command
+                    });
+            }
+        } else {
             return callback({
-                'mode': 'cmdpref',
-                'cmdpref': cmdpref
+                'is_a_command': is_a_command
             });
         }
-        if (lower == cmdpref + 'tsun') {
-            tsun = !tsun;
-            if (tsun) {
-                message.channel.sendMessage('Nah.');
-            } else {
-                message.channel.sendMessage('O-okay.');
-            }
-            return callback({
-                'mode': 'tsun',
-                'tsun': tsun
-            });
-        }
-        // blacklist commands
-        if (lower.startsWith(cmdpref + 'addbluser')) {
-            delete require.cache[require.resolve('./blacklist.js')];
-            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
-                message.channel.sendMessage(msg);
-            });
-        }
-        if (lower.startsWith(cmdpref + 'rembluser')) {
-            delete require.cache[require.resolve('./blacklist.js')];
-            require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
-                message.channel.sendMessage(msg);
-            });
-        }
-        if (lower.startsWith(cmdpref + 'addblchannel')) {
-            delete require.cache[require.resolve('./blacklist.js')];
-            require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
-                message.channel.sendMessage(msg);
-            });
-        }
-        if (lower.startsWith(cmdpref + 'remblchannel')) {
-            delete require.cache[require.resolve('./blacklist.js')];
-            require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
-                message.channel.sendMessage(msg);
-            });
-        }
-        /* TODO: We have time for this part
-        if (lower == cmdpref + 'cache') {
-            checkCache(SankakuPath, 50, message);
-        }
-        */
-
-        /* Updater and frame part
-        if (lower == cmdpref + 'reload') {
-            exit(3);
-        }
-        if (lower == cmdpref + 'close') {
-            exit(2);
-        }-
-        */
     }
 }

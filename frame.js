@@ -55,7 +55,7 @@ bot.on('message', (message) => {
 
 function frame() {
     isStarted = true;
-    gekky = exec('node ./core.js');
+    gekky = exec('node ./core.js --color');
     gekky.stdout.on('data', function (data) {
         console.log(data.substr(0, data.length - 1));
     });
