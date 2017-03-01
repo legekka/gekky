@@ -23,13 +23,16 @@ bot.login(token);
 bot.on('ready', function () {
     bot.channels.get(ch.main).sendMessage('[online]');
     console.log('[online]');
+    bot.user.setPresence({
+        "status": "online",
+    });
     bot.user.setGame('Re:Born [Alpha]');
 });
 
 bot.on('message', (message) => {
     delete require.cache[require.resolve('./module/talk.js')];
     require('./module/talk.js')(bot, message, tsun, cmdpref);
-    
+
     var is_a_command = false;
 
     delete require.cache[require.resolve('./module/command.js')];
@@ -40,7 +43,7 @@ bot.on('message', (message) => {
                     break;
                 case 'tsun': tsun = response.tsun;
             }
-        } 
+        }
         is_a_command = response.is_a_command;
     });
 

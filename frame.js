@@ -26,6 +26,9 @@ bot.on('ready', function () {
     if (!isStarted) {
         bot.channels.get(main).sendMessage('{Frame} online');
         console.log('{Frame} online');
+        bot.user.setPresence({
+            "status": "dnd",
+        });
         bot.user.setGame(motd);
     }
 });
@@ -64,6 +67,9 @@ function frame() {
             isStarted = false;
             console.log('{Frame} Gekky has been stopped...');
             bot.channels.get(main).sendMessage('{Frame} Gekky has been stopped...');
+            bot.user.setPresence({
+                "status": "dnd",
+            });
             bot.user.setGame(motd);
         }
         if (code == 2) {
