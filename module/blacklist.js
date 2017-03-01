@@ -3,8 +3,8 @@
 // updating lists in realtime
 
 var fs = require('fs');
-var path1 = '../data/blacklist.txt';
-var path2 = '../data/channel_blacklist.txt';
+var path1 = './data/blacklist.txt';
+var path2 = './data/channel_blacklist.txt';
 
 module.exports = {
     isBlacklisted: (message) => {

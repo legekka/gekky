@@ -1,0 +1,37 @@
+﻿#### HELP ####
+
+--- Console ---
+Default commands
+  close  - close legekky
+  reload - reload legekky
+  go <ChannelName> - go to specified channel (Ex. go chat)
+  cls - clear console (or something like that)
+  vars - current values of variables
+
+legekky modes
+  tsun_mode - change tsundere mode
+  troll_mode - change troll mode
+
+--- Discord ---
+To send message:
+>[text message]
+
+AutoMessages
+  scuoa --> aoucs
+
+Default messages
+  loli* --> loliraid
+
+Tsundere messages
+  *tsun* *bot* --> random s_tsun
+  nem --> De!
+  de  --> Nem!
+  szia || hi --> random s_tsun_hi
+  <.< || >.> --> random s_tsun_eye
+  *jajne* || *jaj ne* --> Jaj, de. :3
+
+Troll messages
+
+  rop --> rip
+
+#### END ####

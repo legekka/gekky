@@ -12,7 +12,7 @@ var isStarted = false;  // events
 var Reloading = false;
 var Starting = false;
 
-var token = fs.readFileSync('../data/profile.txt').toString();
+var token = fs.readFileSync('../profile.txt').toString();
 
 var main = '281188840084078594';
 

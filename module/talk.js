@@ -4,7 +4,7 @@
 var fs = require('fs');
 var Math = require('mathjs');
 
-var path = '../data/dialogs.txt';
+var path = './data/dialogs.txt';
 var dg = {
     'def': [], 'hi': [], 'eye': [],
     'xd': [], 'proba': [], 'emlites': [],

@@ -1,0 +1,29 @@
+-- IMAGE SEARCH --
+
+usage: !sankaku <tag1> <tag2> <tag3>...
+filters:
+ - rating
+   (safe,questionable,explicit)
+ - order
+   (popular,random,...)
+ ...
+tags:
+ - one_girl
+ - two_girl
+ - loli
+ ...
+
+Excluding tags: "-futanari"
+
+Example: !sankaku inubashiri_momiji one_girl christmas rating:safe
+
+!sanka5 <tag1> <tag2> ...
+The default !sankaku command stacked
+
+!touhou (tags arent recommended)
+5 random touhou solo image
+
+
+-- DOUJIN SEARCH --
+
+!nhentai <tag1> <tag2> <tag3>

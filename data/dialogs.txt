@@ -1,0 +1,44 @@
+﻿s_tsun_def	Meg a jó édes...
+s_tsun_def	Nem vagyok tsundere!
+s_tsun_def	Tudod ki a tsundere...
+s_tsun_def	http://cdn.myanimelist.net/s/common/uploaded_files/1455525093-54b2ee0e1c71b65272f997e5b87464c1.png
+s_tsun_def	http://puu.sh/o9YAy/41217373c2.PNG
+s_tsun_hi	Nem szia.
+s_tsun_hi	Nem.
+s_tsun_hi	Neked nem.
+s_tsun_eye	Most meg mit nézel így?
+s_tsun_eye	Ne forgasd a szemeid!
+s_tsun_xd	Most meg mit nevetsz. Ne nevess.
+s_tsun_xd	Mi olyan vicces? Semmi. Hát akkor meg?
+s_tsun_xd	Ne neveteljél.
+s_tsun_xd	:DDDDDD
+s_tsun_proba	Próbálkozni lehet. ¯\_(ツ)_/¯
+s_tsun_proba	Na mivan? Nem megy?
+s_tsun_proba	xddd
+s_tsun_proba	legekka, üsd már le.
+s_tsun_emlites	Kus! Hagyjál.
+s_tsun_emlites	Hagyj békén.
+s_tsun_emlites	Ne piszkálj.
+s_tsun_kus	Te kussolj.
+s_tsun_kus	Nope.
+s_tsun_kus	Nem.
+s_tsun_zsolt	Zsolt... khm xd...
+s_tsun_zsolt	Zsi...zsolt.
+s_tsun_zsolt	Megy már a szeró?
+s_tsun_zsolt	12... 12 giga.
+s_tsun_zsolt	Hosztojjá!
+s_tsun_ante	Hol a G2-d?
+s_tsun_ante	Baráti hátbaveregetés.
+s_tsun_ante	HóMéhecske11~~
+s_tsun_ante	Most épp milyen használt procid van?
+s_tsun_ante	Buzicamper.
+s_tsun_nana	Már megint flattyol?
+s_tsun_nana	Djága hejcegnőm.
+s_tsun_szabi	```process.killYourself('villam98');```
+s_tsun_szabi	```var szabi = new Retard();```
+s_tsun_mark	Faget.
+s_tsun_mark	Łegekka.
+s_tsun_mark	Gyalog.
+s_tsun_sono	Már megint gyorshajtottál?
+s_tsun_sono	Megvan a piros lufid?
+s_tsun_sono	Passziánsz?

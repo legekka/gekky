@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 
-var path = '../data/workdays.txt';
+var path = './data/workdays.txt';
 
 module.exports = (callback) => {
     var da = new Date();

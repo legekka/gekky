@@ -11,7 +11,7 @@ require('./module/console.js')(bot);
 var tsun = true;    // tsundere mode
 var cmdpref = '!';   // default command prefix
 
-var token = fs.readFileSync('../data/profile.txt').toString();
+var token = fs.readFileSync('../profile.txt').toString();
 
 var ch = {
     'main': '281188840084078594',
