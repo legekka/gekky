@@ -58,7 +58,11 @@ function frame() {
         }
         if (code == 2) {
             Reloading = true;
-            bot.channels.get(main).sendMessage('{Frame} Reloading gekky...');
+            bot.channels.get(main).sendMessage('{Frame} Reloading Gekky...');
+        }
+        if (code == 3) {
+            Reloading = true;
+            bot.channels.get(main).sendMessage('{Frame} Fatal error, restarting Gekky...')
         }
     });
 }

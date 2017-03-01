@@ -14,6 +14,7 @@ var token = fs.readFileSync('../data/profile.txt').toString();
 
 var ch = {
     'main': '281188840084078594',
+    'gekkylog': '281189261355515915',
 }
 
 bot.login(token);
@@ -39,9 +40,20 @@ bot.on('message', (message) => {
     });
     // frame rész, egyenlőre nem tudtam másképp megoldani hogy működjön. Majd még gondolkozom rajta
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
-        process.exit(1);
+        bot.destroy().then(() => {
+            process.exit(1);
+        })
     }
     if (message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {
-        process.exit(2);
+        bot.destroy().then(() => {
+            process.exit(2);
+        })
     }
+})
+
+process.on('uncaughtException', function (error) {
+    console.log(error.stack);
+    bot.channels.get(ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
+        exit(3);
+    })
 })

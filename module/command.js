@@ -9,6 +9,21 @@ module.exports = (bot, message, cmdpref, callback) => {
 
     // legekka-only commands
     if (message.author.id == ownerid) {
+        if (lower.startsWith(cmdpref + 'del')) {
+            var number = lower.split(' ')[1];
+            if (!isNaN(number)) {
+                var number = parseInt(number);
+                message.channel.bulkDelete(number + 1);
+                message.channel.sendMessage(number + ' üzenet törölve.').then((message) => {
+                    var msg = message;
+                    setTimeout( () => {
+                        msg.delete();
+                    },2000);
+                })
+            } else {
+                message.channel.sendMessage('Helytelen paraméter: ' + number);
+            }
+        }        
         /* TODO: these modules
         if (lower.startsWith(cmdpref + 'secret')) {
             giveSecret(lower.split(' ')[1], lower.split(' ')[2], (response) => {
