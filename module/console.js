@@ -1,17 +1,25 @@
 // console.js
-// gekky's conosole module
+// gekky's console module
 
 module.exports = function (bot) {
     var inp = process.openStdin();
 
     inp.addListener('data', (d) => {
-        var cmd = d.toString().trim();
-        var lower = cmd.toLowerCase();
-        if (lower == 'teszt') {
-            console.log('echo');
-        }
-        if (lower == 'teszt2') {
-            bot.channels.get('281188840084078594').sendMessage('sikeres teszt');
+        if (d.toString().startsWith('>')) {
+            // sending messages here from console
+        } else {
+            var cmd = d.toString().toLowerCase().trim();
+            if (cmd == 'close' || cmd == 'stop') {
+                bot.destroy().then(() => {
+                    process.exit(1);
+                })
+            } else if (cmd == 'reload') {
+                bot.destroy().then(() => {
+                    process.exit(2);
+                })
+            } else {
+                console.log('Ismeretlen parancs: ' + cmd);
+            }
         }
     })
 }

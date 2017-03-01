@@ -35,12 +35,15 @@ bot.on('message', (message) => {
         var lower = message.content.toLowerCase();
         if (lower == '!start') {
             if (!isStarted) {
+                console.log('{Frame} Starting gekky...');
                 bot.channels.get(main).sendMessage('{Frame} Starting gekky...');
                 Starting = true;
             } else {
+                console.log('{Frame} Gekky is already running...');
                 bot.channels.get(main).sendMessage('{Frame} Gekky is already running...');
             }
         } else if ((lower == '!reload' || lower == '!close' || lower == '!stop') && !isStarted) {
+            console.log('{Frame} Gekky is not running...');
             bot.channels.get(main).sendMessage('{Frame} Gekky is not running...');
         }
         if (lower == '!isstarted') {
@@ -59,17 +62,20 @@ function frame() {
     gekky.on('exit', (code) => {
         if (code == 1) {
             isStarted = false;
+            console.log('{Frame} Gekky has been stopped...');
             bot.channels.get(main).sendMessage('{Frame} Gekky has been stopped...');
             bot.user.setGame(motd);
         }
         if (code == 2) {
             isStarted = false;
             Reloading = true;
+            console.log('{Frame} Reloading Gekky...');
             bot.channels.get(main).sendMessage('{Frame} Reloading Gekky...');
         }
         if (code == 3) {
             isStarted = false;
             Reloading = true;
+            console.log('{Frame} Fatal error, restarting Gekky...');
             bot.channels.get(main).sendMessage('{Frame} Fatal error, restarting Gekky...')
         }
     });
@@ -107,6 +113,19 @@ inp.addListener('data', (d) => {
         } else if (cmd == '!isstarted') {
             isStarted = !isStarted;
             console.log('{Frame} isStarted = ' + isStarted);
+        } else if (cmd == '!close') {
+            if (isStarted) {
+                gekky.stdin.write('close');
+            }
+            bot.channels.get(main).sendMessage('{Frame} Stopping frame...').then(() => {
+                bot.destroy().then(() => {
+                    console.log('{Frame} Stopping frame...');
+                    process.exit(0);
+                });
+            });
+        }
+        else {
+            console.log("{Frame} Undefined command: '" + cmd + "'");
         }
     }
 })
