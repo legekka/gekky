@@ -41,6 +41,10 @@ bot.on('message', (message) => {
         } else if ((lower == '!reload' || lower == '!close' || lower == '!stop') && !isStarted) {
             bot.channels.get(main).sendMessage('{Frame} Gekky is not running...');
         }
+        if (lower == '!isstarted') {
+            isStarted = !isStarted;
+            bot.channels.get(main).sendMessage('{Frame} isStarted = ' + isStarted);
+        }
     }
 })
 
@@ -57,10 +61,12 @@ function frame() {
             bot.user.setGame(motd);
         }
         if (code == 2) {
+            isStarted = false;
             Reloading = true;
             bot.channels.get(main).sendMessage('{Frame} Reloading Gekky...');
         }
         if (code == 3) {
+            isStarted = false;
             Reloading = true;
             bot.channels.get(main).sendMessage('{Frame} Fatal error, restarting Gekky...')
         }
@@ -76,4 +82,4 @@ setInterval(() => {
         Reloading = false;
         frame();
     }
-},1000);
+}, 1000);

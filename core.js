@@ -6,6 +6,7 @@ const Discord = require('discord.js');
 var bot = new Discord.Client();
 const fs = require('fs');
 require('./module/console.js')(bot);
+//require('./module/log.js')(bot,ch);
 
 var tsun = true;    // tsundere mode
 var cmdpref = '!';   // default command prefix
@@ -53,7 +54,9 @@ bot.on('message', (message) => {
 
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    bot.channels.get(ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
-        exit(3);
-    })
+    bot.channels.get(ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
+        bot.channels.get(ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
+            process.exit(3);
+        })
+    });
 })

@@ -6,7 +6,6 @@ var ownerid = '143399021740818432';
 module.exports = (bot, message, cmdpref, callback) => {
     var lower = message.content.toLowerCase();
 
-
     // legekka-only commands
     if (message.author.id == ownerid) {
         if (lower.startsWith(cmdpref + 'del')) {
@@ -16,14 +15,14 @@ module.exports = (bot, message, cmdpref, callback) => {
                 message.channel.bulkDelete(number + 1);
                 message.channel.sendMessage(number + ' üzenet törölve.').then((message) => {
                     var msg = message;
-                    setTimeout( () => {
+                    setTimeout(() => {
                         msg.delete();
-                    },2000);
+                    }, 2000);
                 })
             } else {
                 message.channel.sendMessage('Helytelen paraméter: ' + number);
             }
-        }        
+        }
         /* TODO: these modules
         if (lower.startsWith(cmdpref + 'secret')) {
             giveSecret(lower.split(' ')[1], lower.split(' ')[2], (response) => {
@@ -36,12 +35,14 @@ module.exports = (bot, message, cmdpref, callback) => {
                 message.channel.sendEmbed(response);
             });
         }
-
+        */
         if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
-            workdayinfo((response) => {
+            delete require.cache[require.resolve('./workdayinfo.js')];
+            require('./workdayinfo.js')((response) => {
                 message.channel.sendEmbed(response);
             });
         }
+        /*
         if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
             ohio(message);
         }

@@ -13,27 +13,28 @@ const fs = require('fs');
 const c = require('chalk');
 const execSync = require('child_process').execSync;
 const bot = new Discord.Client();
-var http = require('https');
+const weather = require('weather-js');
+const http = require('https');
+
 
 // error logging
-
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    bot.channels.get(ch.NtoI('momilog')).sendMessage('<@143399021740818432>').then(() => {
-        bot.channels.get(ch.NtoI('momilog')).sendMessage('```' + error.stack + '```').then(() => {
+    bot.channels.get(ch.NtoI('gekkylog')).sendMessage('<@143399021740818432>').then(() => {
+        bot.channels.get(ch.NtoI('gekkylog')).sendMessage('```' + error.stack + '```').then(() => {
             exit(3);
         });
     });
     log(error.stack + '\r\n');
 });
 
-
 var motd = '';					// motd
 var token = '';					// gekky's token
 
 var blacklist = [];				// blacklist
 var channelblacklist = [];		// channel blacklist
-var friendlist = [];
+var friendlist = [];            // friend list for loggging presences
+var reminders = [];             // reminders
 
 var cmdpref = '!';              // command prefix
 var tsun = true;				// tsundere mode
@@ -58,7 +59,9 @@ var files = {
     'channelblacklist': '',
     'friends': '',
     'log': '',
-    'update': ''
+    'update': '',
+    'workdays': '',
+    'reminders': ''
 }
 
 var ch = {
@@ -114,8 +117,10 @@ function initialize() {
     files.channelblacklist = files.default + 'data/channel_blacklist.txt';
     files.friends = files.default + 'data/friendlist.txt';
     files.log = files.default + 'data/log.txt';
-    files.update = files.default + 'update/';
+    files.workdays = files.default + 'data/workdays.txt';
+    files.reminders = files.default + 'data/reminders.txt';
 
+    files.update = files.default + 'update/';
     // loading channel infos
     input = fs.createReadStream(files.channelID);
     text = fs.readFileSync(files.channelID).toString().split('\n');
@@ -190,6 +195,343 @@ function initialize() {
     for (i in text) {
         friendlist.push(text[i].trim());
     }
+
+    // loading reminders
+    reloadReminders();
+    // generating workday reminders
+    generateReminders();
+    // new code update listener
+    updateListener();
+    // daily reloader
+    dailyReloader();
+    // reminder listener
+    reminderStart();
+}
+
+// function is_a_prime
+
+function is_a_prime(number) {
+    var sqrtnumber = Math.floor(Math.sqrt(number));
+    i = 2;
+    while (number % i != 0 && i < sqrtnumber) { i++ }
+    if (i < sqrtnumber) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+// secret function
+var array = [];
+
+function checkSecret(list,callback) {
+    console.log('response');
+    var szamok = list.split(' ');
+    console.log(szamok);
+    var megold = 0;
+    for (i in szamok) {
+        j=0;
+        while (j<array.length && szamok[i]!=array[j]) {j++}
+        if (j<array.length) {
+            megold++;
+        }
+    }
+    if (megold == array.length) {
+        return callback('sikeres megoldás');
+    } else {
+        return callback('helytelen megoldás');
+    }
+}
+
+function giveSecret(count,max,callback) {
+    array = [];
+    var number;
+    for (var i = 1; i <= count; i++) {
+        do {
+            number = Math.randomInt(max);
+        }
+        while (!is_a_prime(number) && array.indexOf(number) < 0);
+        console.log(number);
+        array.push(number);
+    }
+    console.log(array);
+    var mult = 1;
+    for (i in array) {
+        mult = mult * array[i];
+    }
+    return callback(mult);
+}
+
+
+// reminderLister 
+
+function reminderLister(mode, callback) {
+    var da = new Date();
+    var desc = '';
+    if (mode == 'daily') {
+        for (i in reminders) {
+            if (reminders[i].ev == da.getFullYear() && reminders[i].ho == (da.getMonth() + 1) && reminders[i].nap == da.getDate() && parseInt(reminders[i].ora) * 60 + parseInt(reminders[i].perc) > da.getHours() * 60 + da.getMinutes()) {
+                desc += "**" + reminders[i].ora + ":" + reminders[i].perc + "** " + reminders[i].text + "\n";
+            }
+        }
+        if (desc == '') {
+            return callback({
+                "title": "A mai nap nincsenek emlékeztetőid"
+            });
+        } else {
+            return callback({
+                "title": "A mai napi hátralévő emlékeztetőid",
+                "description": desc
+            });
+        }
+    } else if (mode == "next") {
+        i = 0;
+        while (i < reminders.length && reminders[i].ev == da.getFullYear() && reminders[i].ho == (da.getMonth() + 1) && reminders[i].nap == da.getDate() && parseInt(reminders[i].ora) * 60 + parseInt(reminders[i].perc) >= da.getHours() * 60 + da.getMinutes()) { i++ }
+        if (i < reminders.length) {
+            return callback({
+                "title": "TODO!",
+                "description": "**" + reminders[i].ev + "." + reminders[i].ho + "." + reminders[i].nap + " " + reminders[i].ora + ":" + reminders[i].perc + "** " + reminders[i].text
+            });
+        } else {
+            return callback({
+                "title": "TODO"
+            });
+        }
+    } else {
+        for (i in reminders) {
+            desc += "**" + reminders[i].ev + "." + reminders[i].ho + "." + reminders[i].nap + " " + reminders[i].ora + ":" + reminders[i].perc + "** " + reminders[i].text + "\n";
+        }
+        if (desc == '') {
+            return callback({
+                "title": "Nincsenek emlékeztetőid."
+            });
+        } else {
+            return callback({
+                "title": "Az összes emlékeztetőd",
+                "description": desc
+            });
+        }
+    }
+}
+
+
+// reminder function
+
+
+
+function reloadReminders() {
+    input = fs.createReadStream(files.reminders);
+    text = fs.readFileSync(files.reminders).toString().split('\n');
+    reminders = [];
+    for (i in text) {
+        reminders.push({
+            "ev": text[i].split(',')[0].split('.')[0],
+            "ho": text[i].split(',')[0].split('.')[1],
+            "nap": text[i].split(',')[0].split('.')[2],
+            "ora": text[i].split(',')[0].split('.')[3],
+            "perc": text[i].split(',')[0].split('.')[4],
+            "text": text[i].split(',')[1],
+            "armed": true
+        });
+    }
+
+}
+
+function reminderStart() {
+    setInterval(() => {
+        var da = new Date();
+        for (i in reminders) {
+            if (da.getFullYear() == reminders[i].ev && (da.getMonth() + 1) == reminders[i].ho && da.getDate() == reminders[i].nap && da.getHours() == reminders[i].ora && da.getMinutes() == reminders[i].perc && reminders[i].armed == true) {
+                reminders[i].armed = false;
+                bot.channels.get(ch.defaultID).sendMessage("<@143399021740818432> **" + reminders[i].text + "**\n" + reminders[i].ora + ':' + reminders[i].perc);
+            }
+        }
+    }, 1000);
+}
+
+
+
+
+
+
+// workdayinfo napora atvaltas
+
+function napora(a, b) {
+    if (b - a < 0) {
+        return b - a + 24;
+    } else {
+        return b - a;
+    }
+}
+
+// workdayinfo
+
+function workdayinfo(callback) {
+    var da = new Date();
+    input = fs.createReadStream(files.workdays);
+    text = fs.readFileSync(files.workdays).toString().split('\n');
+    var kezd;
+    var bef;
+    var szabad = false;
+    var megvan = false;
+    for (i in text) {
+        var datum = text[i].split(',')[0].trim();
+        var dadatum = da.getFullYear() + '.' + (da.getMonth() + 1) + '.' + da.getDate();
+        if (dadatum == datum) {
+            megvan = true;
+            if (text[i].split(',')[1] == "free") {
+                szabad = true;
+            } else {
+                kezd = parseInt(text[i].split(',')[1].split('-')[0]);
+                bef = parseInt(text[i].split(',')[1].split('-')[1]);
+            }
+        }
+    }
+    var str = '';
+    var color = "505050";
+    if (megvan) {
+        if (szabad) {
+            str = "Ma nem dolgozol, remélem örülsz.\nÉn nem.";
+            color = "9cff01";
+        } else {
+            str = "Ma " + kezd + " órától " + bef + " óráig dolgozol.\n"
+            if (napora(kezd, bef) <= 6) {
+                str += "Egy rövidke " + napora(kezd, bef) + " órácskás műszak.";
+                color = "01ff07";
+            } else if (napora(kezd, bef) <= 8) {
+                str += "Normál " + napora(kezd, bef) + " órás műszak.";
+                color = "f6ff00";
+            } else {
+                str += napora(kezd, bef) + " óra??? Te beteg vagy. Kitartást.";
+                color = "ff0000";
+            }
+
+            var ind = kezd - 2;
+            var hatra_perc;
+            var hatra_ora;
+            if (29 - da.getMinutes() < 0) {
+                hatra_perc = 29 - da.getMinutes() + 60;
+                hatra_ora = -1;
+            } else {
+                hatra_perc = 29 - da.getMinutes();
+                hatra_ora = 0;
+            }
+            if (ind - da.getHours() < 0) {
+                hatra_ora += ind - da.getHours() + 24;
+            } else {
+                hatra_ora += ind - da.getHours();
+            }
+            if (hatra_ora > 0) {
+                str += "\nIndulásig még van hátra **" + hatra_ora + " óra " + hatra_perc + "perc**ed.";
+            } else {
+                str += "\nIndulásig már csak **" + hatra_perc + "perc**ed van hátra."
+            }
+        }
+    } else {
+        str = "A mai napra nincs infóm a munkaidőddel kapcsolatban.\nRemélem neked azért van."
+    }
+    return callback({
+        "title": "Munkanap Info",
+        "description": str,
+        "color": parseInt(color, 16)
+    });
+}
+
+// generate workday reminders
+
+function generateReminders() {
+    input = fs.createReadStream(files.workdays);
+    text = fs.readFileSync(files.workdays).toString().split('\n');
+    for (i in text) {
+        if (text[i].split(',')[1] != 'free') {
+            var ora = parseInt(text[i].split(',')[1].split('-')[0]) - 2;
+            var perc1 = 19;
+            var perc2 = 29;
+            reminders.push({
+                "ev": text[i].split(',')[0].split('.')[0],
+                "ho": text[i].split(',')[0].split('.')[1],
+                "nap": text[i].split(',')[0].split('.')[2],
+                "ora": ora,
+                "perc": perc1,
+                "text": "10 perc az indulásig, lassan kezdhetsz készülődni.",
+                "armed": true
+            });
+            reminders.push({
+                "ev": text[i].split(',')[0].split('.')[0],
+                "ho": text[i].split(',')[0].split('.')[1],
+                "nap": text[i].split(',')[0].split('.')[2],
+                "ora": ora,
+                "perc": perc2,
+                "text": "Indulás munkába!",
+                "armed": true
+            });
+        }
+    }
+}
+
+// weatherinfo
+
+function weatherInfo(city, callback) {
+    weather.find({ search: city, degreeType: 'C' }, function (err, result) {
+        if (err) { console.log(err); }
+        var desc = "Temperature: " + result[0].current.temperature + " °C" +
+            "\nSky: " + result[0].current.skytext +
+            "\nHumidity: " + result[0].current.humidity + " %" +
+            "\nWind Speed: " + result[0].current.windspeed +
+            "\nObservation Time: " + result[0].current.observationtime;
+        return callback({
+            "title": "Weather: " + result[0].location.name,
+            "description": desc,
+            "thumbnail": {
+                "url": result[0].current.imageUrl
+            }
+        });
+    });
+}
+
+
+// assistant mode
+
+function ohio(message) {
+    var da = new Date();
+    var str = '';
+    if (da.getHours() < 12) {
+        if (da.getHours() <= 6) {
+            str = "Miért keltél ilyen korán O_o";
+        } else {
+            str = "Remélem jól aludtál...";
+        }
+    } else {
+        if (da.getHours() >= 18) {
+            str = "Kúrálod a másnaposságod?";
+        } else {
+            str = "Hétalvó...";
+        }
+    }
+    message.channel.sendMessage("**Ohio legekka!**\n*" + str + "*\n\nTessék, itt van pár infó, hogy jól kezdd a napod:");
+    weatherInfo("Budapest", (response) => {
+        message.channel.sendEmbed(response);
+    });
+    workdayinfo((response) => {
+        message.channel.sendEmbed(response);
+    });
+}
+
+
+// daily reloader
+function dailyReloader() {
+    var da = new Date();
+    var day = da.getDate();
+    setInterval(() => {
+        var currdate = new Date();
+        var currday = currdate.getDate();
+        if (day != currday) {
+            bot.channels.get(ch.defaultID).sendMessage('[daily reload]');
+            consoleLog('[daily reload]');
+            exit(3);
+        }
+    }, 3600000);
 }
 
 // update listener 
@@ -209,15 +551,15 @@ function updateListener() {
 function consoleLog(text) {
     console.log(text);
     if (botonline) {
-        bot.channels.get(ch.NtoI('momilog')).sendMessage(text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''));
+        bot.channels.get(ch.NtoI('gekkylog')).sendMessage(text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''));
     }
     log(text + '\r\n');
 }
 
 function log(text) {
     var rawtext = text.replace(
- 	/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
-    if (rawtext.indexOf('momilog') < 0) {
+        /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+    if (rawtext.indexOf('gekkylog') < 0) {
         fs.appendFile(files.log, rawtext);
     }
 }
@@ -658,7 +1000,7 @@ function sankakuSearch(message, searchword, mode) {
             counter++;
             code = execSync('curl -s "' + resized_url + '" > ' + SankakuPath + counter + '.' + ext);
 
-            bot.channels.get(ch.NtoI('momilog')).sendFile(SankakuPath + counter + "." + ext).then((response) => {
+            bot.channels.get(ch.NtoI('gekkylog')).sendFile(SankakuPath + counter + "." + ext).then((response) => {
                 message.channel.sendEmbed({
                     "title": "Full size",
                     "description": "Post ID: " + imagelist[rnumber] + "\nPost link: " + url_link,
@@ -709,7 +1051,7 @@ function sankakuSearch(message, searchword, mode) {
 						
 						counter++;
 						code = execSync('curl -s "' + resized_url[j] + '" > ' + SankakuPath + counter + '.' + ext[j]);
-						bot.channels.get(ch.NtoI('momilog')).sendFile(SankakuPath + counter + "." + ext[j], undefined, imagelist[j] + '|' + original_url[j]).then( (response) => {
+						bot.channels.get(ch.NtoI('gekkylog')).sendFile(SankakuPath + counter + "." + ext[j], undefined, imagelist[j] + '|' + original_url[j]).then( (response) => {
 							var ipost = response.attachments.first().message.content.split('|')[0];
 							var orurl = response.attachments.first().message.content.split('|')[1];
 							message.channel.sendEmbed({
@@ -799,7 +1141,7 @@ function sankakuSearch(message, searchword, mode) {
                     ext[j] = resized_url[j].substr(resized_url[j].length - 3, 3);
                     counter++;
                     code = execSync('curl -s "' + resized_url[j] + '" > ' + SankakuPath + counter + '.' + ext[j]);
-                    bot.channels.get(ch.NtoI('momilog')).sendFile(SankakuPath + counter + "." + ext[j], undefined, charactername[j] + '|' + imagepost[j] + '|' + original_url[j]).then((response) => {
+                    bot.channels.get(ch.NtoI('gekkylog')).sendFile(SankakuPath + counter + "." + ext[j], undefined, charactername[j] + '|' + imagepost[j] + '|' + original_url[j]).then((response) => {
                         var cname = response.attachments.first().message.content.split('|')[0];
                         var ipost = response.attachments.first().message.content.split('|')[1];
                         var orurl = response.attachments.first().message.content.split('|')[2];
@@ -1006,6 +1348,13 @@ bot.on('message', function (message) {
             message.channel.sendMessage('¯\\_(ツ)_/¯');
             messageConsoleLog(message, true);
         }
+        if (lower.startsWith(cmdpref + "response")) {
+            checkSecret(lower.substr(cmdpref.length + "response ".length), (valasz) => {
+                message.channel.sendMessage(valasz);
+            });
+            messageConsoleLog(message, true);
+        }
+
         // troll part
         if (lower == 'rop' && troll) {
             message.channel.sendMessage('rip');
@@ -1072,7 +1421,8 @@ bot.on('message', function (message) {
                     message.channel.sendMessage('De!');
                     messageConsoleLog(message, true);
                 }
-                if ((lower.indexOf(bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(bot.user.id) >= 0)) {
+                //TODO
+                if ((lower.indexOf(bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
                     message.channel.sendMessage(dg.random(dg.emlites));
                     messageConsoleLog(message, true);
                 }
@@ -1111,17 +1461,26 @@ bot.on('message', function (message) {
                     messageConsoleLog(message, true);
                 }
                 if (lower.startsWith(cmdpref) &&
-					!lower.startsWith(cmdpref + 'news') &&
-					!lower.startsWith(cmdpref + 'sankaku') &&
-					!lower.startsWith(cmdpref + 'help') &&
-					!lower.startsWith(cmdpref + 'touhou') &&
-					!lower.startsWith(cmdpref + 'sanka5') &&
-					!lower.startsWith(cmdpref + 'nhentai') &&
-					message.author.username != 'legekka') {
+                    !lower.startsWith(cmdpref + 'news') &&
+                    !lower.startsWith(cmdpref + 'sankaku') &&
+                    !lower.startsWith(cmdpref + 'help') &&
+                    !lower.startsWith(cmdpref + 'touhou') &&
+                    !lower.startsWith(cmdpref + 'sanka5') &&
+                    !lower.startsWith(cmdpref + 'nhentai') &&
+                    !lower.startsWith(cmdpref + 'weather') &&
+                    !lower.startsWith(cmdpref + 'response') &&
+                    message.author.username != 'legekka') {
                     message.channel.sendMessage(dg.random(dg.proba));
                     messageConsoleLog(message, true);
                 }
             }
+        }
+        // weather info
+        if (lower.startsWith(cmdpref + 'weather')) {
+            weatherInfo(lower.substr(cmdpref.length + 8), (response) => {
+                message.channel.sendEmbed(response);
+            });
+            messageConsoleLog(message, true);
         }
 
         // sankaku search
@@ -1152,7 +1511,31 @@ bot.on('message', function (message) {
 
         // legekka-only commands
         if (message.author.username == 'legekka') {
+            if (lower.startsWith(cmdpref + 'secret')) {
+                giveSecret(lower.split(' ')[1],lower.split(' ')[2],(response) => {
+                    message.channel.sendMessage(response);
+                });
+                messageConsoleLog(message, true);
+            }
             // console commands
+            if (lower.startsWith(cmdpref + 'remlist')) {
+                reminderLister(lower.substr(cmdpref.length + 'remlist'.length + 1), (response) => {
+                    message.channel.sendEmbed(response);
+                });
+                messageConsoleLog(message, true);
+            }
+
+            if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
+                workdayinfo((response) => {
+                    message.channel.sendEmbed(response);
+                });
+                messageConsoleLog(message, true);
+            }
+            if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
+                ohio(message);
+                messageConsoleLog(message, true);
+            }
+
             if (message.content.startsWith(cmdpref + 'motd')) {
                 motd = lower.substr(6);
                 bot.user.setGame(motd);
@@ -1275,7 +1658,6 @@ bot.on('presenceUpdate', function (oldUser, newUser) {
 code = execSync('clear');
 process.stdout.write(c.bgWhite.green('#'));
 initialize();
-updateListener();
 process.stdout.write(c.bgWhite.green('#'));
 bot.login(token);
 process.stdout.write(c.bgWhite.green(' ' + getTime('date') + ' ' + getTime('time') + '\n'));
