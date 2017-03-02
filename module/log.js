@@ -30,6 +30,11 @@ module.exports = {
                 }
             }
         }
+    },
+    consoleLog: (bot, text) => {
+        console.log(text);
+        bot.channels.get('281189261355515915').sendMessage(rawtext(text));
+        log(text + '\r\n');
     }
 }
 
