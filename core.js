@@ -6,8 +6,6 @@ const Discord = require('discord.js');
 var reqreload = require('./module/reqreload.js');
 var bot = new Discord.Client();
 const fs = require('fs');
-require('./module/osuirc.js')(bot);
-require('./module/console.js')(bot);
 
 var tsun = true;    // tsundere mode
 var cmdpref = '!';  // default command prefix
@@ -17,8 +15,12 @@ var token = fs.readFileSync('../profile.txt').toString();
 var ch = {
     'main': '281188840084078594',
     'gekkylog': '281189261355515915',
+    'osuirc': '289509321446916096',
     'current': '281188840084078594',
 }
+
+var client = require('./module/osuirc.js').start(bot, ch, client);
+require('./module/console.js')(bot, ch, client);
 
 bot.login(token);
 
