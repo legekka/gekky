@@ -12,7 +12,7 @@ module.exports = {
             var ircpw = fs.readFileSync('../ircpw.txt').toString();
             globs.client = new irc.Client('irc.ppy.sh', 'legekka', {
                 password: ircpw,
-                channels: ['#osu', '#hungarian']
+                channels: [/*'#osu',*/'#hungarian']
             });
             globs.client.addListener('registered', (message) => {
                 if (message.rawCommand == '001') {
@@ -22,7 +22,7 @@ module.exports = {
             });
             globs.client.addListener('message', (from, to, message) => {
                 if (to[0] == '#') {
-                    var msg = to + ' ' + from + ': ' + message;
+                    var msg = timeStamp() + ' ' + to + ' ' + from + ': ' + message;
                     if (to == '#osu') {
                         msg = c.grey(msg);
                     }
@@ -30,22 +30,28 @@ module.exports = {
                     bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
                 }
             });
+
+
             globs.client.addListener('pm', (from, text, message) => {
                 console.log(c.yellow('[IRC] ') + c.cyan(from) + ': ' + text);
+                bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
-            globs.client.addListener('selfMessage', (to, text) => {
-                if (to[0] == '#') {
-                    console.log(c.yellow('[IRC] ') + to + ' legekka: ' + text);
-                } else {
-                    console.log(c.yellow('[IRC] ') + to + ': ' + text);
-                }
-            });
+
+
+            // globs.client.addListener('selfMessage', (to, text) => {
+            //     if (to[0] == '#') {
+            //         console.log(c.yellow('[IRC] ') + to + ' legekka: ' + text);
+            //     } else {
+            //         console.log(c.yellow('[IRC] ') + to + ': ' + text);
+            //     }
+            // });
             globs.client.addListener('error', function (message) {
                 console.log(c.yellow('[IRC]') + ' Error: ', message);
             });
         } else {
             console.log(c.yellow('[IRC]') + ' is already running');
         }
+        return globs.client;
     },
     stop: (bot, globs) => {
         if (globs.irc_online) {
@@ -57,6 +63,17 @@ module.exports = {
         } else {
             console.log(c.yellow('[IRC]') + ' is already disconnected.');
         }
+        return globs.client;
+    },
+    say: (bot, globs, to, text) => {
+        globs.client.say(to, text);
+        if (to[0] == '#') {
+            var msg = timeStamp() + ' ' + to + c.magenta(' legekka: ') + text;
+        } else {
+            var msg = timeStamp() + ' PM' + to + c.magenta(' legekka: ') + text;
+        }
+        console.log(c.yellow('[IRC] ') + msg);
+        return globs.client;
     }
 }
 
