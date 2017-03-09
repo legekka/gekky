@@ -5,7 +5,9 @@ const reqreload = require('./reqreload.js');
 
 var ownerid = '143399021740818432';
 
-module.exports = (bot, message, cmdpref, callback) => {
+module.exports = (bot, message, globs, callback) => {
+    var cmdpref = globs.cmdpref;
+    var tsun = globs.tsun;
     delete require.cache[require.resolve('./blacklist.js')];
     if (!require('./blacklist.js').isBlacklisted(message)) {
         var lower = message.content.toLowerCase();

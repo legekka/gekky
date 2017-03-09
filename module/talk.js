@@ -49,7 +49,9 @@ function loadDialogs() {
 }
 
 loadDialogs();
-module.exports = (bot, message, tsun, cmdpref) => {
+module.exports = (bot, globs, message) => {
+    tsun = globs.tsun;
+    cmdpref = globs.cmdpref;
     var lower = message.content.toLowerCase();
     delete require.cache[require.resolve('./blacklist.js')];
     if (!require('./blacklist.js').isBlacklisted(message)) {

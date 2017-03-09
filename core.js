@@ -7,25 +7,25 @@ var reqreload = require('./module/reqreload.js');
 var bot = new Discord.Client();
 const fs = require('fs');
 
-var tsun = true;    // tsundere mode
-var cmdpref = '!';  // default command prefix
-
-var token = fs.readFileSync('../profile.txt').toString();
-
-var ch = {
-    'main': '281188840084078594',
-    'gekkylog': '281189261355515915',
-    'osuirc': '289509321446916096',
-    'current': '281188840084078594',
+var globs = {
+    'tsun': true,       // tsundere mode
+    'cmdpref': '!',     // default command prefix
+    'token': token = fs.readFileSync('../profile.txt').toString(),
+    'ch': {
+        'main': '281188840084078594',
+        'gekkylog': '281189261355515915',
+        'osuirc': '289509321446916096',
+        'current': '281188840084078594',
+    },
+    'client': undefined
 }
+globs.client = require('./module/osuirc.js').start(bot, globs);
+require('./module/console.js')(bot, globs);
 
-var client = require('./module/osuirc.js').start(bot, ch, client);
-require('./module/console.js')(bot, ch, client);
-
-bot.login(token);
+bot.login(globs.token);
 
 bot.on('ready', function () {
-    bot.channels.get(ch.main).sendMessage('[online]');
+    bot.channels.get(globs.ch.main).sendMessage('[online]');
     console.log('[online]');
     bot.user.setPresence({
         "status": "online",
@@ -34,23 +34,22 @@ bot.on('ready', function () {
 });
 
 bot.on('message', (message) => {
-    reqreload('./talk.js')(bot, message, tsun, cmdpref);
+    reqreload('./talk.js')(bot, globs, message);
 
     var is_a_command = false;
 
     reqreload('./command.js')(bot, message, cmdpref, (response) => {
         if (response.mode != undefined) {
             switch (response.mode) {
-                case 'cmdpref': cmdpref = response.cmdpref;
+                case 'cmdpref': globs.cmdpref = response.cmdpref;
                     break;
-                case 'tsun': tsun = response.tsun;
+                case 'tsun': globs.tsun = response.tsun;
             }
         }
         is_a_command = response.is_a_command;
     });
 
-    delete require.cache[require.resolve('./module/log.js')];
-    require('./module/log.js').messageConsoleLog(bot, message, ch, is_a_command);
+    reqreload('./log.js').messageConsoleLog(bot, message, globs, is_a_command);
 
     // frame rész, egyenlőre nem tudtam másképp megoldani hogy működjön. Majd még gondolkozom rajta
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
@@ -67,8 +66,8 @@ bot.on('message', (message) => {
 
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    bot.channels.get(ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
-        bot.channels.get(ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
+    bot.channels.get(globs.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
+        bot.channels.get(globs.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
             process.exit(3);
         })
     });

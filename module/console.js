@@ -2,7 +2,7 @@
 // gekky's console module
 var reqreload = require('./reqreload.js');
 
-module.exports = function (bot, ch, client) {
+module.exports = function (bot, globs) {
     var inp = process.openStdin();
 
     inp.addListener('data', (d) => {
@@ -19,9 +19,9 @@ module.exports = function (bot, ch, client) {
                     process.exit(2);
                 })
             } else if (cmd == 'ircstart') {
-                client = reqreload('./osuirc.js').start(bot, ch, client);
+                globs.client = reqreload('./osuirc.js').start(bot, globs);
             } else if (cmd == 'ircstop') {
-                client = reqreload('./osuirc.js').stop(bot, ch, client);
+                globs.client = reqreload('./osuirc.js').stop(bot, globs);
             } else {
                 console.log('Ismeretlen parancs: ' + cmd);
             }

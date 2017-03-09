@@ -5,7 +5,9 @@ var fs = require('fs');
 var c = require('chalk');
 
 module.exports = {
-    start: (bot, ch, client) => {
+    start: (bot, globs) => {
+        var ch = globs.ch;
+        client = globs.client;
         var ircpw = fs.readFileSync('../ircpw.txt').toString();
         client = new irc.Client('irc.ppy.sh', 'legekka', {
             password: ircpw,
@@ -43,7 +45,9 @@ module.exports = {
 
         return client;
     },
-    stop: (bot, ch, client) => {
+    stop: (bot, globs) => {
+        client = globs.client;
+        var ch = globs.ch;
         client.disconnect();
         console.log(c.yellow('[IRC]') + ' is disconnected.');
         bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');

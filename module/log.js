@@ -3,13 +3,14 @@
 
 const fs = require('fs');
 const c = require('chalk');
+var reqreload = require('./reqreload.js');
 
 var path = '../log.txt';
 
 module.exports = {
-    messageConsoleLog: (bot, message, ch, is_a_command) => {
-        delete require.cache[require.resolve('./blacklist.js')];
-        if (!require('./blacklist.js').isBlacklisted(message)) {
+    messageConsoleLog: (bot, message, globs, is_a_command) => {
+        var ch = globs.ch;
+        if (!reqreload('./blacklist.js').isBlacklisted(message)) {
             var chID = message.channel.id;
             if (chID == undefined) { chname = 'private#'; } else { chname = bot.channels.get(chID).name; }
             if (message.content == '') { message.content = '<attachment>'; }
