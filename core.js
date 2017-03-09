@@ -17,7 +17,8 @@ var globs = {
         'osuirc': '289509321446916096',
         'current': '281188840084078594',
     },
-    'client': undefined
+    'client': undefined,
+    'irc_online': false,
 }
 globs.client = require('./module/osuirc.js').start(bot, globs);
 require('./module/console.js')(bot, globs);
