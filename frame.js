@@ -3,10 +3,11 @@
 
 const fs = require('fs');
 const Discord = require('discord.js');
+const c = require('chalk');
 var exec = require('child_process').exec;
 var bot = new Discord.Client();
 
-var motd = '{Frame}';
+var motd = '[Frame]';
 
 var isStarted = false;  // events
 var Reloading = false;
@@ -24,8 +25,8 @@ bot.login(token);
 
 bot.on('ready', function () {
     if (!isStarted) {
-        bot.channels.get(main).sendMessage('{Frame} online');
-        console.log('{Frame} online');
+        bot.channels.get(main).sendMessage('[Frame] online');
+        console.log(c.red('[Frame]') + ' online');
         bot.user.setPresence({
             "status": "dnd",
         });
@@ -38,20 +39,20 @@ bot.on('message', (message) => {
         var lower = message.content.toLowerCase();
         if (lower == '!start') {
             if (!isStarted) {
-                console.log('{Frame} Starting gekky...');
-                bot.channels.get(main).sendMessage('{Frame} Starting gekky...');
+                console.log(c.red('[Frame]') + ' Starting gekky...');
+                bot.channels.get(main).sendMessage('[Frame] Starting gekky...');
                 Starting = true;
             } else {
-                console.log('{Frame} Gekky is already running...');
-                bot.channels.get(main).sendMessage('{Frame} Gekky is already running...');
+                console.log(c.red('[Frame]') + ' Gekky is already running...');
+                bot.channels.get(main).sendMessage('[Frame] Gekky is already running...');
             }
         } else if ((lower == '!reload' || lower == '!close' || lower == '!stop') && !isStarted) {
-            console.log('{Frame} Gekky is not running...');
-            bot.channels.get(main).sendMessage('{Frame} Gekky is not running...');
+            console.log(c.red('[Frame]') + ' Gekky is not running...');
+            bot.channels.get(main).sendMessage('[Frame] Gekky is not running...');
         }
         if (lower == '!isstarted') {
             isStarted = !isStarted;
-            bot.channels.get(main).sendMessage('{Frame} isStarted = ' + isStarted);
+            bot.channels.get(main).sendMessage('[Frame] isStarted = ' + isStarted);
         }
     }
 })
@@ -65,8 +66,8 @@ function frame() {
     gekky.on('exit', (code) => {
         if (code == 1) {
             isStarted = false;
-            console.log('{Frame} Gekky has been stopped...');
-            bot.channels.get(main).sendMessage('{Frame} Gekky has been stopped...');
+            console.log(c.red('[Frame]') + ' Gekky has been stopped...');
+            bot.channels.get(main).sendMessage('[Frame] Gekky has been stopped...');
             bot.user.setPresence({
                 "status": "dnd",
             });
@@ -75,14 +76,14 @@ function frame() {
         if (code == 2) {
             isStarted = false;
             Reloading = true;
-            console.log('{Frame} Reloading Gekky...');
-            bot.channels.get(main).sendMessage('{Frame} Reloading Gekky...');
+            console.log(c.red('[Frame]') + ' Reloading Gekky...');
+            bot.channels.get(main).sendMessage('[Frame] Reloading Gekky...');
         }
         if (code == 3) {
             isStarted = false;
             Reloading = true;
-            console.log('{Frame} Fatal error, restarting Gekky...');
-            bot.channels.get(main).sendMessage('{Frame} Fatal error, restarting Gekky...')
+            console.log(c.red('[Frame]') + ' Fatal error, restarting Gekky...');
+            bot.channels.get(main).sendMessage('[Frame] Fatal error, restarting Gekky...')
         }
     });
 }
@@ -104,34 +105,34 @@ inp.addListener('data', (d) => {
         if (isStarted) {
             gekky.stdin.write(d);
         } else {
-            console.log('{Frame} Gekky is not started...');
+            console.log(c.red('[Frame]') + ' Gekky is not started...');
         }
     } else {
         // frame commands goes here
         if (cmd == '!start') {
             if (!isStarted) {
-                console.log('{Frame} Starting gekky...');
-                bot.channels.get(main).sendMessage('{Frame} Starting gekky...');
+                console.log(c.red('[Frame]') + ' Starting gekky...');
+                bot.channels.get(main).sendMessage('[Frame] Starting gekky...');
                 Starting = true;
             } else {
-                console.log('{Frame} Gekky is already running...');
+                console.log(c.red('[Frame]') + ' Gekky is already running...');
             }
         } else if (cmd == '!isstarted') {
             isStarted = !isStarted;
-            console.log('{Frame} isStarted = ' + isStarted);
+            console.log(c.red('[Frame]') + ' isStarted = ' + isStarted);
         } else if (cmd == '!close') {
             if (isStarted) {
                 gekky.stdin.write('close');
             }
-            bot.channels.get(main).sendMessage('{Frame} Stopping frame...').then(() => {
+            bot.channels.get(main).sendMessage('[Frame] Stopping frame...').then(() => {
                 bot.destroy().then(() => {
-                    console.log('{Frame} Stopping frame...');
+                    console.log(c.red('[Frame]') + ' Stopping frame...');
                     process.exit(0);
                 });
             });
         }
         else {
-            console.log("{Frame} Undefined command: '" + cmd + "'");
+            console.log("[Frame] Undefined command: '" + cmd + "'");
         }
     }
 })

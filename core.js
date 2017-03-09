@@ -3,12 +3,14 @@
 
 
 const Discord = require('discord.js');
+var reqreload = require('./module/reqreload.js');
 var bot = new Discord.Client();
 const fs = require('fs');
+require('./module/osuirc.js')(bot);
 require('./module/console.js')(bot);
 
 var tsun = true;    // tsundere mode
-var cmdpref = '!';   // default command prefix
+var cmdpref = '!';  // default command prefix
 
 var token = fs.readFileSync('../profile.txt').toString();
 
@@ -30,13 +32,11 @@ bot.on('ready', function () {
 });
 
 bot.on('message', (message) => {
-    delete require.cache[require.resolve('./module/talk.js')];
-    require('./module/talk.js')(bot, message, tsun, cmdpref);
+    reqreload('./talk.js')(bot, message, tsun, cmdpref);
 
     var is_a_command = false;
 
-    delete require.cache[require.resolve('./module/command.js')];
-    require('./module/command.js')(bot, message, cmdpref, (response) => {
+    reqreload('./command.js')(bot, message, cmdpref, (response) => {
         if (response.mode != undefined) {
             switch (response.mode) {
                 case 'cmdpref': cmdpref = response.cmdpref;
