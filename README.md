@@ -16,6 +16,7 @@ Parts:
 - Prime game - primegame.js
 - Console I/O - console.js
 - Message logging - log.js
+- osu irc - osuirc.js
 
 Frame Part - frame.js
 ---------------------
@@ -85,3 +86,10 @@ Message logging - log.js
 - üzenet logolás konzolra
 - színes, parancsok szerinti kiíratás
 - logolás fájlba
+
+osu! Irc - osuirc.js
+--------------------
+
+- osu chat logolás és üzenés
+- online user listázás
+- privát üzenetküldés
