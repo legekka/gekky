@@ -4,7 +4,7 @@ var reqreload = require('./reqreload.js');
 
 module.exports = function (bot, globs) {
     var inp = process.openStdin();
-    
+
     inp.addListener('data', (d) => {
         if (d.toString().startsWith('>')) {
             // sending messages here from console
@@ -24,6 +24,8 @@ module.exports = function (bot, globs) {
                 globs.client = reqreload('./osuirc.js').stop(bot, globs);
             } else if (cmd.startsWith('<')) {
                 globs.client = reqreload('./osuirc.js').say(bot, globs, cmd.split(' ')[0].substr(1), cmd.substr(cmd.split(' ')[0].length + 1));
+            } else if (cmd == '') {
+                // no input
             } else {
                 console.log('Ismeretlen parancs: ' + cmd);
             }
