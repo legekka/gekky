@@ -1,6 +1,8 @@
 // command.js
 // specified commands
 
+const reqreload = require('./reqreload.js');
+
 var ownerid = '143399021740818432';
 
 module.exports = (bot, message, cmdpref, callback) => {
@@ -15,6 +17,9 @@ module.exports = (bot, message, cmdpref, callback) => {
                 message.channel.sendEmbed(response);
             });
             is_a_command = true;
+        }
+        if (lower.startsWith(cmdpref + 'nhentai')) {
+            reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
         }
 
         // legekka-only commands
