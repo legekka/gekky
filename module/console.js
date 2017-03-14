@@ -1,6 +1,7 @@
 // console.js
 // gekky's console module
 var reqreload = require('./reqreload.js');
+const c = require('chalk');
 
 module.exports = function (bot, globs) {
     var inp = process.openStdin();
