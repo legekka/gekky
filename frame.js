@@ -111,6 +111,9 @@ var updater = setInterval(() => {
         if (response.update) {
             console.log(c.green('[UPDATING]'));
             console.log(response.data);
+            if (connected) {
+                bot.channels.get(main).sendMessage('```'+response.data+'```');
+            }
             if (response.full) {
                 console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
                 clearInterval(updater);
