@@ -4,7 +4,6 @@ var reqreload = require('./reqreload.js');
 
 module.exports = function (bot, globs) {
     var inp = process.openStdin();
-
     inp.addListener('data', (d) => {
         if (d.toString().startsWith('>')) {
             // sending messages here from console
