@@ -9,7 +9,7 @@ const fs = require('fs');
 
 var globs = {
     'tsun': true,       // tsundere mode
-    'cmdpref': '!',     // default command prefix
+    'cmdpref': '$',     // default command prefix
     'token': token = fs.readFileSync('../profile.txt').toString(),
     'ch': {
         'main': '281188840084078594',

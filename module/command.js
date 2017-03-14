@@ -38,6 +38,13 @@ module.exports = (bot, message, globs, callback) => {
                 })
             });
         }
+        if (lower.startsWith(cmdpref + 'git')) {
+            message.channel.sendEmbed({
+                'title': 'GitHub',
+                'desc': 'Teljes nyílt forráskód',
+                'url':'http://github.com/legekka/gekky'
+            })
+        }
         if (lower.startsWith(cmdpref + 'ver')) {
             // !ver|Kiírja a jelenlegi verziót.
             reqreload('./updater.js').fullver((resp) => {
