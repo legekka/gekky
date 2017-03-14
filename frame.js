@@ -107,7 +107,7 @@ setInterval(() => {
 // updater //
 
 var updater = setInterval(() => {
-    reqreload('./updater.js')((response) => {
+    reqreload('./updater.js').update((response) => {
         if (response.update) {
             console.log(c.green('[UPDATING]'));
             console.log(response.data);

@@ -32,7 +32,9 @@ bot.on('ready', function () {
     bot.user.setPresence({
         "status": "online",
     });
-    bot.user.setGame('Re:Born [Alpha]');
+    reqreload('./updater.js').ver((motd) => {
+        bot.user.setGame(motd);
+    });  
 });
 
 bot.on('message', (message) => {
