@@ -93,10 +93,10 @@ module.exports = {
         return globs.client;
     },
     teszt: (bot, globs) => {
-
-        globs.client.join('#hungarian');
-        globs.client.list('names');
-        return globs.client;
+        globs.client.part('#hungarian', () => {
+            globs.client.join('#hungarian');
+            return globs.client;
+        });
     }
 }
 
