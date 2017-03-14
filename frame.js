@@ -112,14 +112,22 @@ var updater = setInterval(() => {
             console.log(c.green('[UPDATING]'));
             console.log(response.data);
             if (connected) {
-                bot.channels.get(main).sendMessage('```'+response.data+'```');
+                bot.channels.get(main).sendMessage('```' + response.data + '```');
             }
             if (response.full) {
                 console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
                 clearInterval(updater);
                 console.log(c.green('[UPDATER] ') + 'update listening stopped.');
                 if (connected) {
-                    bot.channels.get(main).sendMessage('[UPDATER] <@143399021740818432> frame reload needed.' );
+                    if (isStarted) {
+                        gekky.stdin.write('close');
+                    }
+                    bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
+                        bot.destroy().then(() => {
+                            console.log(c.red('[Frame]') + ' Reloading frame...');
+                            process.exit(2);
+                        });
+                    });
                 }
             } else if (response.core) {
                 if (isStarted) {
