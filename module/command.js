@@ -22,10 +22,6 @@ module.exports = (bot, message, globs, callback) => {
             });
             is_a_command = true;
         }
-        if (lower.startsWith(cmdpref + 'nhentai')) {
-
-            reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
-        }
         if (lower.startsWith(cmdpref + 'help')) {
             // !help|Lista a parancsokról, leírással.
             reqreload('./help.js').list((list) => {
@@ -61,6 +57,9 @@ module.exports = (bot, message, globs, callback) => {
         }
         // legekka-only commands
         if (message.author.id == ownerid) {
+            if (lower.startsWith(cmdpref + 'nhentai')) {
+                reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
+            }
             if (lower.startsWith(cmdpref + 'del')) {
                 // !del|Üzenet törlő. !del <üzenetszám>
                 var number = lower.split(' ')[1];
