@@ -90,8 +90,8 @@ module.exports = {
             bot.channels.get(globs.ch.main).sendMessage('[IRC] channellist_start');
             console.log(c.yellow('[IRC]') + ' channellist_start');
         })
-        globs.client.addListener('names#channel', (nicks) => {
-            console.log(c.yellow('[IRC]') + ' names#channel - nicks');
+        globs.client.addListener('names', (channel, nicks) => {
+            console.log(c.yellow('[IRC]') + ' names - nicks');
             console.log(nicks);
         })
 
