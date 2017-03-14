@@ -41,7 +41,9 @@ module.exports = {
 
             globs.client.addListener('pm', (from, text, message) => {
                 console.log(c.yellow('[IRC] ') + c.cyan(from) + ': ' + text);
-                if (bot.users.get('143399021740818432').presence.status != 'online') {
+                if (bot.users.get('143399021740818432').presence.status != 'online' || (
+                bot.users.get('143399021740818432').presence.status == 'online' && 
+                bot.users.get('143399021740818432').presence.game != 'osu!')) {
                     bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>');
                 }
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
