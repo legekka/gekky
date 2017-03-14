@@ -57,7 +57,7 @@ module.exports = {
                 if (bot.users.get('143399021740818432').presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
                     globs.client.say(from, "#GEKKY# Oy. Im gekky. legekka is currently offline, but I sent him your message. Please be patient. He may not answer.");
                     console.log(c.yellow('[IRC] ') + from + ' ' + c.green('gekky: ') + '[afk message]');
-                    bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` PM`' + from + '` `gekky:` [AFK MESSAGE]');
+                    bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
                 }
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
