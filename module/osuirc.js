@@ -82,7 +82,7 @@ module.exports = {
                     for (i in userlist) {
                         str += userlist[i] + '\n';
                     }
-                    bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel + '`\n```' + str + '```');
+                    bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (userlist.length - 1) + '\nChannel: `' + globs.irc_channel + '`\n```' + str + '```');
                 }
             }, 10000);
 
