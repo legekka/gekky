@@ -5,7 +5,7 @@ var exec = require('child_process').exec;
 
 module.exports = () => {
     var checker = setInterval(() => {
-        statuscheck = exec('git status');
+        statuscheck = exec('git checkout master');
         statuscheck.stdout.on('data', (data) => {
             text = data.toString();
             if (text.indexOf('up-to-date') < 0) {
@@ -43,6 +43,8 @@ module.exports = () => {
                 updateing.on('exit', (code) => {
                     console.log('exited: ' + code);
                 })
+            } else {
+                console.log('up-to-date')
             }
         });
     }, 1000);
