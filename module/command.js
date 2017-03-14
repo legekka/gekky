@@ -29,9 +29,12 @@ module.exports = (bot, message, globs, callback) => {
         if (lower.startsWith(cmdpref + 'help')) {
             // !help|Lista a parancsokról, leírással.
             reqreload('./help.js').list((list) => {
-                var str='';
+                var str = '';
                 for (i in list) {
                     str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n\n';
+                }
+                while (str.replace('!', cmdpref) != str) {
+                    str = str.replace('!', cmdpref);
                 }
                 message.channel.sendEmbed({
                     'title': 'Parancsok',
@@ -44,7 +47,7 @@ module.exports = (bot, message, globs, callback) => {
             message.channel.sendEmbed({
                 'title': 'GitHub',
                 'description': 'Teljes nyílt forráskód',
-                'url':'http://github.com/legekka/gekky'
+                'url': 'http://github.com/legekka/gekky'
             })
         }
         if (lower.startsWith(cmdpref + 'ver')) {
@@ -137,7 +140,7 @@ module.exports = (bot, message, globs, callback) => {
                 }
                 message.channel.sendMessage('New prefix: `' + cmdpref + '`');
                 var mode = 'cmdpref';
-                fs.writeFileSync('./data/pref.txt',cmdpref);
+                fs.writeFileSync('./data/pref.txt', cmdpref);
                 is_a_command = true;
             }
             if (lower == cmdpref + 'tsun') {
