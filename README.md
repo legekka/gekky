@@ -17,6 +17,7 @@ Parts:
 - Console I/O - console.js
 - Message logging - log.js
 - osu irc - osuirc.js
+- help - help.js
 
 Frame Part - frame.js
 ---------------------

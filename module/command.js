@@ -14,6 +14,7 @@ module.exports = (bot, message, globs, callback) => {
         var is_a_command = false;
         var mode;
         if (lower.startsWith(cmdpref + 'weather')) {
+            // !weather|Időjárás információ. !weather <város>
             delete require.cache[require.resolve('./weather.js')];
             require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
                 message.channel.sendEmbed(response);
@@ -21,12 +22,29 @@ module.exports = (bot, message, globs, callback) => {
             is_a_command = true;
         }
         if (lower.startsWith(cmdpref + 'nhentai')) {
+            // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
             reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
         }
-
+        if (lower.startsWith(cmdpref + 'help')) {
+            // !help|Lista a parancsokról, leírással.
+            reqreload('./help.js').list((list) => {
+                var str = '**Parancslista**\n';
+                for (i in list) {
+                    str += '\n**' + list[i].cmd + '**\n*' + list[i].desc + '*';
+                }
+                message.channel.sendMessage(str);
+            });
+        }
+        if (lower.startsWith(cmdpref + 'ver')) {
+            // !ver|Kiírja a jelenlegi verziót.
+            reqreload('./updater.js').ver((ver) => {
+                message.channel.sendMessage('Jelenlegi verzió: `' + ver + '`');
+            });
+        }
         // legekka-only commands
         if (message.author.id == ownerid) {
             if (lower.startsWith(cmdpref + 'del')) {
+                // !del|Üzenet törlő. !del <üzenetszám>
                 var number = lower.split(' ')[1];
                 if (!isNaN(number)) {
                     var number = parseInt(number);
