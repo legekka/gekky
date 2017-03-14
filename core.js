@@ -19,6 +19,7 @@ var globs = {
     },
     'client': undefined,
     'irc_online': false,
+    'irc_channel': 'legekka',
 }
 
 require('./module/console.js')(bot, globs);

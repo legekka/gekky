@@ -5,7 +5,7 @@ var fs = require('fs');
 var c = require('chalk');
 
 module.exports = {
-    start: (bot, globs) => {
+    start: (bot, globs, messag) => {
         if (!globs.irc_online) {
             globs.irc_online = true;
             var ch = globs.ch;
@@ -50,10 +50,13 @@ module.exports = {
             });
         } else {
             console.log(c.yellow('[IRC]') + ' is already running');
+            if (messag != undefined) {
+                messag.channel.sendMessage('[IRC] is already running');
+            }
         }
         return globs.client;
     },
-    stop: (bot, globs) => {
+    stop: (bot, globs, messag) => {
         if (globs.irc_online) {
             globs.irc_online = false;
             var ch = globs.ch;
@@ -62,6 +65,9 @@ module.exports = {
             bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');
         } else {
             console.log(c.yellow('[IRC]') + ' is already disconnected.');
+            if (messag != undefined) {
+                messag.channel.sendMessage('[IRC] is already disconnected');
+            }
         }
         return globs.client;
     },

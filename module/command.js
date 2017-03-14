@@ -24,7 +24,7 @@ module.exports = (bot, message, globs, callback) => {
         }
         if (lower.startsWith(cmdpref + 'help')) {
             // !help|Lista a parancsokról, leírással.
-            reqreload('./help.js').list(message,(list) => {
+            reqreload('./help.js').list(message, (list) => {
                 var str = '';
                 for (i in list) {
                     str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n\n';
@@ -57,7 +57,9 @@ module.exports = (bot, message, globs, callback) => {
         }
         // legekka-only commands
         if (message.author.id == ownerid) {
+
             if (lower.startsWith(cmdpref + 'nhentai')) {
+                // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
                 reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
             }
             if (lower.startsWith(cmdpref + 'del')) {
@@ -191,6 +193,27 @@ module.exports = (bot, message, globs, callback) => {
                 checkCache(SankakuPath, 50, message);
             }
             */
+
+            // osu irc rész
+            if (lower.startsWith(cmdpref + 'ircstart')) {
+                // !ircstart|osu! irc elindítása
+                globs.client = reqreload('./osuirc.js').start(bot, globs, message);
+            }
+            if (lower.startsWith(cmdpref + 'ircstop')) {
+                // !ircstop|osu! irc leállítása
+                globs.client = reqreload('./osuirc.js').stop(bot, globs, message);
+            }
+            // üzenetküldés
+            if (globs.client != undefined && message.channel.id == globs.ch.osuirc) {
+                if (lower.startsWith(cmdpref + 'to')) {
+                    // !to|osu! irc címzett váltás
+                    globs.irc_channel = message.content.substr(cmdpref.length + 3);
+                    message.sendMessage('[IRC] Címzett: ' + globs.irc_channel);
+                } else if (lower.startsWith('>')) {
+                    var text = message.content.substr(1);
+                    reqreload('./osuirc.js').say(globs.irc_channel,text);
+                }
+            }
         }
         if (mode != undefined) {
             switch (mode) {
