@@ -27,6 +27,5 @@ module.exports = (callback) => {
         } else {
             return callback(resp);
         }
-
     });
 }
