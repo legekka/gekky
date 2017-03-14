@@ -213,7 +213,7 @@ module.exports = (bot, message, globs, callback) => {
                     // !to|osu irc címzett váltás
                     message.delete();
                     globs.irc_channel = message.content.substr(cmdpref.length + 3);
-                    message.channel.sendMessage('[IRC] Címzett: ' + globs.irc_channel);
+                    message.channel.sendMessage('[IRC] Címzett: `' + globs.irc_channel + '`');
                 } else {
                     message.delete();
                     var text = message.content;

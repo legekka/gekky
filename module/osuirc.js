@@ -3,6 +3,7 @@
 var irc = require('irc');
 var fs = require('fs');
 var c = require('chalk');
+var online_users;
 
 module.exports = {
     start: (bot, globs, messag) => {
@@ -32,7 +33,7 @@ module.exports = {
                     }
                     if (message.indexOf('gekka') >= 0 && from != 'legekka') {
                         bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>');
-                    } 
+                    }
                     console.log(c.yellow('[IRC] ') + msg);
                     bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
                 }
@@ -42,8 +43,8 @@ module.exports = {
             globs.client.addListener('pm', (from, text, message) => {
                 console.log(c.yellow('[IRC] ') + c.cyan(from) + ': ' + text);
                 if (bot.users.get('143399021740818432').presence.status != 'online' || (
-                bot.users.get('143399021740818432').presence.status == 'online' && 
-                bot.users.get('143399021740818432').presence.game != 'osu!')) {
+                    bot.users.get('143399021740818432').presence.status == 'online' &&
+                    bot.users.get('143399021740818432').presence.game != 'osu!')) {
                     bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>');
                 }
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
@@ -72,6 +73,11 @@ module.exports = {
                 bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\n```' + str + '```');
             })
 
+            online_users = setInterval(() => {
+                globs.client.part('#hungarian');
+                globs.client.join('#hungarian');
+            }, 10000);
+
             // globs.client.addListener('selfMessage', (to, text) => {
             //     if (to[0] == '#') {
             //         console.log(c.yellow('[IRC] ') + to + ' legekka: ' + text);
@@ -95,6 +101,7 @@ module.exports = {
             globs.irc_online = false;
             var ch = globs.ch;
             bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).delete();
+            clearInterval(online_users);
             globs.client.disconnect();
             console.log(c.yellow('[IRC]') + ' is disconnected.');
             bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');
