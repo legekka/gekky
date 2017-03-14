@@ -7,6 +7,8 @@ const c = require('chalk');
 var exec = require('child_process').exec;
 var bot = new Discord.Client();
 
+var a = require('./module/updater.js')();
+
 var motd = '[Frame]';
 
 var isStarted = false;  // events
