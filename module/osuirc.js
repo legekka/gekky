@@ -39,7 +39,7 @@ module.exports = {
 
             globs.client.addListener('names', (channel, nicks) => {
                 console.log(c.yellow('[IRC]') + ' names - nicks');
-                var str = nicks.toString().split(',');
+                var str = JSON.stringify(nicks).split(',');
                 console.log(str);
             })
 
