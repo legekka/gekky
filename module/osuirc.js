@@ -75,10 +75,13 @@ module.exports = {
         globs.client.say(to, text);
         if (to[0] == '#') {
             var msg = timeStamp() + ' ' + to + c.magenta(' legekka: ') + text;
+            var msg2 = '`' + timeStamp() + '` `' + to + '` `legekka:` ' + text; 
         } else {
-            var msg = timeStamp() + ' PM' + to + c.magenta(' legekka: ') + text;
+            var msg = timeStamp() + ' PM ' + to + c.magenta(' legekka: ') + text;
+            var msg2 = '`' + timeStamp() + '` `PM ' + to + '` `legekka:` ' + text; 
         }
         console.log(c.yellow('[IRC] ') + msg);
+        bot.channel.get(globs.osuirc).sendMessage(msg2);
         return globs.client;
     }
 }
