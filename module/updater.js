@@ -12,7 +12,7 @@ module.exports = (callback) => {
         console.log('data: ' + data);
         text = data.toString();
         if (text.indexOf('up-to-date') < 0) {
-             need_update = true;
+            need_update = true;
             if (data.toString().indexOf('frame.js') >= 0) {
                 console.log(data.toString());
                 need_full_reload = true;
@@ -27,10 +27,10 @@ module.exports = (callback) => {
         } else {
             console.log('uptodate');
         }
+        return callback({
+            'update': need_update,
+            'full': need_full_reload,
+            'core': need_core_reload
+        })
     });
-    return callback({
-        'update': need_update,
-        'full': need_full_reload,
-        'core': need_core_reload
-    })
 }
