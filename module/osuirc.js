@@ -17,7 +17,10 @@ module.exports = {
             globs.client.addListener('registered', (message) => {
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
-                    bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**');
+                    bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**', (message) => {
+                        globs.irc_pin = message.id;
+                        message.pin()
+                    });
                 }
             });
             globs.client.addListener('message', (from, to, message) => {
@@ -41,18 +44,23 @@ module.exports = {
                 console.log(c.yellow('[IRC]') + ' names - nicks');
                 var str = JSON.stringify(nicks);
                 while (str.indexOf('"') >= 0) {
-                    str = str.replace('"','');
+                    str = str.replace('"', '');
                 }
                 while (str.indexOf("'") >= 0) {
-                    str = str.replace("'",'');
+                    str = str.replace("'", '');
                 }
-                while (str.indexOf(':') >= 0) {$
-                    str = str.replace(':','');
+                while (str.indexOf(':') >= 0) {
+                    str = str.replace(':', '');
                 }
-                str = str.replace('{','');
-                str = str.replace('}','');
+                str = str.replace('{', '');
+                str = str.replace('}', '');
                 var array = str.split(',');
                 console.log(array);
+                var str = '';
+                for (i in array) {
+                    str+=array[i]+'\n';
+                }
+                bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit(str);
             })
 
             // globs.client.addListener('selfMessage', (to, text) => {
