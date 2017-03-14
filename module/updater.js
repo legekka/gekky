@@ -5,7 +5,8 @@ var exec = require('child_process').exec;
 var resp = {
     'update': false,
     'full': false,
-    'core': false
+    'core': false,
+    'data':''
 }
 
 module.exports = (callback) => {
@@ -15,15 +16,19 @@ module.exports = (callback) => {
         resp.update = false;
         if (text.indexOf('up-to-date') < 0) {
             resp.update = true;
-            if (data.toString().indexOf('frame.js') >= 0) {
+            if (text.indexOf('frame.js') >= 0) {
                 resp.full = true;
             }
-            if (data.toString().indexOf('core.js') >= 0 ||
-                data.toString().indexOf('console.js') >= 0) {
+            if (text.indexOf('core.js') >= 0 ||
+                text.indexOf('console.js') >= 0) {
                 resp.core = true;
             }
-            console.log(data);
-            return callback(resp);
+            resp.data = text;
+            if (text.indexOf('Updating') < 0) {
+                return callback(resp);
+            } else {
+                return callback({ 'update': false });
+            }
         } else {
             return callback(resp);
         }
