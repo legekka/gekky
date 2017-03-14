@@ -13,9 +13,9 @@ module.exports = () => {
                 clearInterval(checker);
                 var need_full_reload = false;
                 var need_gekky_reload = false;
-                console.log('What Changed:');
                 whatchanged = exec('git log --name-status HEAD^..HEAD');
                 whatchanged.stdout.on('data', (data) => {
+                    console.log('ANYÁDATMÁR.');
                     if (data.toString().indexOf('updater.js') >= 0 || data.toString().indexOf('frame.js') >= 0) {
                         console.log(data.toString());
                         need_full_reload = true;
@@ -24,7 +24,7 @@ module.exports = () => {
                     if (data.toString().indexOf('core.js') >= 0) {
                         console.log(data.toString());
                         need_gekky_reload = true;
-                        console.log('core reload needed');
+                        console.log('core reload needed.');
                     }
                     if (!need_full_reload) {
                         if (need_gekky_reload) {
