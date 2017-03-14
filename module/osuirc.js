@@ -81,7 +81,7 @@ module.exports = {
             var msg2 = '`' + timeStamp() + '` `PM ' + to + '` `legekka:` ' + text; 
         }
         console.log(c.yellow('[IRC] ') + msg);
-        bot.channel.get(globs.osuirc).sendMessage(msg2);
+        bot.channels.get(globs.osuirc).sendMessage(msg2);
         return globs.client;
     }
 }
