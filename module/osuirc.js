@@ -17,6 +17,9 @@ module.exports = {
                 globs.irc_online = true;
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
+                    if (messag != undefined) {
+                        messag.channel.sendMessage('**[IRC] is connected.**');
+                    }
                     bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**').then((message) => {
                         globs.irc_pin = message.id;
                         message.pin();
@@ -104,6 +107,9 @@ module.exports = {
             clearInterval(globs.irc_online_users);
             globs.client.disconnect();
             console.log(c.yellow('[IRC]') + ' is disconnected.');
+            if (messag != undefined) {
+                messag.channel.sendMessage('**[IRC] is disconnected**');
+            }
             bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');
         } else {
             console.log(c.yellow('[IRC]') + ' is already disconnected.');
