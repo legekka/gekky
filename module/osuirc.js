@@ -74,7 +74,7 @@ module.exports = {
                 for (i in array) {
                     str += array[i] + '\n';
                 }
-                bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\n```' + str + '```');
+                bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel  + '`\n```' + str + '```');
             })
 
             online_users = setInterval(() => {
