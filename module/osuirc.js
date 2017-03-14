@@ -8,7 +8,6 @@ var online_users;
 module.exports = {
     start: (bot, globs, messag) => {
         if (!globs.irc_online) {
-            globs.irc_online = true;
             var ch = globs.ch;
             var ircpw = fs.readFileSync('../ircpw.txt').toString();
             globs.client = new irc.Client('irc.ppy.sh', 'legekka', {
@@ -16,11 +15,11 @@ module.exports = {
                 channels: [/*'#osu',*/'#hungarian']
             });
             globs.client.addListener('registered', (message) => {
+                globs.irc_online = true;
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
                     bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**').then((message) => {
                         globs.irc_pin = message.id;
-                        console.log(globs.irc_pin);
                         message.pin();
                     });
                 }
@@ -54,32 +53,28 @@ module.exports = {
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
-            globs.client.addListener('names', (channel, nicks) => {
-                console.log(c.yellow('[IRC]') + ' names - nicks');
-                var str = JSON.stringify(nicks);
-                while (str.indexOf('"') >= 0) {
-                    str = str.replace('"', '');
-                }
-                while (str.indexOf("'") >= 0) {
-                    str = str.replace("'", '');
-                }
-                while (str.indexOf(':') >= 0) {
-                    str = str.replace(':', '');
-                }
-                str = str.replace('{', '');
-                str = str.replace('}', '');
-                var array = str.split(',').sort();
-                console.log(array);
-                var str = '';
-                for (i in array) {
-                    str += array[i] + '\n';
-                }
-                bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel  + '`\n```' + str + '```');
-            })
-
             online_users = setInterval(() => {
-                globs.client.part('#hungarian');
-                globs.client.join('#hungarian');
+                if (globs.irc_online) {
+                    var nicks = globs.client.chans['#hungarian'].users;
+                    var str = JSON.stringify(nicks);
+                    while (str.indexOf('"') >= 0) {
+                        str = str.replace('"', '');
+                    }
+                    while (str.indexOf("'") >= 0) {
+                        str = str.replace("'", '');
+                    }
+                    while (str.indexOf(':') >= 0) {
+                        str = str.replace(':', '');
+                    }
+                    str = str.replace('{', '');
+                    str = str.replace('}', '');
+                    var array = str.split(',').sort();
+                    var str = '';
+                    for (i in array) {
+                        str += array[i] + '\n';
+                    }
+                    bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel + '`\n```' + str + '```');
+                }
             }, 10000);
 
             // globs.client.addListener('selfMessage', (to, text) => {
@@ -131,8 +126,7 @@ module.exports = {
         return globs.client;
     },
     teszt: (bot, globs) => {
-        globs.client.part('#hungarian');
-        globs.client.join('#hungarian');
+        console.log(globs.client.chans['#hungarian'].users);
         return globs.client;
     }
 }
