@@ -24,7 +24,7 @@ module.exports = {
             var title = data.toString().split('\n')[4].trim();
             var str = '';
             var i = 5;
-            while (i < text.length && text[i] != '\n') {
+            while (i < text.length && text[i] != '') {
                 str += text[i].trim() + '\n';
                 i++;
             }
