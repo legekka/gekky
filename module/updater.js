@@ -44,7 +44,7 @@ module.exports = () => {
                     console.log('exited: ' + code);
                 })
             } else {
-                console.log('up-to-date')
+                console.log('up-to-date');
             }
         });
     }, 1000);
