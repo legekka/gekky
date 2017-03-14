@@ -13,36 +13,24 @@ module.exports = () => {
                 clearInterval(checker);
                 var need_full_reload = false;
                 var need_gekky_reload = false;
-                whatchanged = exec('git log --name-status HEAD^..HEAD');
-                whatchanged.stdout.on('data', (data) => {
-                    console.log('ANYÁDATMÁR.');
-                    if (data.toString().indexOf('updater.js') >= 0 || data.toString().indexOf('frame.js') >= 0) {
-                        console.log(data.toString());
-                        need_full_reload = true;
-                        console.log('full reload needed');
+                console.log('ANYÁDATMÁR.');
+                if (data.toString().indexOf('updater.js') >= 0 || data.toString().indexOf('frame.js') >= 0) {
+                    console.log(data.toString());
+                    need_full_reload = true;
+                    console.log('full reload needed');
+                }
+                if (data.toString().indexOf('core.js') >= 0) {
+                    console.log(data.toString());
+                    need_gekky_reload = true;
+                    console.log('core reload needed.');
+                }
+                if (!need_full_reload) {
+                    if (need_gekky_reload) {
+                        console.log('Gekky reload needed.');
                     }
-                    if (data.toString().indexOf('core.js') >= 0) {
-                        console.log(data.toString());
-                        need_gekky_reload = true;
-                        console.log('core reload needed.');
-                    }
-                    if (!need_full_reload) {
-                        if (need_gekky_reload) {
-                            console.log('Gekky reload needed.');
-                        }
-                    } else {
-                        console.log('Full reload needed.');
-                    }
-                });
-                console.log('Updating...');
-                
-                updateing = exec('git pull origin master');
-                updateing.stdout.on('data', (data) => {
-                    console.log('data: ' + data);
-                })
-                updateing.on('exit', (code) => {
-                    console.log('exited: ' + code);
-                })
+                } else {
+                    console.log('Full reload needed.');
+                }
             } else {
                 console.log('uptodate');
             }
