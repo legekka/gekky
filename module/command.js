@@ -30,7 +30,7 @@ module.exports = (bot, message, globs, callback) => {
             reqreload('./help.js').list((list) => {
                 var str='';
                 for (i in list) {
-                    str += '**' + list[i].cmd + '**\n*    ' + list[i].desc + '*\n\n';
+                    str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n\n';
                 }
                 message.channel.sendEmbed({
                     'title': 'Parancsok',
