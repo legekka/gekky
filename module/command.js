@@ -196,23 +196,23 @@ module.exports = (bot, message, globs, callback) => {
 
             // osu irc rész
             if (lower.startsWith(cmdpref + 'ircstart')) {
-                // !ircstart|osu! irc elindítása
+                // !ircstart|osu irc elindítása
                 globs.client = reqreload('./osuirc.js').start(bot, globs, message);
             }
             if (lower.startsWith(cmdpref + 'ircstop')) {
-                // !ircstop|osu! irc leállítása
+                // !ircstop|osu irc leállítása
                 globs.client = reqreload('./osuirc.js').stop(bot, globs, message);
             }
             // üzenetküldés
             if (globs.client != undefined && message.channel.id == globs.ch.osuirc) {
                 if (lower.startsWith(cmdpref + 'to')) {
-                    // !to|osu! irc címzett váltás
+                    // !to|osu irc címzett váltás
                     message.delete();
                     globs.irc_channel = message.content.substr(cmdpref.length + 3);
                     message.channel.sendMessage('[IRC] Címzett: ' + globs.irc_channel);
                 } else {
                     message.delete();
-                    var text = message.content.substr(1);
+                    var text = message.content;
                     reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
                 }
             }
