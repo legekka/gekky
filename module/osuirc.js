@@ -3,7 +3,6 @@
 var irc = require('irc');
 var fs = require('fs');
 var c = require('chalk');
-var online_users;
 
 module.exports = {
     start: (bot, globs, messag) => {
@@ -53,7 +52,7 @@ module.exports = {
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
-            online_users = setInterval(() => {
+            globs.irc_online_users = setInterval(() => {
                 if (globs.irc_online) {
                     var nicks = globs.client.chans['#hungarian'].users;
                     var str = JSON.stringify(nicks);
@@ -102,7 +101,7 @@ module.exports = {
             globs.irc_online = false;
             var ch = globs.ch;
             bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).delete();
-            clearInterval(online_users);
+            clearInterval(globs.irc_online_users);
             globs.client.disconnect();
             console.log(c.yellow('[IRC]') + ' is disconnected.');
             bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');

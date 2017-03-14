@@ -21,6 +21,7 @@ var globs = {
     'irc_online': false,
     'irc_channel': 'legekka',
     'irc_pin':'',
+    'irc_online_users':'',  // online user interval-timer
 }
 
 require('./module/console.js')(bot, globs);
