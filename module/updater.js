@@ -15,7 +15,8 @@ module.exports = (callback) => {
             if (data.toString().indexOf('frame.js') >= 0) {
                 need_full_reload = true;
             }
-            if (data.toString().indexOf('core.js') >= 0) {
+            if (data.toString().indexOf('core.js') >= 0 ||
+                data.toString().indexOf('console.js') >= 0) {
                 need_core_reload = true;
             }
         }
