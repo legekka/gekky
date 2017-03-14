@@ -19,10 +19,12 @@ module.exports = () => {
                     if (data.toString().indexOf('updater.js') >= 0 || data.toString().indexOf('frame.js') >= 0) {
                         console.log(data.toString());
                         need_full_reload = true;
+                        console.log('full reload needed');
                     }
                     if (data.toString().indexOf('core.js') >= 0) {
                         console.log(data.toString());
                         need_gekky_reload = true;
+                        console.log('core reload needed');
                     }
                     if (!need_full_reload) {
                         if (need_gekky_reload) {
