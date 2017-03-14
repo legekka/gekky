@@ -104,12 +104,15 @@ setInterval(() => {
 var updater = setInterval(() => {
     reqreload('./updater.js')((response) => {
         if (response.update) {
-            console.log(c.green('[UPDATER] ') + 'cleaned interval.');
-            clearInterval(updater);
             if (response.full) {
-                console.log(c.green('[UPDATER] ') + 'full reload needed.');
+                console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
+                clearInterval(updater);
+                console.log(c.green('[UPDATER] ') + 'update listening stopped.');
             } else if (response.core) {
-                console.log(c.green('[UPDATER] ') + 'core reload needed.');
+                if (isStarted) {
+                    console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
+                    gekky.stdin.write('reload');
+                }
             }
         }
     });
