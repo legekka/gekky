@@ -12,6 +12,7 @@ module.exports = (callback) => {
     statuscheck = exec('git pull origin master');
     statuscheck.stdout.on('data', (data) => {
         text = data.toString();
+        resp.update = false;
         if (text.indexOf('up-to-date') < 0) {
             resp.update = true;
             if (data.toString().indexOf('frame.js') >= 0) {
@@ -21,7 +22,11 @@ module.exports = (callback) => {
                 data.toString().indexOf('console.js') >= 0) {
                 resp.core = true;
             }
+            console.log(data);
+            return callback(resp);
+        } else {
+            return callback(resp);
         }
-        return callback(resp);
+
     });
 }
