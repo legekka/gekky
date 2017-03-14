@@ -40,15 +40,17 @@ module.exports = {
             globs.client.addListener('names', (channel, nicks) => {
                 console.log(c.yellow('[IRC]') + ' names - nicks');
                 var str = JSON.stringify(nicks);
-                while (str != str.replace('"','')) {
+                while (str.indexOf('"') >= 0) {
                     str = str.replace('"','');
                 }
-                while (str != str.replace("'",'')) {
+                while (str.indexOf("'") >= 0) {
                     str = str.replace("'",'');
                 }
-                while (str != str.replace(':','')) {
+                while (str.indexOf(':') >= 0) {$
                     str = str.replace(':','');
                 }
+                str = str.replace('{','');
+                str = str.replace('}','');
                 var array = str.split(',');
                 console.log(array);
             })
