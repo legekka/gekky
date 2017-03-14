@@ -129,14 +129,14 @@ module.exports = (bot, message, globs, callback) => {
             }
             if (lower.startsWith(cmdpref + 'addblchannel')) {
                 delete require.cache[require.resolve('./blacklist.js')];
-                require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                require('./blacklist.js').addChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
                 });
                 is_a_command = true;
             }
             if (lower.startsWith(cmdpref + 'remblchannel')) {
                 delete require.cache[require.resolve('./blacklist.js')];
-                require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                require('./blacklist.js').remChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
                 });
                 is_a_command = true;
