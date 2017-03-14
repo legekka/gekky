@@ -104,6 +104,7 @@ setInterval(() => {
 var updater = setInterval(() => {
     reqreload('./updater.js')((response) => {
         if (response.update) {
+            console.log(c.green('[UPDATING]'));
             if (response.full) {
                 console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
                 clearInterval(updater);
