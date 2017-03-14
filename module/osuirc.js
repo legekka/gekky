@@ -68,7 +68,7 @@ module.exports = {
                 }
                 str = str.replace('{', '');
                 str = str.replace('}', '');
-                var array = str.split(',');
+                var array = str.split(',').sort();
                 console.log(array);
                 var str = '';
                 for (i in array) {
