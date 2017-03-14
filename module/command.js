@@ -195,6 +195,10 @@ module.exports = (bot, message, globs, callback) => {
             */
 
             // osu irc rész
+            if (lower.startsWith(cmdpref + 'ircteszt')) {
+                globs.client = reqreload('./osuirc.js').teszt(bot, globs);
+            }
+
             if (lower.startsWith(cmdpref + 'ircstart')) {
                 // !ircstart|osu irc elindítása
                 globs.client = reqreload('./osuirc.js').start(bot, globs, message);
