@@ -19,7 +19,8 @@ module.exports = {
                     console.log(c.yellow('[IRC]') + ' is connected.');
                     bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**', (message) => {
                         globs.irc_pin = message.id;
-                        message.pin()
+                        console.log(globs.irc_pin);
+                        message.pin();
                     });
                 }
             });
