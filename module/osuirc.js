@@ -86,6 +86,7 @@ module.exports = {
         if (globs.irc_online) {
             globs.irc_online = false;
             var ch = globs.ch;
+            bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).delete();
             globs.client.disconnect();
             console.log(c.yellow('[IRC]') + ' is disconnected.');
             bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');
