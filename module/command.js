@@ -28,11 +28,14 @@ module.exports = (bot, message, globs, callback) => {
         if (lower.startsWith(cmdpref + 'help')) {
             // !help|Lista a parancsokról, leírással.
             reqreload('./help.js').list((list) => {
-                var str = '**Parancslista**\n';
+                var str;
                 for (i in list) {
-                    str += '\n**' + list[i].cmd + '**\n*' + list[i].desc + '*';
+                    str += '**' + list[i].cmd + '**\n*' + list[i].desc + '*\n';
                 }
-                message.channel.sendMessage(str);
+                message.channel.sendEmbed({
+                    'title': 'Parancsok',
+                    'description': str
+                })
             });
         }
         if (lower.startsWith(cmdpref + 'ver')) {
