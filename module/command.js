@@ -22,7 +22,7 @@ module.exports = (bot, message, globs, callback) => {
             is_a_command = true;
         }
         if (lower.startsWith(cmdpref + 'nhentai')) {
-            // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
+
             reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
         }
         if (lower.startsWith(cmdpref + 'help')) {
