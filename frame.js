@@ -172,6 +172,16 @@ inp.addListener('data', (d) => {
                     process.exit(0);
                 });
             });
+        } else if (cmd == '!reload') {
+            if (isStarted) {
+                gekky.stdin.write('close');
+            }
+            bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
+                bot.destroy().then(() => {
+                    console.log(c.red('[Frame]') + ' Reloading frame...');
+                    process.exit(2);
+                });
+            });
         }
         else {
             console.log("[Frame] Undefined command: '" + cmd + "'");
