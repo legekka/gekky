@@ -59,9 +59,9 @@ module.exports = {
                 console.log(array);
                 var str = '';
                 for (i in array) {
-                    str+=array[i]+'\n';
+                    str += array[i] + '\n';
                 }
-                bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit(str);
+                bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + array.length - 1 + '\n```' + str + '```');
             })
 
             // globs.client.addListener('selfMessage', (to, text) => {
