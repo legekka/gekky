@@ -5,7 +5,6 @@ var exec = require('child_process').exec;
 
 module.exports = () => {
     var checker = setInterval(() => {
-        console.log('checking git status.');
         statuscheck = exec('git status');
         statuscheck.stdout.on('data', (data) => {
             text = data.toString();
@@ -20,9 +19,11 @@ module.exports = () => {
 
                     for (i in array) {
                         if (array[i].indexOf('updater.js') >= 0 || array[i].indexOf('frame.js') >= 0) {
+                            console.log(array[i]);
                             need_full_reload = true;
                         }
                         if (array[i].indexOf('core.js') >= 0) {
+                            console.log(array[i]);
                             need_gekky_reload = true;
                         }
                     }
