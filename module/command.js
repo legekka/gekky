@@ -207,9 +207,11 @@ module.exports = (bot, message, globs, callback) => {
             if (globs.client != undefined && message.channel.id == globs.ch.osuirc) {
                 if (lower.startsWith(cmdpref + 'to')) {
                     // !to|osu! irc címzett váltás
+                    message.delete();
                     globs.irc_channel = message.content.substr(cmdpref.length + 3);
                     message.channel.sendMessage('[IRC] Címzett: ' + globs.irc_channel);
                 } else if (lower.startsWith('>')) {
+                    message.delete();
                     var text = message.content.substr(1);
                     reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
                 }
