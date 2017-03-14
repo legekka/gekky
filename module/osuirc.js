@@ -94,8 +94,8 @@ module.exports = {
     },
     teszt: (bot, globs) => {
 
-
-        globs.client.list('/names');
+        globs.client.join('#hungarian');
+        globs.client.list('names');
         return globs.client;
     }
 }
