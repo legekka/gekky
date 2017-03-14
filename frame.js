@@ -113,6 +113,7 @@ var updater = setInterval(() => {
                 console.log(response.data);
                 if (connected) {
                     bot.channels.get(main).sendMessage('[UPDATING] => ' + ver + '\n```' + response.data + '```');
+                    bot.user.setGame(ver);
                 }
                 if (response.full) {
                     console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
