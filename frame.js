@@ -109,32 +109,34 @@ setInterval(() => {
 var updater = setInterval(() => {
     reqreload('./updater.js').update((response) => {
         if (response.update) {
-            console.log(c.green('[UPDATING] => ') + reqreload('./updater.js').ver());
-            console.log(response.data);
-            if (connected) {
-                bot.channels.get(main).sendMessage('```' + response.data + '```');
-            }
-            if (response.full) {
-                console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
-                clearInterval(updater);
-                console.log(c.green('[UPDATER] ') + 'update listening stopped.');
+            reqreload('./updater.js').ver((ver) => {
+                console.log(c.green('[UPDATING]') + ' => ' + c.green(ver));
+                console.log(response.data);
                 if (connected) {
-                    if (isStarted) {
-                        gekky.stdin.write('close');
-                    }
-                    bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
-                        bot.destroy().then(() => {
-                            console.log(c.red('[Frame]') + ' Reloading frame...');
-                            process.exit(2);
+                    bot.channels.get(main).sendMessage('[UPDATING] => ' + ver + '\n```' + response.data + '```');
+                }
+                if (response.full) {
+                    console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
+                    clearInterval(updater);
+                    console.log(c.green('[UPDATER] ') + 'update listening stopped.');
+                    if (connected) {
+                        if (isStarted) {
+                            gekky.stdin.write('close');
+                        }
+                        bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
+                            bot.destroy().then(() => {
+                                console.log(c.red('[Frame]') + ' Reloading frame...');
+                                process.exit(2);
+                            });
                         });
-                    });
+                    }
+                } else if (response.core) {
+                    if (isStarted) {
+                        console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
+                        gekky.stdin.write('reload');
+                    }
                 }
-            } else if (response.core) {
-                if (isStarted) {
-                    console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
-                    gekky.stdin.write('reload');
-                }
-            }
+            });
         }
     });
 }, 5000);

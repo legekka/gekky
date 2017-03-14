@@ -10,11 +10,11 @@ var resp = {
 }
 
 module.exports = {
-    ver: () => {
+    ver: (callback) => {
         lastcomm = exec('git log --name-status HEAD^..HEAD');
         lastcomm.stdout.on('data', (data) => {
             var title = data.toString().split('\n')[4].trim();
-            return title;
+            return callback(title);
         });
     },
     update: (callback) => {
