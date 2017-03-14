@@ -17,7 +17,7 @@ module.exports = {
             globs.client.addListener('registered', (message) => {
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
-                    bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**', (message) => {
+                    bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**').then((message) => {
                         globs.irc_pin = message.id;
                         console.log(globs.irc_pin);
                         message.pin();
