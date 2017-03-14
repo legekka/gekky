@@ -2,7 +2,7 @@
 // getting command list
 
 const fs = require('fs');
-var path = 'command.js';
+var path = './module/command.js';
 
 module.exports = {
     list: (callback) => {
