@@ -37,7 +37,14 @@ module.exports = {
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
-
+            globs.client.addListener('channellist_start', () => {
+                bot.channels.get(globs.ch.main).sendMessage('[IRC] channellist_start');
+                console.log(c.yellow('[IRC]') + ' channellist_start');
+            })
+            globs.client.addListener('names', (channel, nicks) => {
+                console.log(c.yellow('[IRC]') + ' names - nicks');
+                console.log(nicks);
+            })
 
             // globs.client.addListener('selfMessage', (to, text) => {
             //     if (to[0] == '#') {
@@ -86,16 +93,9 @@ module.exports = {
         return globs.client;
     },
     teszt: (bot, globs) => {
-        globs.client.addListener('channellist_start', () => {
-            bot.channels.get(globs.ch.main).sendMessage('[IRC] channellist_start');
-            console.log(c.yellow('[IRC]') + ' channellist_start');
-        })
-        globs.client.addListener('names', (channel, nicks) => {
-            console.log(c.yellow('[IRC]') + ' names - nicks');
-            console.log(nicks);
-        })
 
-        globs.client.list();
+
+        globs.client.list('names');
         return globs.client;
     }
 }
