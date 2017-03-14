@@ -39,8 +39,18 @@ module.exports = {
 
             globs.client.addListener('names', (channel, nicks) => {
                 console.log(c.yellow('[IRC]') + ' names - nicks');
-                var str = JSON.stringify(nicks).split(',');
-                console.log(str);
+                var str = JSON.stringify(nicks);
+                while (str != str.replace('"','')) {
+                    str != str.replace('"','');
+                }
+                while (str != str.replace("'",'')) {
+                    str != str.replace("'",'');
+                }
+                while (str != str.replace(':','')) {
+                    str != str.replace(':','');
+                }
+                var array = str.split(',');
+                console.log(array);
             })
 
             // globs.client.addListener('selfMessage', (to, text) => {
