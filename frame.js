@@ -103,7 +103,6 @@ setInterval(() => {
     }
 }, 1000);
 
-
 // updater //
 
 var updater = setInterval(() => {
