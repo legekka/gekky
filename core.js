@@ -58,13 +58,18 @@ bot.on('message', (message) => {
 
     reqreload('./log.js').messageConsoleLog(bot, message, globs, is_a_command);
 
-    // frame rész, egyenlőre nem tudtam másképp megoldani hogy működjön. Majd még gondolkozom rajta
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
+        if (globs.irc_online) {
+            reqreload('./osuirc.js').stop(bot, globs, message)
+        }
         bot.destroy().then(() => {
             process.exit(1);
         })
     }
     if (message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {
+        if (globs.irc_online) {
+            reqreload('./osuirc.js').stop(bot, globs, message)
+        }
         bot.destroy().then(() => {
             process.exit(2);
         })

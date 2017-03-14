@@ -6,6 +6,7 @@ var resp = {
     'update': false,
     'full': false,
     'core': false,
+    'irc': false,
     'data': ''
 }
 
@@ -29,8 +30,8 @@ module.exports = {
                 i++;
             }
             return callback({
-                'ver':title,
-                'desc':str
+                'ver': title,
+                'desc': str
             });
         });
     },
@@ -47,6 +48,9 @@ module.exports = {
                 if (text.indexOf('core.js') >= 0 ||
                     text.indexOf('console.js') >= 0) {
                     resp.core = true;
+                }
+                if (text.indexOf('osuirc.js') >= 0) {
+                    resp.irc = true;
                 }
                 resp.data = text;
                 if (text.indexOf('Updating') < 0) {

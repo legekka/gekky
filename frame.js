@@ -108,12 +108,12 @@ setInterval(() => {
 var updater = setInterval(() => {
     reqreload('./updater.js').update((response) => {
         if (response.update) {
-            reqreload('./updater.js').ver((ver) => {
+            reqreload('./updater.js').fullver((resp) => {
                 console.log(c.green('[UPDATING]') + ' => ' + c.green(ver));
                 console.log(response.data);
                 if (connected) {
-                    bot.channels.get(main).sendMessage('[UPDATING] => ' + ver + '\n```' + response.data + '```');
-                    bot.user.setGame(ver);
+                    bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
+                    bot.user.setGame(resp.ver);
                 }
                 if (response.full) {
                     console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
@@ -134,6 +134,11 @@ var updater = setInterval(() => {
                     if (isStarted) {
                         console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
                         gekky.stdin.write('reload');
+                    }
+                } else if (response.irc) {
+                    if (isStarted) {
+                        console.log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
+                        gekky.stdin.write('ircreload');
                     }
                 }
             });

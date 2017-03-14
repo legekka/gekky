@@ -199,6 +199,16 @@ module.exports = (bot, message, globs, callback) => {
                 globs.client = reqreload('./osuirc.js').teszt(bot, globs);
             }
 
+            if (lower.startsWith(cmdpref + 'ircreload')) {
+                // !ircreload|osu irc újraindítása
+                if (globs.irc_online) {
+                    reqreload('./osuirc.js').stop(bot, globs, message);
+                    reqreload('./osuirc.js').start(bot, globs, message);
+                } else {
+                    message.channel.sendMessage('**[IRC] is not connected.**');
+                }
+            }
+
             if (lower.startsWith(cmdpref + 'ircstart')) {
                 // !ircstart|osu irc elindítása
                 globs.client = reqreload('./osuirc.js').start(bot, globs, message);

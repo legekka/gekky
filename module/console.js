@@ -10,10 +10,16 @@ module.exports = function (bot, globs) {
         } else {
             var cmd = d.toString().toLowerCase().trim();
             if (cmd == 'close' || cmd == 'stop') {
+                if (globs.irc_online) {
+                    reqreload('./osuirc.js').stop(bot, globs, message)
+                }
                 bot.destroy().then(() => {
                     process.exit(1);
                 })
             } else if (cmd == 'reload') {
+                if (globs.irc_online) {
+                    reqreload('./osuirc.js').stop(bot, globs, message)
+                }
                 bot.destroy().then(() => {
                     process.exit(2);
                 })
@@ -21,8 +27,13 @@ module.exports = function (bot, globs) {
                 globs.client = reqreload('./osuirc.js').start(bot, globs);
             } else if (cmd == 'ircstop') {
                 globs.client = reqreload('./osuirc.js').stop(bot, globs);
-            } else if (cmd.startsWith('<')) {
-                globs.client = reqreload('./osuirc.js').say(bot, globs, cmd.split(' ')[0].substr(1), cmd.substr(cmd.split(' ')[0].length + 1));
+            } else if (cmd == 'ircreload') {
+                if (globs.irc_online) {
+                    reqreload('./osuirc.js').stop(bot, globs);
+                    reqreload('./osuirc.js').start(bot, globs);
+                } else {
+                    console.log(c.yellow('[IRC] ') + 'is not connected.');
+                }
             } else if (cmd == '') {
                 // no input
             } else {

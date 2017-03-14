@@ -18,7 +18,7 @@ module.exports = {
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
                     if (messag != undefined) {
-                        messag.channel.sendMessage('**[IRC] is connected.**');
+                        messag.channel.sendMessage('**[IRC] is connected**');
                     }
                     bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**').then((message) => {
                         globs.irc_pin = message.id;
@@ -79,7 +79,7 @@ module.exports = {
                     }
                     bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel + '`\n```' + str + '```');
                 }
-            }, 10000);
+            }, 1000);
 
             // globs.client.addListener('selfMessage', (to, text) => {
             //     if (to[0] == '#') {
