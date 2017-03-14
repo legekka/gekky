@@ -2,6 +2,7 @@
 // getting command list
 
 const fs = require('fs');
+var path = 'command.js';
 
 module.exports = {
     list: (callback) => {
@@ -10,7 +11,7 @@ module.exports = {
             'cmd': '',
             'desc': ''
         }
-        text = fs.readFileSync('./command.js').toString().split('\n');
+        text = fs.readFileSync(path).toString().split('\n');
         for (i in text) {
             text[i] = text[i].trim();
             if (text[i].startsWith('// !')) {
