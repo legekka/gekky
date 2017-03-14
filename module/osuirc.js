@@ -84,7 +84,7 @@ module.exports = {
                     }
                     bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel + '`\n```' + str + '```');
                 }
-            }, 1000);
+            }, 10000);
 
             // globs.client.addListener('selfMessage', (to, text) => {
             //     if (to[0] == '#') {

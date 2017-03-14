@@ -109,7 +109,7 @@ var updater = setInterval(() => {
     reqreload('./updater.js').update((response) => {
         if (response.update) {
             reqreload('./updater.js').fullver((resp) => {
-                console.log(c.green('[UPDATING]') + ' => ' + c.green(ver));
+                console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
                 console.log(response.data);
                 if (connected) {
                     bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
