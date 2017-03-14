@@ -22,6 +22,7 @@ module.exports = () => {
                 if (data.toString().indexOf('core.js') >= 0) {
                     console.log(data.toString());
                     need_gekky_reload = true;
+                    
                     console.log('core reload needed.');
                 }
                 if (!need_full_reload) {
