@@ -17,6 +17,23 @@ module.exports = {
             return callback(title);
         });
     },
+    fullver: (callback) => {
+        lastcomm = exec('git log --name-status HEAD^..HEAD');
+        lastcomm.stdout.on('data', (data) => {
+            var text = data.toString().split('\n');
+            var title = data.toString().split('\n')[4].trim();
+            var str = '';
+            var i = 5;
+            while (i < text.length && text[i] != '\n') {
+                str += text.trim() + '\n';
+                i++;
+            }
+            return callback({
+                'ver':title,
+                'desc':str
+            });
+        });
+    },
     update: (callback) => {
         statuscheck = exec('git pull origin master');
         statuscheck.stdout.on('data', (data) => {

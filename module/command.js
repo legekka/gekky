@@ -37,8 +37,11 @@ module.exports = (bot, message, globs, callback) => {
         }
         if (lower.startsWith(cmdpref + 'ver')) {
             // !ver|Kiírja a jelenlegi verziót.
-            reqreload('./updater.js').ver((ver) => {
-                message.channel.sendMessage('Jelenlegi verzió: `' + ver + '`');
+            reqreload('./updater.js').fullver((resp) => {
+                message.channel.sendEmbed({
+                    'title': resp.ver,
+                    'description': resp.desc
+                })
             });
         }
         // legekka-only commands
@@ -79,6 +82,7 @@ module.exports = (bot, message, globs, callback) => {
             }
             */
             if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
+                // !workdayinfo|Munkanappal kapcsolatos információk.
                 delete require.cache[require.resolve('./workdayinfo.js')];
                 require('./workdayinfo.js')((response) => {
                     message.channel.sendEmbed(response);
@@ -91,11 +95,13 @@ module.exports = (bot, message, globs, callback) => {
                 is_a_command = true;
             }
             if (message.content.startsWith(cmdpref + 'motd')) {
+                // !motd|'playing <game>' megváltoztatására. !motd <szó>
                 motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
                 bot.user.setGame(motd);
                 is_a_command = true;
             }
             if (lower == cmdpref + 'inv') {
+                // !inv|Gekky invite linkje.
                 message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
                 is_a_command = true;
             }
@@ -112,6 +118,7 @@ module.exports = (bot, message, globs, callback) => {
             }
             */
             if (lower.startsWith(cmdpref + 'cmdpref')) {
+                // !cmdpref|Parancs prefix megváltoztatása. !cmdpref <karakter>
                 cmdpref = message.content.substr(cmdpref.length + 'cmdpref'.length + 1);
                 if (cmdpref == '') {
                     cmdpref = '!';
@@ -121,6 +128,7 @@ module.exports = (bot, message, globs, callback) => {
                 is_a_command = true;
             }
             if (lower == cmdpref + 'tsun') {
+                // !tsun|Tsundere mód kapcsoló
                 tsun = !tsun;
                 if (tsun) {
                     message.channel.sendMessage('Nah.');
@@ -132,6 +140,7 @@ module.exports = (bot, message, globs, callback) => {
             }
             // blacklist commands
             if (lower.startsWith(cmdpref + 'addbluser')) {
+                // !addbluser|UserID hozzáadása blacklisthez
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
@@ -139,6 +148,7 @@ module.exports = (bot, message, globs, callback) => {
                 is_a_command = true;
             }
             if (lower.startsWith(cmdpref + 'rembluser')) {
+                // !rembluser|UserID eltávolítása a blacklistből
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
@@ -146,6 +156,7 @@ module.exports = (bot, message, globs, callback) => {
                 is_a_command = true;
             }
             if (lower.startsWith(cmdpref + 'addblchannel')) {
+                // !addblchannel|ChannelID hozzáadása a blacklisthez
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').addChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
@@ -153,6 +164,7 @@ module.exports = (bot, message, globs, callback) => {
                 is_a_command = true;
             }
             if (lower.startsWith(cmdpref + 'remblchannel')) {
+                // !remblchannel|ChhannelID eltávolítása a blacklistből
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').remChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
