@@ -14,6 +14,8 @@ var isStarted = false;  // events
 var Reloading = false;
 var Starting = false;
 
+var connected = false;  // is the frame ready
+
 var token = fs.readFileSync('../profile.txt').toString();
 
 var main = '281188840084078594';
@@ -25,6 +27,7 @@ var inp = process.openStdin();  // for the child process inputs
 bot.login(token);
 
 bot.on('ready', function () {
+    connected = true;
     if (!isStarted) {
         bot.channels.get(main).sendMessage('[Frame] online');
         console.log(c.red('[Frame]') + ' online');
@@ -101,6 +104,8 @@ setInterval(() => {
 }, 1000);
 
 
+// updater //
+
 var updater = setInterval(() => {
     reqreload('./updater.js')((response) => {
         if (response.update) {
@@ -109,6 +114,9 @@ var updater = setInterval(() => {
                 console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
                 clearInterval(updater);
                 console.log(c.green('[UPDATER] ') + 'update listening stopped.');
+                if (connected) {
+                    bot.channels.get(main).sendMessage('[UPDATER] <@143399021740818432> frame reload needed.' );
+                }
             } else if (response.core) {
                 if (isStarted) {
                     console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
@@ -118,6 +126,8 @@ var updater = setInterval(() => {
         }
     });
 }, 5000);
+
+// stdio //
 
 inp.addListener('data', (d) => {
     var cmd = d.toString().toLowerCase().trim();
