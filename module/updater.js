@@ -44,5 +44,5 @@ module.exports = () => {
                 console.log('uptodate');
             }
         });
-    }, 1000);
+    }, 5000);
 }
