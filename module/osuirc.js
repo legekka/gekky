@@ -37,13 +37,9 @@ module.exports = {
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
-            globs.client.addListener('channellist_start', () => {
-                bot.channels.get(globs.ch.main).sendMessage('[IRC] channellist_start');
-                console.log(c.yellow('[IRC]') + ' channellist_start');
-            })
             globs.client.addListener('names', (channel, nicks) => {
                 console.log(c.yellow('[IRC]') + ' names - nicks');
-                console.log(nicks);
+                console.log(nicks.toString());
             })
 
             // globs.client.addListener('selfMessage', (to, text) => {
