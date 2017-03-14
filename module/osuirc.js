@@ -4,6 +4,12 @@ var irc = require('irc');
 var fs = require('fs');
 var c = require('chalk');
 
+function contains(match, array) {
+    var i = 0;
+    while (i < array.length && array[i] != match) { i++ }
+    return i < array.length;
+}
+
 module.exports = {
     start: (bot, globs, messag) => {
         if (!globs.irc_online) {
@@ -54,7 +60,7 @@ module.exports = {
                         message.delete();
                     });
                 }
-                if (bot.users.get('143399021740818432').presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
+                if (bot.users.get('143399021740818432').presence.status == 'offline' && contains('legekka', userlist)) {
                     globs.client.say(from, "#GEKKY# Oy. Im gekky. legekka is currently offline, but i sent him a message. Please be patient. He may not answer.");
                 }
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
