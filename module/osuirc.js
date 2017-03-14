@@ -32,7 +32,9 @@ module.exports = {
                         msg = c.grey(msg);
                     }
                     if (message.indexOf('gekka') >= 0 && from != 'legekka') {
-                        bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>');
+                        bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>').then((message) => {
+                            message.delete();
+                        });
                     }
                     console.log(c.yellow('[IRC] ') + msg);
                     bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
@@ -45,7 +47,9 @@ module.exports = {
                 if (bot.users.get('143399021740818432').presence.status != 'online' || (
                     bot.users.get('143399021740818432').presence.status == 'online' &&
                     bot.users.get('143399021740818432').presence.game != 'osu!')) {
-                    bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>');
+                    bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>').then((message) => {
+                        message.delete();
+                    });
                 }
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
