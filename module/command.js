@@ -2,6 +2,7 @@
 // specified commands
 
 const reqreload = require('./reqreload.js');
+const fs = require('fs');
 
 var ownerid = '143399021740818432';
 
@@ -41,7 +42,7 @@ module.exports = (bot, message, globs, callback) => {
         if (lower.startsWith(cmdpref + 'git')) {
             message.channel.sendEmbed({
                 'title': 'GitHub',
-                'desc': 'Teljes nyílt forráskód',
+                'description': 'Teljes nyílt forráskód',
                 'url':'http://github.com/legekka/gekky'
             })
         }
@@ -135,6 +136,7 @@ module.exports = (bot, message, globs, callback) => {
                 }
                 message.channel.sendMessage('New prefix: `' + cmdpref + '`');
                 var mode = 'cmdpref';
+                fs.writeFileSync('../pref.txt',cmdpref);
                 is_a_command = true;
             }
             if (lower == cmdpref + 'tsun') {

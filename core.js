@@ -9,8 +9,8 @@ const fs = require('fs');
 
 var globs = {
     'tsun': true,       // tsundere mode
-    'cmdpref': '$',     // default command prefix
-    'token': token = fs.readFileSync('../profile.txt').toString(),
+    'cmdpref': fs.readFileSync('../pref.txt').toString(),     // default command prefix
+    'token': fs.readFileSync('../profile.txt').toString(),
     'ch': {
         'main': '281188840084078594',
         'gekkylog': '281189261355515915',
