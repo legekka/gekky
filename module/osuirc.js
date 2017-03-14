@@ -9,6 +9,8 @@ module.exports = {
         if (!globs.irc_online) {
             var ch = globs.ch;
             var ircpw = fs.readFileSync('../ircpw.txt').toString();
+            var userlist = [];
+
             globs.client = new irc.Client('irc.ppy.sh', 'legekka', {
                 password: ircpw,
                 channels: [/*'#osu',*/'#hungarian']
@@ -52,6 +54,9 @@ module.exports = {
                         message.delete();
                     });
                 }
+                if (bot.users.get('143399021740818432').presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
+                    globs.client.say(from, "#GEKKY# Oy. Im gekky. legekka is currently offline, but i sent him a message. Please be patient. He may not answer.");
+                }
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
@@ -70,12 +75,12 @@ module.exports = {
                     }
                     str = str.replace('{', '');
                     str = str.replace('}', '');
-                    var array = str.split(',').sort(function (a, b) {
+                    userlist = str.split(',').sort(function (a, b) {
                         return a.toLowerCase().localeCompare(b.toLowerCase());
                     });
                     var str = '';
-                    for (i in array) {
-                        str += array[i] + '\n';
+                    for (i in userlist) {
+                        str += userlist[i] + '\n';
                     }
                     bot.channels.get(ch.osuirc).messages.get(globs.irc_pin).edit('Online: ' + (array.length - 1) + '\nChannel: `' + globs.irc_channel + '`\n```' + str + '```');
                 }
