@@ -68,7 +68,9 @@ module.exports = {
                     }
                     str = str.replace('{', '');
                     str = str.replace('}', '');
-                    var array = str.split(',').sort();
+                    var array = str.split(',').sort(function (a, b) {
+                        return a.toLowerCase().localeCompare(b.toLowerCase());
+                    });
                     var str = '';
                     for (i in array) {
                         str += array[i] + '\n';
