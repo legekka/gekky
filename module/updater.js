@@ -13,7 +13,7 @@ module.exports = {
     ver: (callback) => {
         lastcomm = exec('git log --name-status HEAD^..HEAD');
         lastcomm.stdout.on('data', (data) => {
-            var title = data.toString.split('\n')[4].trim();
+            var title = data.toString().split('\n')[4].trim();
             console.log(title);
             return callback(title);
         });
