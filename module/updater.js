@@ -13,7 +13,7 @@ module.exports = (callback) => {
         text = data.toString();
         if (text.indexOf('up-to-date') < 0) {
              need_update = true;
-            if (data.toString().indexOf('updater.js') >= 0 || data.toString().indexOf('frame.js') >= 0) {
+            if (data.toString().indexOf('frame.js') >= 0) {
                 console.log(data.toString());
                 need_full_reload = true;
                 console.log('full reload needed');
