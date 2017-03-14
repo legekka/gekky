@@ -211,7 +211,7 @@ module.exports = (bot, message, globs, callback) => {
                     message.sendMessage('[IRC] Címzett: ' + globs.irc_channel);
                 } else if (lower.startsWith('>')) {
                     var text = message.content.substr(1);
-                    reqreload('./osuirc.js').say(globs.irc_channel,text);
+                    reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
                 }
             }
         }
