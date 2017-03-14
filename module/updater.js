@@ -22,6 +22,6 @@ module.exports = (callback) => {
                 resp.core = true;
             }
         }
-        return callback(resp)
+        return callback(resp);
     });
 }
