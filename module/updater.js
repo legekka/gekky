@@ -16,17 +16,13 @@ module.exports = () => {
                 console.log('What Changed:');
                 whatchanged = exec('git log --name-status HEAD^..HEAD');
                 whatchanged.stdout.on('data', (data) => {
-                    var array = data.toString().split('\n');
-
-                    for (i in array) {
-                        if (array[i].indexOf('updater.js') >= 0 || array[i].indexOf('frame.js') >= 0) {
-                            console.log(array[i]);
-                            need_full_reload = true;
-                        }
-                        if (array[i].indexOf('core.js') >= 0) {
-                            console.log(array[i]);
-                            need_gekky_reload = true;
-                        }
+                    if (data.toString().indexOf('updater.js') >= 0 || data.toString().indexOf('frame.js') >= 0) {
+                        console.log(data.toString());
+                        need_full_reload = true;
+                    }
+                    if (data.toString().indexOf('core.js') >= 0) {
+                        console.log(data.toString());
+                        need_gekky_reload = true;
                     }
                     if (!need_full_reload) {
                         if (need_gekky_reload) {
