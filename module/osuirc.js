@@ -39,8 +39,8 @@ module.exports = {
 
             globs.client.addListener('names', (channel, nicks) => {
                 console.log(c.yellow('[IRC]') + ' names - nicks');
-                var array = Array.from(nicks);
-                console.log(array);
+                var str = nicks.split(',');
+                console.log(str);
             })
 
             // globs.client.addListener('selfMessage', (to, text) => {
