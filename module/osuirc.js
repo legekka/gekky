@@ -37,19 +37,8 @@ module.exports = {
                 bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
-            globs.client.addListener('channellist_start', () => {
-                bot.channels.get(globs.ch.main).sendMessage('[IRC] channellist_start');
-                console.log(c.yellow('[IRC]') + ' channellist_start');
-            })
-            globs.client.addListener('channellist_item', (channel_info) => {
-                console.log(c.yellow('[IRC]') + ' channellist_item - channel_info');
-                console.log(channel_info);
-            })
-            globs.client.addlistener('channellist', (channellist) => {
-                console.log(c.yellow('[IRC]') + ' channellist');
-                console.log(channellist);
-            })
-            
+
+
             // globs.client.addListener('selfMessage', (to, text) => {
             //     if (to[0] == '#') {
             //         console.log(c.yellow('[IRC] ') + to + ' legekka: ' + text);
@@ -97,7 +86,18 @@ module.exports = {
         return globs.client;
     },
     teszt: (bot, globs) => {
-
+        globs.client.addListener('channellist_start', () => {
+            bot.channels.get(globs.ch.main).sendMessage('[IRC] channellist_start');
+            console.log(c.yellow('[IRC]') + ' channellist_start');
+        })
+        globs.client.addListener('channellist_item', (channel_info) => {
+            console.log(c.yellow('[IRC]') + ' channellist_item - channel_info');
+            console.log(channel_info);
+        })
+        globs.client.addListener('channellist', (channellist) => {
+            console.log(c.yellow('[IRC]') + ' channellist');
+            console.log(channellist);
+        })
 
         globs.client.list();
         return globs.client;
