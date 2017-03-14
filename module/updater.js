@@ -25,7 +25,7 @@ module.exports = {
             var str = '';
             var i = 5;
             while (i < text.length && text[i] != '\n') {
-                str += text.trim() + '\n';
+                str += text[i].trim() + '\n';
                 i++;
             }
             return callback({
