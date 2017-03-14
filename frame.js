@@ -6,8 +6,7 @@ const Discord = require('discord.js');
 const c = require('chalk');
 var exec = require('child_process').exec;
 var bot = new Discord.Client();
-
-var a = require('./module/updater.js')();
+var reqreload = require('./module/reqreload.js');
 
 var motd = '[Frame]';
 
@@ -100,6 +99,20 @@ setInterval(() => {
         frame();
     }
 }, 1000);
+
+
+var updater = setInterval(() => {
+    reqreload('./updater.js')((response) => {
+        if (response.update) {
+            clearInterval(updater);
+            if (response.full) {
+                console.log(c.green('[UPDATER] ') + 'full reload needed.');
+            } else if (response.core) {
+                console.log(c.green('[UPDATER] ') + 'core reload needed.');
+            }
+        }
+    });
+}, 5000);
 
 inp.addListener('data', (d) => {
     var cmd = d.toString().toLowerCase().trim();
