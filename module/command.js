@@ -40,6 +40,7 @@ module.exports = (bot, message, globs, callback) => {
             });
         }
         if (lower.startsWith(cmdpref + 'git')) {
+            // !git|Kiírja gekky githubját.
             message.channel.sendEmbed({
                 'title': 'GitHub',
                 'description': 'Teljes nyílt forráskód',
@@ -136,7 +137,7 @@ module.exports = (bot, message, globs, callback) => {
                 }
                 message.channel.sendMessage('New prefix: `' + cmdpref + '`');
                 var mode = 'cmdpref';
-                fs.writeFileSync('../pref.txt',cmdpref);
+                fs.writeFileSync('./data/pref.txt',cmdpref);
                 is_a_command = true;
             }
             if (lower == cmdpref + 'tsun') {
@@ -176,7 +177,7 @@ module.exports = (bot, message, globs, callback) => {
                 is_a_command = true;
             }
             if (lower.startsWith(cmdpref + 'remblchannel')) {
-                // !remblchannel|ChhannelID eltávolítása a blacklistből
+                // !remblchannel|ChannelID eltávolítása a blacklistből
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').remChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
