@@ -12,7 +12,7 @@ var motd = '[Frame]';
 
 var isStarted = false;  // events
 var Reloading = false;
-var Starting = false;
+var Starting = true;
 
 var connected = false;  // is the frame ready
 
