@@ -210,7 +210,7 @@ module.exports = (bot, message, globs, callback) => {
                     message.delete();
                     globs.irc_channel = message.content.substr(cmdpref.length + 3);
                     message.channel.sendMessage('[IRC] Címzett: ' + globs.irc_channel);
-                } else if (lower.startsWith('>')) {
+                } else {
                     message.delete();
                     var text = message.content.substr(1);
                     reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
