@@ -40,7 +40,7 @@ bot.on('message', (message) => {
 
     var is_a_command = false;
 
-    reqreload('./command.js')(bot, message, cmdpref, (response) => {
+    reqreload('./command.js')(bot, message, globs, (response) => {
         if (response.mode != undefined) {
             switch (response.mode) {
                 case 'cmdpref': globs.cmdpref = response.cmdpref;
