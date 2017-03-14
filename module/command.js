@@ -24,7 +24,7 @@ module.exports = (bot, message, globs, callback) => {
         }
         if (lower.startsWith(cmdpref + 'help')) {
             // !help|Lista a parancsokról, leírással.
-            reqreload('./help.js').list((list) => {
+            reqreload('./help.js').list(message,(list) => {
                 var str = '';
                 for (i in list) {
                     str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n\n';
