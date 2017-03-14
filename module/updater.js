@@ -36,7 +36,7 @@ module.exports = () => {
                     }
                 });
                 console.log('Updating...');
-                updateing = exec('git remote update');
+                updateing = exec('git pull origin master');
                 updateing.stdout.on('data', (data) => {
                     console.log('data: ' + data);
                 })
