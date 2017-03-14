@@ -93,10 +93,9 @@ module.exports = {
         return globs.client;
     },
     teszt: (bot, globs) => {
-        globs.client.part('#hungarian', () => {
-            globs.client.join('#hungarian');
-            return globs.client;
-        });
+        globs.client.part('#hungarian');
+        globs.client.join('#hungarian');
+        return globs.client;
     }
 }
 
