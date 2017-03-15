@@ -15,7 +15,8 @@ module.exports = (bot, message, globs, callback) => {
         var is_a_command = false;
         var mode;
         if (lower.startsWith(cmdpref + 'lenny')) {
-            message.sendMessage('( ͡° ͜ʖ ͡°)');
+            // !lenny|Beszúr egy lenny fejet.
+            message.channel.sendMessage('( ͡° ͜ʖ ͡°)');
             message.delete();
             is_a_command = true;
         }
