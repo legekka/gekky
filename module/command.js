@@ -14,6 +14,11 @@ module.exports = (bot, message, globs, callback) => {
         var lower = message.content.toLowerCase();
         var is_a_command = false;
         var mode;
+        if (lower.startsWith(cmdpref + 'lenny')) {
+            message.sendMessage('( ͡° ͜ʖ ͡°)');
+            message.delete();
+            is_a_command = true;
+        }
         if (lower.startsWith(cmdpref + 'weather')) {
             // !weather|Időjárás információ. !weather <város>
             delete require.cache[require.resolve('./weather.js')];

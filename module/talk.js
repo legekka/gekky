@@ -148,7 +148,7 @@ module.exports = (bot, globs, message) => {
                 }
                 if (lower.indexOf('ayy') >= 0) {
                     message.channel.sendMessage('Ayy ayy ayy...');
-                }
+                }/*
                 if (lower.startsWith(cmdpref) &&
                     !lower.startsWith(cmdpref + 'news') &&
                     !lower.startsWith(cmdpref + 'sankaku') &&
@@ -160,7 +160,7 @@ module.exports = (bot, globs, message) => {
                     !lower.startsWith(cmdpref + 'response') &&
                     message.author.username != 'legekka') {
                     message.channel.sendMessage(dg.random(dg.proba));
-                }
+                }*/
             }
         }
     }
