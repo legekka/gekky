@@ -183,7 +183,7 @@ module.exports = (bot, message, globs, callback) => {
                     reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
                 }
             }
-        } else {
+        } else if (lower.startsWith(cmdpref)){
             reqreload('./talk.js').wrongcommand(message);
         }
 
