@@ -7,7 +7,7 @@ const c = require('chalk');
 const githook = require('github-webhook-handler');
 var handler = githook({
     path: '/webhook',
-    secret: ''
+    secret: 'kutya'
 });
 const http = require('http');
 
