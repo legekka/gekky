@@ -149,8 +149,7 @@ var updater = setInterval(() => {
 }, 5000);
 */
 function setupUpdater() {
-	var updater = require('./updater.js');
-	updater.registerUpdate((response) => {
+	reqreload('./updater.js').registerUpdate((response) => {
 		reqreload('./updater.js').fullver((resp) => {
 			console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
 			console.log(response.data);
