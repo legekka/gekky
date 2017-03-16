@@ -119,8 +119,6 @@ function setupUpdater() {
                 }
                 if (response.full) {
                     console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
-                    clearInterval(updater);
-                    console.log(c.green('[UPDATER] ') + 'update listening stopped.');
                     if (connected) {
                         if (isStarted) {
                             gekky.stdin.write('close');

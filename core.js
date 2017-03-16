@@ -20,8 +20,8 @@ var globs = {
     'client': undefined,
     'irc_online': false,
     'irc_channel': 'legekka',
-    'irc_pin':'',
-    'irc_online_users':'',  // online user interval-timer
+    'irc_pin': '',
+    'irc_online_users': '',  // online user interval-timer
 }
 
 require('./module/console.js')(bot, globs);
@@ -30,14 +30,19 @@ bot.login(globs.token);
 
 bot.on('ready', function () {
     //globs.client = require('./module/osuirc.js').start(bot, globs);
-    bot.channels.get(globs.ch.main).sendMessage('[online]');
+    var onlineMessage = setInterval(() => {
+        if (bot.channels.get(globs.ch.main) != undefined) {
+            clearInterval(onlineMessage);
+            bot.channels.get(globs.ch.main).sendMessage('[online]');
+        }
+    },250);
     console.log('[online]');
     bot.user.setPresence({
         "status": "online",
     });
     reqreload('./updater.js').ver((motd) => {
         bot.user.setGame(motd);
-    });  
+    });
 });
 
 bot.on('message', (message) => {
