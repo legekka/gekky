@@ -75,8 +75,8 @@ module.exports = {
 	},
 	*/
 	registerUpdate: (callback) => {
-		if (this.isRegistered)
-			return;
+		//if (this.isRegistered)
+		//	return;
 
 		http.createServer((request, result) => {
 			handler(request, result, function (error) {
@@ -86,7 +86,7 @@ module.exports = {
 		}).listen(7777);
 
 		handler.on('error', (error) => {
-			resp.data = { data: 'ERROR: ' + error.message };
+			resp.data = 'ERROR: ' + error.message;
 			callback(resp);
 		});
 
@@ -108,6 +108,6 @@ module.exports = {
 			return callback(resp);
 		});
 
-		this.isRegistered = true;
+		//this.isRegistered = true;
 	}
 }
