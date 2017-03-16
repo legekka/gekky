@@ -8,7 +8,7 @@ var handler = githook({
 	path: '/webhook',
 	secret: ''
 });
-const https = require('https');
+const http = require('http');
 
 var resp = {
     'update': false,
@@ -78,7 +78,7 @@ module.exports = {
 		//if (this.isRegistered)
 		//	return;
 
-		https.createServer((request, result) => {
+		http.createServer((request, result) => {
 			handler(request, result, function (error) {
 				result.statusCode = 404;
 				result.end("It's forbidden to do this!");
