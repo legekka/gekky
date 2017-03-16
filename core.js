@@ -55,7 +55,7 @@ bot.on('ready', function () {
 });
 
 bot.on('message', (message) => {
-    reqreload('./talk.js')(bot, globs, message);
+    reqreload('./talk.js').default(bot, globs, message);
 
     var is_a_command = false;
 

@@ -19,16 +19,14 @@ module.exports = (bot, message, globs, callback) => {
             message.channel.sendMessage('`' + message.author.username + '` ( ͡° ͜ʖ ͡°)');
             message.delete();
             is_a_command = true;
-        }
-        if (lower.startsWith(cmdpref + 'weather')) {
+        } else if (lower.startsWith(cmdpref + 'weather')) {
             // !weather|Időjárás információ. !weather <város>
             delete require.cache[require.resolve('./weather.js')];
             require('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
                 message.channel.sendEmbed(response);
             });
             is_a_command = true;
-        }
-        if (lower.startsWith(cmdpref + 'help')) {
+        } else if (lower.startsWith(cmdpref + 'help')) {
             // !help|Lista a parancsokról, leírással.
             reqreload('./help.js').list(message, (list) => {
                 var str = '';
@@ -43,16 +41,14 @@ module.exports = (bot, message, globs, callback) => {
                     'description': str
                 })
             });
-        }
-        if (lower.startsWith(cmdpref + 'git')) {
+        } else if (lower.startsWith(cmdpref + 'git')) {
             // !git|Kiírja gekky githubját.
             message.channel.sendEmbed({
                 'title': 'GitHub',
                 'description': 'Teljes nyílt forráskód',
                 'url': 'http://github.com/legekka/gekky'
             })
-        }
-        if (lower.startsWith(cmdpref + 'ver')) {
+        } else if (lower.startsWith(cmdpref + 'ver')) {
             // !ver|Kiírja a jelenlegi verziót.
             reqreload('./updater.js').fullver((resp) => {
                 message.channel.sendEmbed({
@@ -60,15 +56,12 @@ module.exports = (bot, message, globs, callback) => {
                     'description': resp.desc
                 })
             });
-        }
-        // legekka-only commands
-        if (message.author.id == ownerid) {
-
+        } else if (message.author.id == ownerid) {
+            // legekka-only commands
             if (lower.startsWith(cmdpref + 'nhentai')) {
                 // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
                 reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
-            }
-            if (lower.startsWith(cmdpref + 'del')) {
+            } else if (lower.startsWith(cmdpref + 'del')) {
                 // !del|Üzenet törlő. !del <üzenetszám>
                 var number = lower.split(' ')[1];
                 if (!isNaN(number)) {
@@ -89,57 +82,27 @@ module.exports = (bot, message, globs, callback) => {
                     message.channel.sendMessage('Helytelen paraméter: ' + number);
                 }
                 is_a_command = true;
-            }
-            /* TODO: these modules
-            if (lower.startsWith(cmdpref + 'secret')) {
-                giveSecret(lower.split(' ')[1], lower.split(' ')[2], (response) => {
-                    message.channel.sendMessage(response);
-                });
-            }
-    
-            if (lower.startsWith(cmdpref + 'remlist')) {
-                reminderLister(lower.substr(cmdpref.length + 'remlist'.length + 1), (response) => {
-                    message.channel.sendEmbed(response);
-                });
-            }
-            */
-            if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
+            } else if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
                 // !workdayinfo|Munkanappal kapcsolatos információk.
                 delete require.cache[require.resolve('./workdayinfo.js')];
                 require('./workdayinfo.js')((response) => {
                     message.channel.sendEmbed(response);
                 });
                 is_a_command = true;
-            }
-            if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
+            } else if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {
                 delete require.cache[require.resolve('./assistant.js')];
                 require('./assistant.js').ohio(message);
                 is_a_command = true;
-            }
-            if (message.content.startsWith(cmdpref + 'motd')) {
+            } else if (message.content.startsWith(cmdpref + 'motd')) {
                 // !motd|'playing <game>' megváltoztatására. !motd <szó>
                 motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
                 bot.user.setGame(motd);
                 is_a_command = true;
-            }
-            if (lower == cmdpref + 'inv') {
+            } else if (lower == cmdpref + 'inv') {
                 // !inv|Gekky invite linkje.
                 message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
                 is_a_command = true;
-            }
-            /* TODO: Sankaku cache folder deleting
-            if (lower == cmdpref + 'delcache') {
-                code = execSync('rm -f ' + SankakuPath + '*');
-                message.channel.sendMessage('Cache deleted.');
-            }
-            */
-
-            /* TODO: DELETE THIS
-            if (message.content.startsWith(cmdpref + 'send')) {
-                sendFile(message, message.content.substr(6));
-            }
-            */
-            if (lower.startsWith(cmdpref + 'cmdpref')) {
+            } else if (lower.startsWith(cmdpref + 'cmdpref')) {
                 // !cmdpref|Parancs prefix megváltoztatása. !cmdpref <karakter>
                 cmdpref = message.content.substr(cmdpref.length + 'cmdpref'.length + 1);
                 if (cmdpref == '') {
@@ -149,8 +112,7 @@ module.exports = (bot, message, globs, callback) => {
                 var mode = 'cmdpref';
                 fs.writeFileSync('./data/pref.txt', cmdpref);
                 is_a_command = true;
-            }
-            if (lower == cmdpref + 'tsun') {
+            } else if (lower == cmdpref + 'tsun') {
                 // !tsun|Tsundere mód kapcsoló
                 tsun = !tsun;
                 if (tsun) {
@@ -160,33 +122,29 @@ module.exports = (bot, message, globs, callback) => {
                 }
                 var mode = 'tsun';
                 is_a_command = true;
-            }
-            // blacklist commands
-            if (lower.startsWith(cmdpref + 'addbluser')) {
+            } // blacklist commands 
+            else if (lower.startsWith(cmdpref + 'addbluser')) {
                 // !addbluser|UserID hozzáadása blacklisthez
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').addUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
                 });
                 is_a_command = true;
-            }
-            if (lower.startsWith(cmdpref + 'rembluser')) {
+            } else if (lower.startsWith(cmdpref + 'rembluser')) {
                 // !rembluser|UserID eltávolítása a blacklistből
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
                 });
                 is_a_command = true;
-            }
-            if (lower.startsWith(cmdpref + 'addblchannel')) {
+            } else if (lower.startsWith(cmdpref + 'addblchannel')) {
                 // !addblchannel|ChannelID hozzáadása a blacklisthez
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').addChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                     message.channel.sendMessage(msg);
                 });
                 is_a_command = true;
-            }
-            if (lower.startsWith(cmdpref + 'remblchannel')) {
+            } else if (lower.startsWith(cmdpref + 'remblchannel')) {
                 // !remblchannel|ChannelID eltávolítása a blacklistből
                 delete require.cache[require.resolve('./blacklist.js')];
                 require('./blacklist.js').remChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
@@ -194,18 +152,10 @@ module.exports = (bot, message, globs, callback) => {
                 });
                 is_a_command = true;
             }
-            /* TODO: We have time for this part
-            if (lower == cmdpref + 'cache') {
-                checkCache(SankakuPath, 50, message);
-            }
-            */
-
             // osu irc rész
-            if (lower.startsWith(cmdpref + 'ircteszt')) {
+            else if (lower.startsWith(cmdpref + 'ircteszt')) {
                 globs.client = reqreload('./osuirc.js').teszt(bot, globs);
-            }
-
-            if (lower.startsWith(cmdpref + 'ircreload')) {
+            } else if (lower.startsWith(cmdpref + 'ircreload')) {
                 // !ircreload|osu irc újraindítása
                 if (globs.irc_online) {
                     reqreload('./osuirc.js').stop(bot, globs, message);
@@ -213,18 +163,15 @@ module.exports = (bot, message, globs, callback) => {
                 } else {
                     message.channel.sendMessage('**[IRC] is not connected.**');
                 }
-            }
-
-            if (lower.startsWith(cmdpref + 'ircstart')) {
+            } else if (lower.startsWith(cmdpref + 'ircstart')) {
                 // !ircstart|osu irc elindítása
                 globs.client = reqreload('./osuirc.js').start(bot, globs, message);
-            }
-            if (lower.startsWith(cmdpref + 'ircstop')) {
+            } else if (lower.startsWith(cmdpref + 'ircstop')) {
                 // !ircstop|osu irc leállítása
                 globs.client = reqreload('./osuirc.js').stop(bot, globs, message);
             }
             // üzenetküldés
-            if (globs.client != undefined && message.channel.id == globs.ch.osuirc) {
+            else if (globs.client != undefined && message.channel.id == globs.ch.osuirc) {
                 if (lower.startsWith(cmdpref + 'to')) {
                     // !to|osu irc címzett váltás
                     message.delete();
@@ -236,7 +183,11 @@ module.exports = (bot, message, globs, callback) => {
                     reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
                 }
             }
+        } else {
+            reqreload('./talk.js').wrongcommand(message);
         }
+
+
         if (mode != undefined) {
             switch (mode) {
                 case 'cmdpref':
