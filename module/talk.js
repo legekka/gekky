@@ -118,7 +118,7 @@ module.exports = {
                     else if ((lower.indexOf(bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
                         message.channel.sendMessage(dg.random(dg.emlites));
                     }
-                    else if (lower.startsWith('kus') >= 0) {
+                    else if (lower.startsWith('kus')) {
                         message.channel.sendMessage(dg.random(dg.kus));
                     }
                     else if ((lower.indexOf('szia') >= 0 || lower == 'hi')) {
