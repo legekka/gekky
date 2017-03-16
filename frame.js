@@ -106,86 +106,45 @@ setInterval(() => {
     }
 }, 1000);
 
-// updater //
-/*
-var updater = setInterval(() => {
-    reqreload('./updater.js').update((response) => {
-        if (response.update) {
-            reqreload('./updater.js').fullver((resp) => {
-                console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
-                console.log(response.data);
-                if (connected) {
-                    bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
-                    bot.user.setGame(resp.ver);
-                }
-                if (response.full) {
-                    console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
-                    clearInterval(updater);
-                    console.log(c.green('[UPDATER] ') + 'update listening stopped.');
-                    if (connected) {
-                        if (isStarted) {
-                            gekky.stdin.write('close');
-                        }
-                        bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
-                            bot.destroy().then(() => {
-                                console.log(c.red('[Frame]') + ' Reloading frame...');
-                                process.exit(2);
-                            });
-                        });
-                    }
-                } else if (response.core) {
-                    if (isStarted) {
-                        console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
-                        gekky.stdin.write('reload');
-                    }
-                } else if (response.irc) {
-                    if (isStarted) {
-                        console.log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
-                        gekky.stdin.write('ircreload');
-                    }
-                }
-            });
-        }
-    });
-}, 5000);
-*/
+// updater
+
 function setupUpdater() {
-	reqreload('./updater.js').registerUpdate((response) => {
-		reqreload('./updater.js').fullver((resp) => {
-			console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
-			console.log(response.data);
-			if (connected) {
-				bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
-				bot.user.setGame(resp.ver);
-			}
-			if (response.full) {
-				console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
-				clearInterval(updater);
-				console.log(c.green('[UPDATER] ') + 'update listening stopped.');
-				if (connected) {
-					if (isStarted) {
-						gekky.stdin.write('close');
-					}
-					bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
-						bot.destroy().then(() => {
-							console.log(c.red('[Frame]') + ' Reloading frame...');
-							process.exit(2);
-						});
-					});
-				}
-			} else if (response.core) {
-				if (isStarted) {
-					console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
-					gekky.stdin.write('reload');
-				}
-			} else if (response.irc) {
-				if (isStarted) {
-					console.log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
-					gekky.stdin.write('ircreload');
-				}
-			}
-		});
-	});
+    reqreload('./updater.js').registerUpdate((response) => {
+        reqreload('./updater.js').fullver((resp) => {
+            console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
+            console.log(response.data);
+            if (connected) {
+                bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
+                bot.user.setGame(resp.ver);
+            }
+            if (response.full) {
+                console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
+                clearInterval(updater);
+                console.log(c.green('[UPDATER] ') + 'update listening stopped.');
+                if (connected) {
+                    if (isStarted) {
+                        gekky.stdin.write('close');
+                    }
+                    bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
+                        bot.destroy().then(() => {
+                            console.log(c.red('[Frame]') + ' Reloading frame...');
+                            process.exit(2);
+                        });
+                    });
+                }
+            } else if (response.core) {
+                if (isStarted) {
+                    console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
+                    gekky.stdin.write('reload');
+                }
+            } else if (response.irc) {
+                if (isStarted) {
+                    console.log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
+                    gekky.stdin.write('ircreload');
+                }
+            }
+        });
+    });
 }
 
 // stdio //
