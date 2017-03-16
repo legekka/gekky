@@ -7,6 +7,7 @@ var reqreload = require('./module/reqreload.js');
 var bot = new Discord.Client();
 const fs = require('fs');
 
+
 var globs = {
     'tsun': true,       // tsundere mode
     'cmdpref': fs.readFileSync('../pref.txt').toString(),     // default command prefix
@@ -24,18 +25,26 @@ var globs = {
     'irc_online_users': '',  // online user interval-timer
 }
 
+process.on('uncaughtException', function (error) {
+    console.log(error.stack);
+    if (bot.channels.get(globs.ch.gekkylog) != undefined) {
+        bot.channels.get(globs.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
+            bot.channels.get(globs.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
+                process.exit(3);
+            })
+        });
+    } else {
+        process.exit(3);
+    }
+})
+
 require('./module/console.js')(bot, globs);
 
 bot.login(globs.token);
 
 bot.on('ready', function () {
     //globs.client = require('./module/osuirc.js').start(bot, globs);
-    var onlineMessage = setInterval(() => {
-        if (bot.channels.get(globs.ch.main) != undefined) {
-            clearInterval(onlineMessage);
-            bot.channels.get(globs.ch.main).sendMessage('[online]');
-        }
-    },250);
+    bot.channels.get(globs.ch.main).sendMessage('[online]');
     console.log('[online]');
     bot.user.setPresence({
         "status": "online",
@@ -81,11 +90,4 @@ bot.on('message', (message) => {
     }
 })
 
-process.on('uncaughtException', function (error) {
-    console.log(error.stack);
-    bot.channels.get(globs.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
-        bot.channels.get(globs.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
-            process.exit(3);
-        })
-    });
-})
+
