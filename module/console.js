@@ -12,14 +12,14 @@ module.exports = function (bot, globs) {
             var cmd = d.toString().toLowerCase().trim();
             if (cmd == 'close' || cmd == 'stop') {
                 if (globs.irc_online) {
-                    reqreload('./osuirc.js').stop(bot, globs, message)
+                    reqreload('./osuirc.js').stop(bot, globs);
                 }
                 bot.destroy().then(() => {
                     process.exit(4);
                 })
             } else if (cmd == 'reload') {
                 if (globs.irc_online) {
-                    reqreload('./osuirc.js').stop(bot, globs, message)
+                    reqreload('./osuirc.js').stop(bot, globs);
                 }
                 bot.destroy().then(() => {
                     process.exit(2);
