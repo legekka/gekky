@@ -64,64 +64,64 @@ module.exports = (bot, globs, message) => {
             if (lower == 'ping') {
                 message.channel.sendMessage('Pong!');
             }
-            if (lower == 'juj') {
+            else if (lower == 'juj') {
                 message.channel.sendMessage('lyuly');
             }
-            if (lower.startsWith('loli')) {
+            else if (lower.indexOf('loli') >= 0) {
                 message.channel.sendMessage('loliraid');
             }
-            if (lower.indexOf(',,') >= 0) {
+			else if (lower.indexOf(',,') >= 0) {
                 message.channel.sendMessage('nemnemnemNEMNEMNEM!!! Nem.');
             }
-            if (lower.indexOf('¯\\_(ツ)_/¯') >= 0) {
+			else if (lower.indexOf('¯\\_(ツ)_/¯') >= 0) {
                 message.channel.sendMessage('¯\\_(ツ)_/¯');
             }
-            if (tsun) {
+			else if (tsun) {
                 if (lower.indexOf('kurwa') >= 0 || lower.indexOf('kurva') >= 0) {
                     message.channel.sendMessage('Anyád.');
                 }
-                if (lower.indexOf('minden szar') >= 0) {
+				else if (lower.indexOf('minden szar') >= 0) {
                     message.channel.sendMessage('A gmod nem szar.');
                 }
                 /*if (lower.indexOf('new score by') >=0 && message.channel.name == 'hun-scores'){
                     message.channel.sendMessage('noob');
                     messageConsoleLog(message,true);
                 }*/
-                if (lower.indexOf('tsun') >= 0 && lower.indexOf('bot') > 0) {
+				else if (lower.indexOf('tsun') >= 0 && lower.indexOf('bot') > 0) {
                     message.channel.sendMessage(dg.random(dg.def));
                 }
-                if (lower.indexOf('xd') >= 0) {
+				else if (lower.indexOf('xd') >= 0) {
                     message.channel.sendMessage(dg.random(dg.xd));
                 }
-                if (lower.indexOf('zsolt') >= 0 && message.channel.id == '144787515268661248') {
+				else if (lower.indexOf('zsolt') >= 0 && message.channel.id == '144787515268661248') {
                     message.channel.sendMessage(dg.random(dg.zsolt));
                 }
-                if (lower.indexOf('ante') >= 0 && message.channel.id == '144787515268661248') {
+				else if (lower.indexOf('ante') >= 0 && message.channel.id == '144787515268661248') {
                     message.channel.sendMessage(dg.random(dg.ante));
                 }
-                if (lower.indexOf('nana') >= 0 && message.channel.id == '144787515268661248') {
+				else if (lower.indexOf('nana') >= 0 && message.channel.id == '144787515268661248') {
                     message.channel.sendMessage(dg.random(dg.nana));
                 }
-                if (lower.indexOf('szabi') >= 0 && message.channel.id == '144787515268661248') {
+				else if (lower.indexOf('szabi') >= 0 && message.channel.id == '144787515268661248') {
                     message.channel.sendMessage(dg.random(dg.szabi));
                 }
-                if (lower.indexOf('márk') >= 0 && message.channel.id == '144787515268661248') {
+				else if (lower.indexOf('márk') >= 0 && message.channel.id == '144787515268661248') {
                     message.channel.sendMessage(dg.random(dg.mark));
                 }
-                if (lower.indexOf('sono') >= 0 && message.channel.id == '144787515268661248') {
+				else if (lower.indexOf('sono') >= 0 && message.channel.id == '144787515268661248') {
                     message.channel.sendMessage(dg.random(dg.sono));
                 }
-                if (lower == 'de') {
+				else if (lower == 'de') {
                     message.channel.sendMessage('Nem!');
                 }
-                if (lower == 'nem') {
+				else if (lower == 'nem') {
                     message.channel.sendMessage('De!');
                 }
                 //TODO
-                if ((lower.indexOf(bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
+				else if ((lower.indexOf(bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
                     message.channel.sendMessage(dg.random(dg.emlites));
                 }
-                if (lower.startsWith('kus')) {
+				else if (lower.indexOf('kus') >= 0) {
                     message.channel.sendMessage(dg.random(dg.kus));
                 }
                 /*
@@ -131,22 +131,22 @@ module.exports = (bot, globs, message) => {
                     message.channel.sendMessage('*' + fullID + ' slaps ' + elso + '*'); 
                 }
                 */
-                if ((lower.indexOf('szia') >= 0 || lower == 'hi')) {
+				else if ((lower.indexOf('szia') >= 0 || lower == 'hi')) {
+                    message.channel.sendMessage(dg.random(dg.hi));
+				}
+				else if (lower.indexOf('jó éjt') >= 0) {
                     message.channel.sendMessage(dg.random(dg.hi));
                 }
-                if (lower.startsWith('jó éjt')) {
-                    message.channel.sendMessage(dg.random(dg.hi));
-                }
-                if ((lower.indexOf('>.>') >= 0) || (lower.indexOf('<.<') >= 0)) {
+				else if ((lower.indexOf('>.>') >= 0) || (lower.indexOf('<.<') >= 0)) {
                     message.channel.sendMessage(dg.random(dg.eye));
                 }
-                if (lower.indexOf('jajne') >= 0 || lower.indexOf('jaj ne') >= 0) {
+				else if (lower.indexOf('jajne') >= 0 || lower.indexOf('jaj ne') >= 0) {
                     message.channel.sendMessage('Jaj, de. :3');
                 }
-                if (lower.indexOf('osu.ppy.sh/ss') >= 0) {
+				else if (lower.indexOf('osu.ppy.sh/ss') >= 0) {
                     message.channel.sendMessage("noob");
                 }
-                if (lower.indexOf('ayy') >= 0) {
+				else if (lower.indexOf('ayy') >= 0) {
                     message.channel.sendMessage('Ayy ayy ayy...');
                 }/*
                 if (lower.startsWith(cmdpref) &&
