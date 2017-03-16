@@ -60,7 +60,7 @@ module.exports = (bot, globs, message) => {
                 message.edit('Nope.');
             }, 1000);
         }
-        if (message.author.username != bot.user.username) {
+        else if (message.author.username != bot.user.username) {
             if (lower == 'ping') {
                 message.channel.sendMessage('Pong!');
             }
