@@ -43,7 +43,7 @@ require('./module/console.js')(bot, globs);
 bot.login(globs.token);
 
 bot.on('ready', function () {
-    //globs.client = require('./module/osuirc.js').start(bot, globs);
+    globs.client = require('./module/osuirc.js').start(bot, globs);
     bot.channels.get(globs.ch.main).sendMessage('[online]');
     console.log('[online]');
     bot.user.setPresence({
