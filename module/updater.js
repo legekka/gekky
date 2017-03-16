@@ -6,7 +6,7 @@ var execSync = require('child_process').execSync;
 const githook = require('github-webhook-handler');
 var handler = githook({
 	path: '/webhook',
-	secret: 'kutya'
+	secret: ''
 });
 const https = require('https');
 
