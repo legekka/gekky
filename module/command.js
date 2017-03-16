@@ -43,11 +43,7 @@ module.exports = (bot, message, globs, callback) => {
             });
         } else if (lower.startsWith(cmdpref + 'git')) {
             // !git|Kiírja gekky githubját.
-            message.channel.sendEmbed({
-                'title': 'GitHub',
-                'description': 'Teljes nyílt forráskód',
-                'url': 'http://github.com/legekka/gekky'
-            })
+            message.channel.sendMessage('http://github.com/legekka/gekky');
         } else if (lower.startsWith(cmdpref + 'ver')) {
             // !ver|Kiírja a jelenlegi verziót.
             reqreload('./updater.js').fullver((resp) => {
