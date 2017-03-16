@@ -28,6 +28,7 @@ module.exports = {
             return callback(title);
         });
     },
+
     fullver: (callback) => {
         lastcomm = exec('git log --name-status HEAD^..HEAD');
         lastcomm.stdout.on('data', (data) => {
@@ -45,6 +46,7 @@ module.exports = {
             });
         });
     },
+    
     registerUpdate: (callback) => {
         http.createServer((request, result) => {
             handler(request, result, function (error) {
