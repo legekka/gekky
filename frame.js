@@ -1,5 +1,6 @@
 // frame.js
 // frame of the core.js
+// includes updater system
 
 const fs = require('fs');
 const Discord = require('discord.js');
