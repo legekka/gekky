@@ -63,7 +63,7 @@ bot.on('message', (message) => {
             reqreload('./osuirc.js').stop(bot, globs, message)
         }
         bot.destroy().then(() => {
-            process.exit(1);
+            process.exit(4);
         })
     }
     if (message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {

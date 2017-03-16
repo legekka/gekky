@@ -15,7 +15,7 @@ module.exports = function (bot, globs) {
                     reqreload('./osuirc.js').stop(bot, globs, message)
                 }
                 bot.destroy().then(() => {
-                    process.exit(1);
+                    process.exit(4);
                 })
             } else if (cmd == 'reload') {
                 if (globs.irc_online) {

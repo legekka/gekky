@@ -71,7 +71,7 @@ function frame() {
         console.log(data.substr(0, data.length - 1));
     });
     gekky.on('exit', (code) => {
-        if (code == 1) {
+        if (code == 4) {
             isStarted = false;
             console.log(c.red('[Frame]') + ' Gekky has been stopped...');
             bot.channels.get(main).sendMessage('[Frame] Gekky has been stopped...');
@@ -113,7 +113,6 @@ function setupUpdater() {
         if (response.update) {
             reqreload('./updater.js').fullver((resp) => {
                 console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
-                console.log(response.data);
                 if (connected) {
                     bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
                     bot.user.setGame(resp.ver);
@@ -179,7 +178,7 @@ inp.addListener('data', (d) => {
             bot.channels.get(main).sendMessage('[Frame] Stopping frame...').then(() => {
                 bot.destroy().then(() => {
                     console.log(c.red('[Frame]') + ' Stopping frame...');
-                    process.exit(0);
+                    process.exit(1);
                 });
             });
         } else if (cmd == '!reload') {
