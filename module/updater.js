@@ -11,7 +11,6 @@ var handler = githook({
 });
 const http = require('http');
 
-
 var resp = {
     'update': false,
     'full': false,
