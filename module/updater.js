@@ -54,6 +54,7 @@ module.exports = {
 
         handler.on('error', (error) => {
             console.log(c.green('[UPDATER] ') + 'ERROR: ' + error.message);
+            return callback(resp);
         });
 
         handler.on('push', (pushData) => {
