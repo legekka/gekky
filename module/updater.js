@@ -3,6 +3,7 @@
 
 var exec = require('child_process').exec;
 var execSync = require('child_process').execSync;
+const c = require('chalk');
 const githook = require('github-webhook-handler');
 var handler = githook({
     path: '/webhook',
