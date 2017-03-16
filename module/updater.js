@@ -83,7 +83,7 @@ module.exports = {
 				result.statusCode = 404;
 				result.end("It's forbidden to do this!");
 			});
-		}).listen(7777);
+		}).listen(4242);
 
 		handler.on('error', (error) => {
 			resp.data = 'ERROR: ' + error.message;
