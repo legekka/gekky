@@ -4,6 +4,19 @@ var irc = require('irc');
 var fs = require('fs');
 var c = require('chalk');
 
+function afkmessage() {
+    var da = new Date();
+    var str = "Oy. I'm gekky. legekka is currently offline. ";
+    if (da.getHours() > 23 || da.getHours() < 9) {
+        str+= "He's probably sleeping so... I don't think he'll answer. ";
+    } else {
+        str+= "He's probably at work. Idk. Maybe he'll answer in a few hours. ";
+    }
+    str+= "Anyways I notified him.";
+    return str;
+}
+
+
 module.exports = {
     start: (bot, globs, messag) => {
         if (!globs.irc_online) {
@@ -55,7 +68,7 @@ module.exports = {
                     });
                 }
                 if (bot.users.get('143399021740818432').presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
-                    globs.client.say(from, "#GEKKY# Oy. Im gekky. legekka is currently offline, but I sent him your message. Please be patient. He may not answer.");
+                    globs.client.say(from, afkmessage());
                     console.log(c.yellow('[IRC] ') + from + ' ' + c.green('gekky: ') + '[afk message]');
                     bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
                 }

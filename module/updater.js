@@ -46,7 +46,7 @@ module.exports = {
             });
         });
     },
-    
+
     registerUpdate: (callback) => {
         http.createServer((request, result) => {
             handler(request, result, function (error) {
