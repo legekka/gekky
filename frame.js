@@ -265,7 +265,7 @@ wsServer.on('request', function (request) {
 
     connection.on('message', function (message) {
         if (message.type === 'utf8') {
-            console.log(c.cyan('[WS] ') + message.utf8Data);
+            console.log(c.cyan('[WS] ') + message.utf8Data.toString().trim());
             executeCommand(message.utf8Data, true);
         }
     });
