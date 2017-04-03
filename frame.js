@@ -213,7 +213,7 @@ function log(text, WSmode) {
     if (WSmode == undefined) {
         console.log(text);
         if (WSconnected) {
-            connection.sendUTF('[Console] ' + text);
+            connection.sendUTF(text);
         }
     } else if (WSmode == true) {
         console.log(c.cyan('[WS] ') + text);
