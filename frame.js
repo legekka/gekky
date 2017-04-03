@@ -25,6 +25,9 @@ var gekky;  // The child process
 
 var inp = process.openStdin();  // for the child process inputs
 
+var connection;  // for the WS connection
+var WSconnected = false;  // is WS client connected 
+
 setupUpdater();
 
 bot.login(token);
@@ -33,7 +36,7 @@ bot.on('ready', function () {
     connected = true;
     if (!isStarted) {
         bot.channels.get(main).sendMessage('[Frame] online');
-        console.log(c.red('[Frame]') + ' online');
+        log(c.red('[Frame]') + ' online');
         bot.user.setPresence({
             "status": "dnd",
         });
@@ -46,15 +49,15 @@ bot.on('message', (message) => {
         var lower = message.content.toLowerCase();
         if (lower == '!start') {
             if (!isStarted) {
-                console.log(c.red('[Frame]') + ' Starting gekky...');
+                log(c.red('[Frame]') + ' Starting gekky...');
                 bot.channels.get(main).sendMessage('[Frame] Starting gekky...');
                 Starting = true;
             } else {
-                console.log(c.red('[Frame]') + ' Gekky is already running...');
+                log(c.red('[Frame]') + ' Gekky is already running...');
                 bot.channels.get(main).sendMessage('[Frame] Gekky is already running...');
             }
         } else if ((lower == '!reload' || lower == '!close' || lower == '!stop') && !isStarted) {
-            console.log(c.red('[Frame]') + ' Gekky is not running...');
+            log(c.red('[Frame]') + ' Gekky is not running...');
             bot.channels.get(main).sendMessage('[Frame] Gekky is not running...');
         }
         if (lower == '!isstarted') {
@@ -68,12 +71,12 @@ function frame() {
     isStarted = true;
     gekky = exec('node ./core.js --color');
     gekky.stdout.on('data', function (data) {
-        console.log(data.substr(0, data.length - 1));
+        log(data.substr(0, data.length - 1));
     });
     gekky.on('exit', (code) => {
         if (code == 4) {
             isStarted = false;
-            console.log(c.red('[Frame]') + ' Gekky has been stopped...');
+            log(c.red('[Frame]') + ' Gekky has been stopped...');
             bot.channels.get(main).sendMessage('[Frame] Gekky has been stopped...');
             bot.user.setPresence({
                 "status": "dnd",
@@ -83,13 +86,13 @@ function frame() {
         if (code == 2) {
             isStarted = false;
             Reloading = true;
-            console.log(c.red('[Frame]') + ' Reloading Gekky...');
+            log(c.red('[Frame]') + ' Reloading Gekky...');
             bot.channels.get(main).sendMessage('[Frame] Reloading Gekky...');
         }
         if (code == 3) {
             isStarted = false;
             Reloading = true;
-            console.log(c.red('[Frame]') + ' Fatal error, restarting Gekky...');
+            log(c.red('[Frame]') + ' Fatal error, restarting Gekky...');
             bot.channels.get(main).sendMessage('[Frame] Fatal error, restarting Gekky...')
         }
     });
@@ -112,32 +115,32 @@ function setupUpdater() {
     reqreload('./updater.js').registerUpdate((response) => {
         if (response.update) {
             reqreload('./updater.js').fullver((resp) => {
-                console.log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
+                log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
                 if (connected) {
                     bot.channels.get(main).sendMessage('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
                     bot.user.setGame(resp.ver);
                 }
                 if (response.full) {
-                    console.log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
+                    log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
                     if (connected) {
                         if (isStarted) {
                             gekky.stdin.write('close');
                         }
                         bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
                             bot.destroy().then(() => {
-                                console.log(c.red('[Frame]') + ' Reloading frame...');
+                                log(c.red('[Frame]') + ' Reloading frame...');
                                 process.exit(2);
                             });
                         });
                     }
                 } else if (response.core) {
                     if (isStarted) {
-                        console.log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
+                        log(c.green('[UPDATER] ') + 'core.js updated, reloading...');
                         gekky.stdin.write('reload');
                     }
                 } else if (response.irc) {
                     if (isStarted) {
-                        console.log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
+                        log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
                         gekky.stdin.write('ircreload');
                     }
                 }
@@ -149,33 +152,40 @@ function setupUpdater() {
 // stdio //
 
 inp.addListener('data', (d) => {
+    executeCommand(d);
+})
+
+// managing commands
+// common for discord and websocket
+
+function executeCommand(d, WSmode) {
     var cmd = d.toString().toLowerCase().trim();
     if (!cmd.startsWith('!')) {
         if (isStarted) {
             gekky.stdin.write(d);
         } else {
-            console.log(c.red('[Frame]') + ' Gekky is not started...');
+            log(c.red('[Frame]') + ' Gekky is not started...', WSmode);
         }
     } else {
         // frame commands goes here
         if (cmd == '!start') {
             if (!isStarted) {
-                console.log(c.red('[Frame]') + ' Starting gekky...');
+                log(c.red('[Frame]') + ' Starting gekky...', WSmode);
                 bot.channels.get(main).sendMessage('[Frame] Starting gekky...');
                 Starting = true;
             } else {
-                console.log(c.red('[Frame]') + ' Gekky is already running...');
+                log(c.red('[Frame]') + ' Gekky is already running...', WSmode);
             }
         } else if (cmd == '!isstarted') {
             isStarted = !isStarted;
-            console.log(c.red('[Frame]') + ' isStarted = ' + isStarted);
+            log(c.red('[Frame]') + ' isStarted = ' + isStarted, WSmode);
         } else if (cmd == '!close') {
             if (isStarted) {
                 gekky.stdin.write('close');
             }
             bot.channels.get(main).sendMessage('[Frame] Stopping frame...').then(() => {
                 bot.destroy().then(() => {
-                    console.log(c.red('[Frame]') + ' Stopping frame...');
+                    log(c.red('[Frame]') + ' Stopping frame...', WSmode);
                     process.exit(1);
                 });
             });
@@ -185,13 +195,82 @@ inp.addListener('data', (d) => {
             }
             bot.channels.get(main).sendMessage('[Frame] Reloading frame...').then(() => {
                 bot.destroy().then(() => {
-                    console.log(c.red('[Frame]') + ' Reloading frame...');
+                    log(c.red('[Frame]') + ' Reloading frame...', WSmode);
                     process.exit(2);
                 });
             });
         }
         else {
-            console.log("[Frame] Undefined command: '" + cmd + "'");
+            log("[Frame] Undefined command: '" + cmd + "'", WSmode);
         }
     }
-})
+}
+
+
+// sending back console.log if WSmode is true
+
+function log(text, WSmode) {
+    if (WSmode == undefined) {
+        console.log(text);
+        if (WSconnected) {
+            connection.sendUTF('[Console] ' + text);
+        }
+    } else if (WSmode == true) {
+        console.log(c.cyan('[WS] ') + text);
+        connection.sendUTF(text);
+    }
+}
+
+// websocket server
+// for alternative control
+
+function WSpref() {
+    return c.cyan('[WS] ') + reqreload('./getTime.js')('full') + ' ';
+}
+
+var WebSocketServer = require('websocket').server;
+var http = require('http');
+
+var server = http.createServer(function (request, response) {
+    response.writeHead(404);
+    response.end();
+});
+
+server.listen(4242, function () {
+    console.log(WSpref() + 'Websocket server is listening on port 4242');
+});
+
+wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: false
+});
+
+function originIsAllowed(origin) {
+    if (origin === token) {
+        return true;
+    } else {
+        return false;
+    }
+}
+wsServer.on('request', function (request) {
+    if (!originIsAllowed(request.origin)) {
+        request.reject();
+        console.log(WSpref() + 'Connection from origin ' + request.origin + ' rejected.');
+        return;
+    }
+    connection = request.accept('echo-protocol', request.origin);
+    WSconnected = true;
+    console.log(WSpref() + 'Connection accepted.');
+    connection.sendUTF('Oy legekka! Having troubles?\nDirect Access mode');
+
+    connection.on('message', function (message) {
+        if (message.type === 'utf8') {
+            executeCommand(message.utf8Data, true);
+        }
+    });
+
+    connection.on('close', function (reasonCode, description) {
+        console.log(WSpref() + 'legekka from ' + connection.remoteAddress + ' disconnected.');
+        WSconnected = false;
+    });
+});

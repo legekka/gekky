@@ -15,19 +15,19 @@ module.exports = {
             if (chID == undefined) { chname = 'private#'; } else { chname = bot.channels.get(chID).name; }
             if (message.content == '') { message.content = '<attachment>'; }
             if (ch.current == chID) {
-                var text = getTime('full') + c.yellow(' #' + chname) + ' ' + usercolor(message.author) + ': ' + c.grey(message.content);
+                var text = reqreload('./getTime.js')('full') + c.yellow(' #' + chname) + ' ' + usercolor(message.author) + ': ' + c.grey(message.content);
                 console.log(text);
                 bot.channels.get(ch.gekkylog).sendMessage(rawtext(text));
                 log(text + '\r\n');
             } else {
                 if (is_a_command) {
-                    var text = c.gray(getTime('full') + ' #' + chname + ' ' + message.author.username + ': ' + message.content);
+                    var text = c.gray(reqreload('./getTime.js')('full') + ' #' + chname + ' ' + message.author.username + ': ' + message.content);
                     console.log(text);
                     bot.channels.get(ch.gekkylog).sendMessage(rawtext(text));
                     log(text + '\r\n');
                 }
                 if (!is_a_command) {
-                    log(getTime('full') + ' #' + chname + ' ' + message.author.username + ': ' + message.content + '\r\n');
+                    log(reqreload('./getTime.js')('full') + ' #' + chname + ' ' + message.author.username + ': ' + message.content + '\r\n');
                 }
             }
         }
@@ -63,20 +63,6 @@ function usercolor(user) {
             } else {
                 return c.cyan(user.username);
             }
-            break;
-    }
-}
-
-function getTime(format) {
-    var da = new Date();
-    switch (format) {
-        case 'time': return da.getHours() + ':' + da.getMinutes() + ':' + da.getSeconds();
-            break;
-        case 'date': return da.getFullYear() + '-' + (da.getMonth() + 1) + '-' + da.getDate();
-            break;
-        case 'full': return da.getFullYear() + '-' + (da.getMonth() + 1) + '-' + da.getDate() + ' ' + da.getHours() + ':' + da.getMinutes() + ':' + da.getSeconds();
-            break;
-        default: return '<####>';
             break;
     }
 }
