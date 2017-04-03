@@ -236,8 +236,8 @@ var server = http.createServer(function (request, response) {
     response.end();
 });
 
-server.listen(4242, function () {
-    console.log(WSpref() + 'Websocket server is listening on port 4242');
+server.listen(6969, function () {
+    console.log(WSpref() + 'Websocket server is listening on port 6969');
 });
 
 wsServer = new WebSocketServer({
