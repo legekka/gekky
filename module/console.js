@@ -35,6 +35,15 @@ module.exports = function (bot, globs) {
                 } else {
                     console.log(c.yellow('[IRC] ') + 'is not connected.');
                 }
+            } else if (cmd == 'globs') {
+                console.log(c.yellow('<globs>'));
+                console.log('tsun: ' + globs.tsun);
+                console.log('cmdpref: ' + globs.cmdpref);
+                console.log('token: ' + globs.token);
+                process.stdout.write('ch: '); console.log(globs.ch);
+                console.log('irc_online: ' + globs.irc_online);
+                console.log('irc_channel: ' + globs.irc_channel);
+                console.log('irc_pin: ', globs.irc_pin);
             } else if (cmd == '') {
                 // no input
             } else {
