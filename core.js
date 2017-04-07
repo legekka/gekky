@@ -75,26 +75,39 @@ bot.on('message', (message) => {
 
     // message logger
     reqreload('./log.js').messageConsoleLog(bot, message, globs, is_a_command);
-    
+
     // webp converter when image attachment
     reqreload('./webpconvert.js')(bot, message, globs);
 
     // kilépés
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
         if (globs.irc_online) {
-            reqreload('./osuirc.js').stop(bot, globs, message)
+            reqreload('./osuirc.js').stop(bot, globs, message);
+            setTimeout(() => {
+                bot.destroy().then(() => {
+                    process.exit(4);
+                });
+            }, 2000);
+        } else {
+            bot.destroy().then(() => {
+                process.exit(4);
+            });
         }
-        bot.destroy().then(() => {
-            process.exit(4);
-        })
     }
     if (message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {
         if (globs.irc_online) {
-            reqreload('./osuirc.js').stop(bot, globs, message)
+            reqreload('./osuirc.js').stop(bot, globs, message);
+            setTimeout(() => {
+                bot.destroy().then(() => {
+                    process.exit(2);
+                });
+            }, 2000);
+
+        } else {
+            bot.destroy().then(() => {
+                process.exit(2);
+            })
         }
-        bot.destroy().then(() => {
-            process.exit(2);
-        })
     }
 })
 

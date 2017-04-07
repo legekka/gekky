@@ -13,17 +13,29 @@ module.exports = function (bot, globs) {
             if (cmd == 'close' || cmd == 'stop') {
                 if (globs.irc_online) {
                     reqreload('./osuirc.js').stop(bot, globs);
+                    setTimeout(() => {
+                        bot.destroy().then(() => {
+                            process.exit(4);
+                        });
+                    }, 2000);
+                } else {
+                    bot.destroy().then(() => {
+                        process.exit(4);
+                    })
                 }
-                bot.destroy().then(() => {
-                    process.exit(4);
-                })
             } else if (cmd == 'reload') {
                 if (globs.irc_online) {
                     reqreload('./osuirc.js').stop(bot, globs);
+                    setTimeout(() => {
+                        bot.destroy().then(() => {
+                            process.exit(2);
+                        });
+                    }, 2000);
+                } else {
+                    bot.destroy().then(() => {
+                        process.exit(2);
+                    })
                 }
-                bot.destroy().then(() => {
-                    process.exit(2);
-                })
             } else if (cmd == 'ircstart') {
                 globs.client = reqreload('./osuirc.js').start(bot, globs);
             } else if (cmd == 'ircstop') {
