@@ -31,7 +31,16 @@ process.on('uncaughtException', function (error) {
     if (bot.channels.get(globs.ch.gekkylog) != undefined) {
         bot.channels.get(globs.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
             bot.channels.get(globs.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
-                process.exit(3);
+                if (globs.irc_online) {
+                    reqreload('./osuirc.js').stop(bot, globs);
+                    setTimeout(() => {
+                        bot.destroy().then(() => {
+                            process.exit(3);
+                        });
+                    }, 2000);
+                } else {
+                    process.exit(3);
+                }
             })
         });
     } else {
