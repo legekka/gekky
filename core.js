@@ -16,6 +16,7 @@ var globs = {
         'main': '281188840084078594',
         'gekkylog': '281189261355515915',
         'osuirc': '289509321446916096',
+        'webps': '299862573078151178',
         'current': '281188840084078594',
     },
     'client': undefined,
@@ -55,10 +56,12 @@ bot.on('ready', function () {
 });
 
 bot.on('message', (message) => {
+    // talking messages
     reqreload('./talk.js').default(bot, globs, message);
 
     var is_a_command = false;
 
+    // commands with prefix
     reqreload('./command.js')(bot, message, globs, (response) => {
         if (response.mode != undefined) {
             switch (response.mode) {
@@ -70,8 +73,13 @@ bot.on('message', (message) => {
         is_a_command = response.is_a_command;
     });
 
+    // message logger
     reqreload('./log.js').messageConsoleLog(bot, message, globs, is_a_command);
+    
+    // webp converter when image attachment
+    reqreload('./webpconvert.js')(bot, message, globs);
 
+    // kilépés
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
         if (globs.irc_online) {
             reqreload('./osuirc.js').stop(bot, globs, message)
