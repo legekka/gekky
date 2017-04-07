@@ -34,11 +34,13 @@ module.exports = (bot, message, globs) => {
             httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
                     bot.channels.get(globs.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
-                        if (message.channel.permissionsFor(bot.user).hasPermission("MANAGE_MESSAGES")) {
-                            message.delete();
-                            message.channel.sendMessage('`' + message.author.username + '`', { file: filemsg.attachments.first().url });
-                        } else {
-                            bot.channels.get(globs.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                        if (message.channel.type != 'dm') {
+                            if (message.channel.permissionsFor(bot.user).hasPermission("MANAGE_MESSAGES")) {
+                                message.delete();
+                                message.channel.sendMessage('`' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                            } else {
+                                bot.channels.get(globs.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                            }
                         }
                     });
                 });
