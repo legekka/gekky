@@ -17,6 +17,7 @@ var globs = {
         'gekkylog': '281189261355515915',
         'osuirc': '289509321446916096',
         'webps': '299862573078151178',
+        'hun_scores': '261144312387993610',
         'current': '281188840084078594',
     },
     'client': undefined,
@@ -24,6 +25,9 @@ var globs = {
     'irc_channel': 'legekka',
     'irc_pin': '',
     'irc_online_users': '',  // online user interval-timer
+    'ready': false,
+    'osutrack_running': false,
+    'osutrack': undefined
 }
 
 process.on('uncaughtException', function (error) {
@@ -53,9 +57,13 @@ require('./module/console.js')(bot, globs);
 bot.login(globs.token);
 
 bot.on('ready', function () {
-    globs.client = require('./module/osuirc.js').start(bot, globs);
-    bot.channels.get(globs.ch.main).sendMessage('[online]');
-    console.log('[online]');
+    if (!globs.ready) {
+        globs.ready = true;
+        globs.client = require('./module/osuirc.js').start(bot, globs);
+        globs.osutrack = require('./module/osutrack.js').startChecker(bot, globs);
+        bot.channels.get(globs.ch.main).sendMessage('[online]');
+        console.log('[online]');
+    }
     bot.user.setPresence({
         "status": "online",
     });
@@ -86,7 +94,7 @@ bot.on('message', (message) => {
     reqreload('./log.js').messageConsoleLog(bot, message, globs, is_a_command);
 
     // webp converter when image attachment
-    reqreload('./webpconvert.js')(bot, message, globs);
+    reqreload('./webpconvert.js').message(bot, message, globs);
 
     // kilépés
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {

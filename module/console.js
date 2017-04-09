@@ -48,14 +48,17 @@ module.exports = function (bot, globs) {
                     console.log(c.yellow('[IRC] ') + 'is not connected.');
                 }
             } else if (cmd == 'globs') {
-                console.log(c.yellow('<globs>'));
-                console.log('tsun: ' + globs.tsun);
-                console.log('cmdpref: ' + globs.cmdpref);
-                console.log('token: ' + globs.token);
-                process.stdout.write('ch: '); console.log(globs.ch);
-                console.log('irc_online: ' + globs.irc_online);
-                console.log('irc_channel: ' + globs.irc_channel);
-                console.log('irc_pin: ', globs.irc_pin);
+                console.log(globs);
+            } else if (cmd == 'osu_top20list') {
+                reqreload('./osutrack.js').top20list();
+            } else if (cmd == 'osu_defaultscores') {
+                reqreload('./osutrack.js').defaultScores();
+            } else if (cmd == 'osu_checkscores') {
+                reqreload('./osutrack.js').checkScores(bot, globs);
+            } else if (cmd == 'osu_startchecker') {
+                reqreload('./osutrack.js').startChecker(bot, globs);
+            } else if (cmd == 'osu_stopchecker') {
+                reqreload('./osutrack.js').stopChecker(bot, globs);
             } else if (cmd == '') {
                 // no input
             } else {

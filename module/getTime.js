@@ -6,9 +6,7 @@ module.exports = function getTime(format) {
             break;
         case 'date': return da.getFullYear() + '-' + (da.getMonth() + 1) + '-' + da.getDate();
             break;
-        case 'full': return da.getFullYear() + '-' + (da.getMonth() + 1) + '-' + da.getDate() + ' ' + da.getHours() + ':' + da.getMinutes() + ':' + da.getSeconds();
-            break;
-        default: return '<####>';
+        default: return da.getFullYear() + '-' + (da.getMonth() + 1) + '-' + da.getDate() + ' ' + da.getHours() + ':' + da.getMinutes() + ':' + da.getSeconds();
             break;
     }
 }

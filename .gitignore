@@ -1,4 +1,6 @@
 data/blacklist.txt
 data/channel_blacklist.txt
 data/pref.txt
+data/osu_scores.txt
+data/osu_scores_userlist.txt
 /.vs
