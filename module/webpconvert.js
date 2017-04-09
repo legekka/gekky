@@ -56,7 +56,9 @@ module.exports = (bot, message, globs) => {
                             if (message.channel.type != 'dm') {
                                 if (message.channel.permissionsFor(bot.user).hasPermission("MANAGE_MESSAGES")) {
                                     message.delete();
-                                    message.channel.sendMessage('`' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                    var str = '';
+                                    if (message.content != '<attachment>') { str = message.content; }
+                                    message.channel.sendMessage('`' + message.author.username + '` ' + str, { file: filemsg.attachments.first().url });
                                 } else {
                                     bot.channels.get(globs.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                 }
