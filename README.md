@@ -2,7 +2,7 @@
 
 Gekky, a személyes tsundere JavaScript botom. Eléggé szerteágazóvá vált mostanra, és ez csak bővülni fog a továbbiakban. Eredetileg egy egyszerű Discord Bot volt, a magja még mindig ez, de mára már egy megfékezhetetlen programmá vált. Későbbiekben világuralomra fog törni.
 
-## Felépítése
+## Felépítés
 ![image of stucture](https://legekka.s-ul.eu/dG3GtlR3.png)
 
 ## frame.js
