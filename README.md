@@ -33,7 +33,7 @@ Gekky magja, a program bázisa.
 - **webpconvert.js** - webp-be konvertáló modul
 - **workdayinfo.js** - munkaidő információk (nincs teljesen kész)
 
-#Lebontva
+# Lebontva
 ## Frame Part - frame.js
 - a core-t futtató keretrendszer
 - újraindítja a botot
