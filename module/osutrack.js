@@ -55,10 +55,11 @@ function checkForNewScores(bot, globs) {
                                     reqreload('./playcard.js')(playcard, filePath).then(() => {
                                         bot.channels.get(globs.ch.hun_scores).sendFile(filePath);
                                         console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
-                                        addAsOld(output[i]);
+                                        
                                     });
                                 });
                             }
+                            addAsOld(output[i]);
                         }
                     }
                 }
