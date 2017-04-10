@@ -42,19 +42,24 @@ function checkForNewScores(bot, globs) {
     var userlist = fs.readFileSync(userlistpath).toString().split('\n');
     for (i in userlist) {
         osu.getUserRecent(userlist[i], (err, output) => {
-            if (output[0] != undefined) {
-                for (i in output) {
-                    if (isNewScore(output[i])) {
-                        if (output[i].rank != 'F') {
-                            var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
-                            createPlayCard(output[i], playcard => {
-                                reqreload('./playcard.js')(playcard, filePath).then(() => {
-                                    bot.channels.get(globs.ch.hun_scores).sendFile(filePath);
-                                    console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+            if (err) {
+                console.log(err);
+            }
+            if (output != null) {
+                if (output[0] != undefined) {
+                    for (i in output) {
+                        if (isNewScore(output[i])) {
+                            if (output[i].rank != 'F') {
+                                var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
+                                createPlayCard(output[i], playcard => {
+                                    reqreload('./playcard.js')(playcard, filePath).then(() => {
+                                        bot.channels.get(globs.ch.hun_scores).sendFile(filePath);
+                                        console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+                                        addAsOld(output[i]);
+                                    });
                                 });
-                            });
+                            }
                         }
-                        addAsOld(output[i]);
                     }
                 }
             }
