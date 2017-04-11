@@ -4,11 +4,10 @@
 
 const Discord = require('discord.js');
 var reqreload = require('./module/reqreload.js');
-var bot = new Discord.Client();
 const fs = require('fs');
 
-
-var globs = {
+var core = {
+    'bot': new Discord.Client(),
     'tsun': true,       // tsundere mode
     'cmdpref': fs.readFileSync('../pref.txt').toString(),     // default command prefix
     'token': fs.readFileSync('../profile.txt').toString(),
@@ -32,13 +31,13 @@ var globs = {
 
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    if (bot.channels.get(globs.ch.gekkylog) != undefined) {
-        bot.channels.get(globs.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
-            bot.channels.get(globs.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
-                if (globs.irc_online) {
-                    reqreload('./osuirc.js').stop(bot, globs);
+    if (core.bot.channels.get(core.ch.gekkylog) != undefined) {
+        core.bot.channels.get(core.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
+            core.bot.channels.get(core.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
+                if (core.irc_online) {
+                    reqreload('./osuirc.js').stop(core);
                     setTimeout(() => {
-                        bot.destroy().then(() => {
+                        core.bot.destroy().then(() => {
                             process.exit(3);
                         });
                     }, 2000);
@@ -52,76 +51,71 @@ process.on('uncaughtException', function (error) {
     }
 })
 
-require('./module/console.js')(bot, globs);
+require('./module/console.js')(core);
 
-bot.login(globs.token);
+core.bot.login(core.token);
 
-bot.on('ready', function () {
-    if (!globs.ready) {
-        globs.ready = true;
-        globs.client = require('./module/osuirc.js').start(bot, globs);
-        globs.osutrack = require('./module/osutrack.js').startChecker(bot, globs);
-        bot.channels.get(globs.ch.main).sendMessage('[online]');
+core.bot.on('ready', function () {
+    if (!core.ready) {
+        core.ready = true;
+        core.client = require('./module/osuirc.js').start(core);
+        core.osutrack = require('./module/osutrack.js').startChecker(core);
+        core.bot.channels.get(core.ch.main).sendMessage('[online]');
         console.log('[online]');
     }
-    bot.user.setPresence({
+    core.bot.user.setPresence({
         "status": "online",
     });
     reqreload('./updater.js').ver((motd) => {
-        bot.user.setGame(motd);
+        core.bot.user.setGame(motd);
     });
 });
 
-bot.on('message', (message) => {
+core.bot.on('message', (message) => {
     // talking messages
-    reqreload('./talk.js').default(bot, globs, message);
+    reqreload('./talk.js').default(core, message);
 
     var is_a_command = false;
 
     // commands with prefix
-    reqreload('./command.js')(bot, message, globs, (response) => {
-        if (response.mode != undefined) {
-            switch (response.mode) {
-                case 'cmdpref': globs.cmdpref = response.cmdpref;
-                    break;
-                case 'tsun': globs.tsun = response.tsun;
-            }
-        }
-        is_a_command = response.is_a_command;
+    reqreload('./command.js')(core, message, resp => {
+        is_a_command = resp.is_a_command;
+        core.tsun = resp.tsun;
+        core.cmdpref = resp.cmdpref;
     });
 
     // message logger
-    reqreload('./log.js').messageConsoleLog(bot, message, globs, is_a_command);
+    reqreload('./log.js').messageConsoleLog(core, message, is_a_command);
 
     // webp converter when image attachment
-    reqreload('./webpconvert.js').message(bot, message, globs);
+    reqreload('./webpconvert.js').message(core, message);
 
     // kilépés
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
-        if (globs.irc_online) {
-            reqreload('./osuirc.js').stop(bot, globs, message);
+        if (core.irc_online) {
+            reqreload('./osuirc.js').stop(core, message);
             setTimeout(() => {
-                bot.destroy().then(() => {
+                core.bot.destroy().then(() => {
                     process.exit(4);
                 });
             }, 2000);
         } else {
-            bot.destroy().then(() => {
+            core.bot.destroy().then(() => {
                 process.exit(4);
             });
         }
     }
     if (message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {
-        if (globs.irc_online) {
-            reqreload('./osuirc.js').stop(bot, globs, message);
+        if (core.irc_online) {
+            reqreload('./osuirc.js').stop(core, message);
             setTimeout(() => {
-                bot.destroy().then(() => {
+                core.bot.destroy().then(() => {
                     process.exit(2);
                 });
             }, 2000);
 
         } else {
-            bot.destroy().then(() => {
+            core.bot.destroy().then(() => {
                 process.exit(2);
             })
         }

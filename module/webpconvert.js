@@ -52,23 +52,23 @@ module.exports = {
         });
     },
 
-    message: (bot, message, globs) => {
-        if (message.channel.id != globs.ch.gekkylog && message.channel.id != globs.ch.hun_scores) {
+    message: (core, message) => {
+        if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores) {
             if (message.attachments.first() != undefined) {
                 var fname = message.attachments.first().filename;
                 var ext = fname.substr(fname.length - 3, 3);
                 if (extensions.indexOf(ext) >= 0) {
                     httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                         webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                            bot.channels.get(globs.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
+                            core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
                                 if (message.channel.type != 'dm') {
-                                    if (message.channel.permissionsFor(bot.user).hasPermission("MANAGE_MESSAGES")) {
+                                    if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
                                         message.delete();
                                         var str = '';
                                         if (message.content != '<attachment>') { str = message.content; }
                                         message.channel.sendMessage('`' + message.author.username + '` ' + str, { file: filemsg.attachments.first().url });
                                     } else {
-                                        bot.channels.get(globs.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                        core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                     }
                                 }
                             });
@@ -82,16 +82,16 @@ module.exports = {
                     if (url.indexOf('https') >= 0) {
                         httpsGet(url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                bot.channels.get(globs.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
-                                    bot.channels.get(globs.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
+                                    core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                 });
                             });
                         });
                     } else {
                         httpGet(url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                bot.channels.get(globs.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
-                                    bot.channels.get(globs.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
+                                    core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                 });
                             });
                         });

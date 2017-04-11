@@ -16,29 +16,29 @@ var osu = new osuapi.Api(apikey);
 module.exports = {
     top20list: () => { generateTop20list(); },
     defaultScores: () => { getDefaultScores(); },
-    checkScores: (bot, globs) => { checkForNewScores(bot, globs) },
-    startChecker: (bot, globs) => {
-        if (!globs.osutrack_running) {
-            checkForNewScores(bot, globs);
+    checkScores: (core) => { checkForNewScores(core) },
+    startChecker: (core) => {
+        if (!core.osutrack_running) {
+            checkForNewScores(core);
             console.log(c.green('[OT]') + ' osutrack started');
-            globs.osutrack_running = true;
-            globs.osutrack = setInterval(() => {
-                checkForNewScores(bot, globs);
+            core.osutrack_running = true;
+            core.osutrack = setInterval(() => {
+                checkForNewScores(core);
             }, 60000);
         } else {
             console.log(c.green('[OT]') + ' osutrack is already started');
         }
-        return globs.osutrack;
+        return core.osutrack;
     },
-    stopChecker: (globs) => {
-        globs.osutrack_running = false;
+    stopChecker: (core) => {
+        core.osutrack_running = false;
         console.log(c.green('[OT]') + ' osutrack stopped');
-        clearInterval(globs.osutrack);
-        return globs;
+        clearInterval(core.osutrack);
+        return core;
     }
 }
 
-function checkForNewScores(bot, globs) {
+function checkForNewScores(core) {
     var userlist = fs.readFileSync(userlistpath).toString().split('\n');
     for (i in userlist) {
         osu.getUserRecent(userlist[i], (err, output) => {
@@ -53,9 +53,9 @@ function checkForNewScores(bot, globs) {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
                                     reqreload('./playcard.js')(playcard, filePath).then(() => {
-                                        bot.channels.get(globs.ch.hun_scores).sendFile(filePath);
+                                        core.bot.channels.get(core.ch.hun_scores).sendFile(filePath);
                                         console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
-                                        
+
                                     });
                                 });
                             }

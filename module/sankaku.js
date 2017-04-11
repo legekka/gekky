@@ -26,7 +26,7 @@ function httpGet(url, filename) {
 function nsfwFilter(message, lower, mode, callback) {
     if (mode == 'nhentai') {
         if (message.channel.name != 'nsfw' && message.channel.name != 'fapmaterial' && message.channel.name != undefined) {
-            reqreload('./log.js').consoleLog(bot, c.bgRed('Doujin search at wrong channel.'));
+            reqreload('./log.js').consoleLog(core, c.bgRed('Doujin search at wrong channel.'));
             message.channel.sendMessage('retard, itt nem kereshetsz.');
         } else {
             nhentaiSearch(message, lower);
@@ -36,7 +36,7 @@ function nsfwFilter(message, lower, mode, callback) {
 }
 
 module.exports = {
-    nhentaiSearch: (bot, message, searchword) => {
+    nhentaiSearch: (core, message, searchword) => {
         var ncounter = message.id;
         var url_link = 'https://nhentai.net/search/?q=';
         while (searchword != searchword.replace(' ', '+')) {
@@ -96,21 +96,21 @@ module.exports = {
                                     var rnumber = Math.round((Math.random() * (doujinlist.length - 1) + 1));
                                     if (doujinlist[rnumber] != undefined) {
                                         message.channel.sendMessage(doujinlist[rnumber]);
-                                        reqreload('./log.js').consoleLog(bot, doujinlist[rnumber]);
+                                        reqreload('./log.js').consoleLog(core, doujinlist[rnumber]);
                                     } else {
                                         message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
-                                        reqreload('./log.js').consoleLog(bot, 'Nincs találat. ¯\\_(ツ)_/¯');
+                                        reqreload('./log.js').consoleLog(core, 'Nincs találat. ¯\\_(ツ)_/¯');
                                     }
                                 }
                             }, 100);
                         }
                     } else {
                         message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
-                        reqreload('./log.js').consoleLog(bot, 'Nincs találat. ¯\\_(ツ)_/¯');
+                        reqreload('./log.js').consoleLog(core, 'Nincs találat. ¯\\_(ツ)_/¯');
                     }
                 } else {
                     message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
-                    reqreload('./log.js').consoleLog(bot, 'Nincs találat. ¯\\_(ツ)_/¯');
+                    reqreload('./log.js').consoleLog(core, 'Nincs találat. ¯\\_(ツ)_/¯');
                 }
             }
         }, 100);

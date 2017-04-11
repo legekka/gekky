@@ -6,14 +6,13 @@ const fs = require('fs');
 
 var ownerid = '143399021740818432';
 
-module.exports = (bot, message, globs, callback) => {
-    var cmdpref = globs.cmdpref;
-    var tsun = globs.tsun;
+module.exports = (core, message, callback) => {
+    var cmdpref = core.cmdpref;
+    var tsun = core.tsun;
     delete require.cache[require.resolve('./blacklist.js')];
     if (!require('./blacklist.js').isBlacklisted(message)) {
         var lower = message.content.toLowerCase();
         var is_a_command = false;
-        var mode;
         if (lower.startsWith(cmdpref + 'lenny')) {
             // !lenny|Beszúr egy lenny fejet.
             message.channel.sendMessage('`' + message.author.username + '` ( ͡° ͜ʖ ͡°)');
@@ -56,7 +55,7 @@ module.exports = (bot, message, globs, callback) => {
             // legekka-only commands
             if (lower.startsWith(cmdpref + 'nhentai')) {
                 // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
-                reqreload('./sankaku.js').nhentaiSearch(bot, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
+                reqreload('./sankaku.js').nhentaiSearch(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
             } else if (lower.startsWith(cmdpref + 'del')) {
                 // !del|Üzenet törlő. !del <üzenetszám>
                 var number = lower.split(' ')[1];
@@ -92,7 +91,7 @@ module.exports = (bot, message, globs, callback) => {
             } else if (message.content.startsWith(cmdpref + 'motd')) {
                 // !motd|'playing <game>' megváltoztatására. !motd <szó>
                 motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
-                bot.user.setGame(motd);
+                core.bot.user.setGame(motd);
                 is_a_command = true;
             } else if (lower == cmdpref + 'inv') {
                 // !inv|Gekky invite linkje.
@@ -105,7 +104,6 @@ module.exports = (bot, message, globs, callback) => {
                     cmdpref = '!';
                 }
                 message.channel.sendMessage('New prefix: `' + cmdpref + '`');
-                var mode = 'cmdpref';
                 fs.writeFileSync('./data/pref.txt', cmdpref);
                 is_a_command = true;
             } else if (lower == cmdpref + 'tsun') {
@@ -116,7 +114,6 @@ module.exports = (bot, message, globs, callback) => {
                 } else {
                     message.channel.sendMessage('O-okay.');
                 }
-                var mode = 'tsun';
                 is_a_command = true;
             } // blacklist commands 
             else if (lower.startsWith(cmdpref + 'addbluser')) {
@@ -150,60 +147,42 @@ module.exports = (bot, message, globs, callback) => {
             }
             // osu irc rész
             else if (lower.startsWith(cmdpref + 'ircteszt')) {
-                globs.client = reqreload('./osuirc.js').teszt(bot, globs);
+                core.client = reqreload('./osuirc.js').teszt(core);
             } else if (lower.startsWith(cmdpref + 'ircreload')) {
                 // !ircreload|osu irc újraindítása
-                if (globs.irc_online) {
-                    reqreload('./osuirc.js').stop(bot, globs, message);
-                    reqreload('./osuirc.js').start(bot, globs, message);
+                if (core.irc_online) {
+                    reqreload('./osuirc.js').stop(core, message);
+                    reqreload('./osuirc.js').start(core, message);
                 } else {
                     message.channel.sendMessage('**[IRC] is not connected.**');
                 }
             } else if (lower.startsWith(cmdpref + 'ircstart')) {
                 // !ircstart|osu irc elindítása
-                globs.client = reqreload('./osuirc.js').start(bot, globs, message);
+                core.client = reqreload('./osuirc.js').start(core, message);
             } else if (lower.startsWith(cmdpref + 'ircstop')) {
                 // !ircstop|osu irc leállítása
-                globs.client = reqreload('./osuirc.js').stop(bot, globs, message);
+                core.client = reqreload('./osuirc.js').stop(core, message);
             }
             // üzenetküldés
-            else if (globs.client != undefined && message.channel.id == globs.ch.osuirc) {
+            else if (core.client != undefined && message.channel.id == core.ch.osuirc) {
                 if (lower.startsWith(cmdpref + 'to')) {
                     // !to|osu irc címzett váltás
                     message.delete();
-                    globs.irc_channel = message.content.substr(cmdpref.length + 3);
-                    message.channel.sendMessage('[IRC] Címzett: `' + globs.irc_channel + '`');
+                    core.irc_channel = message.content.substr(cmdpref.length + 3);
+                    message.channel.sendMessage('[IRC] Címzett: `' + core.irc_channel + '`');
                 } else {
                     message.delete();
                     var text = message.content;
-                    reqreload('./osuirc.js').say(bot, globs, globs.irc_channel, text);
+                    reqreload('./osuirc.js').say(core, text);
                 }
             }
         } else if (lower.startsWith(cmdpref)){
             reqreload('./talk.js').wrongcommand(message);
         }
-
-
-        if (mode != undefined) {
-            switch (mode) {
-                case 'cmdpref':
-                    return callback({
-                        'mode': 'cmdpref',
-                        'cmdpref': cmdpref,
-                        'is_a_command': is_a_command
-                    });
-                    break;
-                case 'tsun':
-                    return callback({
-                        'mode': 'tsun',
-                        'tsun': tsun,
-                        'is_a_command': is_a_command
-                    });
-            }
-        } else {
-            return callback({
-                'is_a_command': is_a_command
-            });
-        }
+        return callback({
+            'tsun': core.tsun,
+            'cmdpref': core.cmdpref,
+            'is_a_command': is_a_command
+        });
     }
 }
