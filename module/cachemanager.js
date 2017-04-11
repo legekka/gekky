@@ -7,7 +7,7 @@ var getSize = require('get-folder-size');
 var path = '../cache/';
 
 module.exports = (core) => {
-    setInterval(manageSize(core.limit), 10000);
+    setInterval(() => { manageSize(core.limit) }, 10000);
 }
 
 function manageSize(limit) {
