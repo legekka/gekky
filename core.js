@@ -8,6 +8,7 @@ const fs = require('fs');
 
 var core = {
     'bot': new Discord.Client(),
+    'cachelimit': 50,
     'tsun': true,       // tsundere mode
     'cmdpref': fs.readFileSync('../pref.txt').toString(),     // default command prefix
     'token': fs.readFileSync('../profile.txt').toString(),
@@ -52,6 +53,7 @@ process.on('uncaughtException', function (error) {
 })
 
 require('./module/console.js')(core);
+require('./module/cachemanager.js')(core);
 
 core.bot.login(core.token);
 
