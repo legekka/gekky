@@ -6,7 +6,7 @@ var fs = require('fs');
 
 module.exports = (playcard, filePath) => {
     return new Promise((resolve, reject) => {
-        jimp.read('./data/score-panel-new.png', (err, background) => {
+        jimp.read(randombg(), (err, background) => {
             var Image = background;
             jimp.read(playcard.player.avatar, (error, avatar) => {
                 var avatarPrint = avatar.resize(100, 100);
@@ -57,4 +57,9 @@ function WriteImage(backgroundImage, ImageToPrint, x, y){
             }
         }
     }
+}
+
+function randombg() {
+    var number = Math.round(Math.random()*6).toString();
+    return './data/playcardbgs/playcard-' + number + '.png';
 }
