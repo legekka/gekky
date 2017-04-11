@@ -294,7 +294,7 @@ function getMods(EnabledMods) {
     var Mods = EnabledMods;
     var FinalMods = "";
 
-    var Source = `NoMod: 0,No Fail: 1,Easy: 2,No Video: 4,Hidden: 8,Hard Rock: 16,Sudden Death: 32,Double Time: 64,Relax: 128,Half Time: 256,Nightcore: 512,Flashlight: 1024,Auto play: 2048,Spun Out: 4096,Auto Cursor: 8192,Perfect: 16384,Key4: 32768,Key5: 65536,Key6: 131072,Key7: 262144,Key8: 524288,Keys: -1,Fade In: 1048576,Random: 2097152,Last Mod: 4194304,Free Mod Allowed: -2,Key9: 16777216,Key10: 33554432,Key1: 67108864,Key3: 134217728,Key2: 268435456`;
+    var Source = `NoMod: 0,NF: 1,EZ: 2,No Video: 4,HD: 8,HR: 16,SD: 32,DT: 64,RX: 128,HT: 256,NC: 512,FL: 1024,Auto play: 2048,Spun Out: 4096,Auto Cursor: 8192,PF: 16384,Key4: 32768,Key5: 65536,Key6: 131072,Key7: 262144,Key8: 524288,Keys: -1,Fade In: 1048576,Random: 2097152,Last Mod: 4194304,Free Mod Allowed: -2,Key9: 16777216,Key10: 33554432,Key1: 67108864,Key3: 134217728,Key2: 268435456`;
 
     var Values = [];
     var Names = [];
