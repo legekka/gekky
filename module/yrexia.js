@@ -2,6 +2,7 @@
 // websocket server for Aixery clients
 
 const c = require('chalk');
+var reqreload = require('./reqreload.js');
 
 function WSpref() {
     return c.cyan('[YR] ') + reqreload('./getTime.js')('full') + ' ';
