@@ -1,6 +1,8 @@
 // yrexia.js
 // websocket server for Aixery clients
 
+const c = require('chalk');
+
 function WSpref() {
     return c.cyan('[YR] ') + reqreload('./getTime.js')('full') + ' ';
 }
