@@ -54,6 +54,7 @@ process.on('uncaughtException', function (error) {
 
 require('./module/console.js')(core);
 require('./module/cachemanager.js')(core);
+require('./module/yrexia.js')(core);
 
 core.bot.login(core.token);
 
