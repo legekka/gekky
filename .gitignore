@@ -3,4 +3,5 @@ data/channel_blacklist.txt
 data/pref.txt
 data/osu_scores.txt
 data/osu_scores_userlist.txt
+data/yrexia/userlist.json
 /.vs

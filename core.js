@@ -64,7 +64,7 @@ core.bot.on('ready', function () {
         core.client = require('./module/osuirc.js').start(core);
         core.osutrack = require('./module/osutrack.js').startChecker(core);
         core.bot.channels.get(core.ch.main).sendMessage('[online]');
-        console.log('[online]');
+        console.log('[Discord] online');
     }
     core.bot.user.setPresence({
         "status": "online",
