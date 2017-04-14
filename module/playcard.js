@@ -24,7 +24,7 @@ module.exports = (playcard, filePath) => {
                                 Image = background.print(font20, 8, 165, playcard.map.diff);
                                 Image = background.print(font20, 8, 196, playcard.map.length + ' | ' + playcard.map.bpm + ' | ' + playcard.map.sdiff + ' | ' + playcard.map.maxcombo);
                                 jimp.loadFont('./data/fonts/35/font.fnt', (err4, font35) => {
-                                    Image = background.print(font35, 480, 82, playcard.play.pp);
+                                    Image = background.print(font35, 475, 82, playcard.play.pp);
                                     jimp.loadFont('./data/fonts/15/font.fnt', (error4, font15) => {
                                         Image = background.print(font15, 8, 226, playcard.map.cs + ' | ' + playcard.map.ar + ' | ' + playcard.map.od + ' | ' + playcard.map.hp);
                                         var stream = fs.createWriteStream(filePath);

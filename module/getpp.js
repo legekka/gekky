@@ -58,8 +58,8 @@ function downloadMap(beatmapID, callback) {
 }
 function getOppaiMods(mods) {
     var oppaiMods = mods.toLowerCase().trim();
-    while ((oppaiMods = oppaiMods.replace(" + ", "")).indexOf(" + ") >= 0) {
-        oppaiMods = oppaiMods.replace(" + ", "");
+    while ((oppaiMods = oppaiMods.replace("+", "")).indexOf("+") >= 0) {
+        oppaiMods = oppaiMods.replace("+", "");
     }
     return oppaiMods;
 }

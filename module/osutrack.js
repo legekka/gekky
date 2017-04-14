@@ -328,7 +328,7 @@ function getMods(EnabledMods) {
             Mods -= Value;
 
             if (FinalMods != "")
-                FinalMods += " + ";
+                FinalMods += "";
 
             FinalMods += Names[i];
         }
