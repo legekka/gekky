@@ -10,7 +10,7 @@ module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
         var oppai = exec(`./oppai.sh ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
             if (error) { throw error; }
             if (stdout.toString().indexOf("pp") >= 0) {
-                stdout.toString().split("\r\n").forEach(t => {
+                stdout.toString().split("\n").forEach(t => {
                     if (t.indexOf("pp") >= 0 && t.indexOf("acc pp bonus") < 0) {
                         return callback(t.substring(0, t.length - 2));
                         oppai.kill();
