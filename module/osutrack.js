@@ -184,7 +184,7 @@ function createPlayCard(score, callback) {
 
     // pp calc
     reqreload('./getpp.js')(score.beatmap_id, playcard.play.acc, playcard.play.combo, score.countmiss, playcard.play.mods, (pp) => {
-        playcard.play.pp = pp;
+        playcard.play.pp = pp + 'pp';
     });
 
     var userdone = false;

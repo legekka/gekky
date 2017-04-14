@@ -7,7 +7,8 @@ const fs = require("fs");
 module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
     getBeatmap(beatmapID, (osuFile) => {
         // EZT sűrgősen multiplatformmá tenni!!
-        var oppai = exec(`./oppai.sh ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo}x ${misses}m`, (error, stdout, stderr) => {
+        var oppai = exec(`./oppai.sh ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
+            if (error) { throw error; }
             if (stdout.toString().indexOf("pp") >= 0) {
                 stdout.toString().split("\r\n").forEach(t => {
                     if (t.indexOf("pp") >= 0 && t.indexOf("acc pp bonus") < 0) {
@@ -16,6 +17,7 @@ module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
                     }
                 });
             }
+
         });
     });
 };
@@ -40,7 +42,6 @@ function getBeatmap(beatmapID, callback) {
 function downloadMap(beatmapID, callback) {
     var filePath = "../cache/" + beatmapID + ".osu";
     var osuRequest = request("https://osu.ppy.sh/osu/" + beatmapID);
-
     var stream = fs.createWriteStream(filePath);
     osuRequest.on("response", (resp) => {
         resp.pipe(stream);
