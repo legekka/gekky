@@ -181,6 +181,12 @@ function createPlayCard(score, callback) {
             'hp': ''
         }
     }
+
+    // pp calc
+    reqreload('./getpp.js')(score.beatmap_id, playcard.play.acc, playcard.play.combo, score.countmiss, playcard.play.mods, (pp) => {
+        playcard.play.pp = pp;
+    });
+
     var userdone = false;
     osu.getUser(parseInt(score.user_id), (err, output) => {
         playcard.player.username = output.username;
