@@ -12,7 +12,7 @@ module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
             if (stdout.toString().indexOf("pp") >= 0) {
                 stdout.toString().split("\n").forEach(t => {
                     if (t.indexOf("pp") >= 0 && t.indexOf("acc pp bonus") < 0) {
-                        return callback(t.substring(0, t.length - 2));
+                        return callback(parseFloat(t.substring(0, t.length - 2)).toFixed(1));
                         oppai.kill();
                     }
                 });
