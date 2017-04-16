@@ -59,7 +59,10 @@ module.exports = function (core) {
                 reqreload('./osutrack.js').startChecker(core);
             } else if (cmd == 'osu_stopchecker') {
                 reqreload('./osutrack.js').stopChecker(core);
-            } else if (cmd == '') {
+            } else if (cmd == 'teszt') {
+                reqreload('./music.js')(core);
+            }
+            else if (cmd == '') {
                 // no input
             } else {
                 console.log('Ismeretlen parancs: ' + cmd);
