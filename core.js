@@ -7,6 +7,10 @@ var reqreload = require('./module/reqreload.js');
 const fs = require('fs');
 
 var core = {
+    'autorun': {
+        'irc': true,
+        'osutrack': true,
+    },
     'bot': new Discord.Client(),
     'cachelimit': 50,
     'tsun': true,       // tsundere mode
@@ -61,8 +65,8 @@ core.bot.login(core.token);
 core.bot.on('ready', function () {
     if (!core.ready) {
         core.ready = true;
-        core.client = require('./module/osuirc.js').start(core);
-        core.osutrack = require('./module/osutrack.js').startChecker(core);
+        if (core.autorun.irc) { core.client = require('./module/osuirc.js').start(core); }
+        if (core.autorun.osutrack) { core.osutrack = require('./module/osutrack.js').startChecker(core); }
         core.bot.channels.get(core.ch.main).sendMessage('[online]');
         console.log('[Discord] online');
     }
