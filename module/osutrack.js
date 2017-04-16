@@ -53,9 +53,10 @@ function checkForNewScores(core) {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
                                     reqreload('./playcard.js')(playcard, filePath).then(() => {
-                                        core.bot.channels.get(core.ch.hun_scores).sendFile(filePath);
-                                        console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
-
+                                        reqreload('./webconvert.js').file(filePath, (filePath) => {
+                                            core.bot.channels.get(core.ch.hun_scores).sendFile(filePath);
+                                            console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+                                        });
                                     });
                                 });
                             }
