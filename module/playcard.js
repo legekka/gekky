@@ -16,7 +16,7 @@ module.exports = (playcard, filePath) => {
                     jimp.loadFont('./data/fonts/30/font.fnt', (error2, font30) => {
                         Image = background.print(font30, 118, 6, playcard.player.username);
                         jimp.loadFont('./data/fonts/25/font.fnt', (err3, font25) => {
-							var Name = playcard.map.title.length > 39 ? playcard.map.title.substring(0, 35) + '...' : playcard.map.title; 
+                            var Name = playcard.map.title.length > 39 ? playcard.map.title.substring(0, 35) + '...' : playcard.map.title;
                             Image = background.print(font25, 8, 137, Name);
                             jimp.loadFont('./data/fonts/20/font.fnt', (error3, font20) => {
                                 Image = background.print(font20, 118, 41, playcard.player.global_rank + ' | ' + playcard.player.country_rank + ' | ' + playcard.player.allpp);
@@ -44,15 +44,14 @@ module.exports = (playcard, filePath) => {
     });
 }
 
-function WriteImage(backgroundImage, ImageToPrint, x, y){
-    for(var i = 0; i < ImageToPrint.bitmap.width; i++){
-        for(var j = 0; j < ImageToPrint.bitmap.height; j++){
-            try{
+function WriteImage(backgroundImage, ImageToPrint, x, y) {
+    for (var i = 0; i < ImageToPrint.bitmap.width; i++) {
+        for (var j = 0; j < ImageToPrint.bitmap.height; j++) {
+            try {
                 var originalColor = ImageToPrint.getPixelColor(i, j);
                 backgroundImage.setPixelColor(originalColor, x + i, y + j);
             }
-            catch(err)
-            {
+            catch (err) {
                 console.log(`Error while reading ${i} - ${j} pixels!`);
             }
         }
@@ -60,6 +59,9 @@ function WriteImage(backgroundImage, ImageToPrint, x, y){
 }
 
 function randombg() {
-    var number = Math.round(Math.random()*6).toString();
-    return './data/playcardbgs/playcard-' + number + '.png';
+    fs.readdirSync('./data/playcardbgs/');
+    fs.readdir('./data/playcardbgs/', (err, files) => {
+        var number = Math.round(Math.random() * (files.length - 1)).toString();
+        return './data/playcardbgs/playcard-' + number + '.png';
+    });  
 }
