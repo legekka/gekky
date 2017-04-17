@@ -19,6 +19,7 @@ var core = {
     'ch': {
         'main': '281188840084078594',
         'gekkylog': '281189261355515915',
+        'gekkyerrorlog': '303610093226819584',
         'osuirc': '289509321446916096',
         'webps': '299862573078151178',
         'hun_scores': '261144312387993610',
@@ -38,7 +39,7 @@ process.on('uncaughtException', function (error) {
     console.log(error.stack);
     if (core.bot.channels.get(core.ch.gekkylog) != undefined) {
         core.bot.channels.get(core.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
-            core.bot.channels.get(core.ch.gekkylog).sendMessage('```' + error.stack + '```').then(() => {
+            core.bot.channels.get(core.ch.gekkyerrorlog).sendMessage('```' + error.stack + '```').then(() => {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
                     setTimeout(() => {
