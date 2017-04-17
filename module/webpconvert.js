@@ -54,12 +54,17 @@ module.exports = {
 
     message: (core, message) => {
         if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores) {
+            if (message.channel.name == "nsfw" || message.channel.name == "weeb") {
+                var qual = "-q 100";
+            } else {
+                var qual = "-q 80";
+            }
             if (message.attachments.first() != undefined) {
                 var fname = message.attachments.first().filename;
                 var ext = fname.substr(fname.length - 3, 3);
                 if (extensions.indexOf(ext) >= 0) {
                     httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
-                        webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
+                        webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
                             core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
                                 if (message.channel.type != 'dm') {
                                     if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
