@@ -8,7 +8,7 @@ module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
     getBeatmap(beatmapID, (osuFile) => {
         // EZT sűrgősen multiplatformmá tenni!!
         var oppai = exec(`./oppai.sh ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
-            if (error) { throw error; }
+            if (error) { return callback("###"); }
             if (stdout.toString().indexOf("pp") >= 0) {
                 stdout.toString().split("\n").forEach(t => {
                     if (t.indexOf("pp") >= 0 && t.indexOf("acc pp bonus") < 0) {

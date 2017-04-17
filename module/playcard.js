@@ -52,16 +52,14 @@ function WriteImage(backgroundImage, ImageToPrint, x, y) {
                 backgroundImage.setPixelColor(originalColor, x + i, y + j);
             }
             catch (err) {
-                console.log(`Error while reading ${i} - ${j} pixels!`);
+                //console.log(`Error while reading ${i} - ${j} pixels!`);
             }
         }
     }
 }
 
 function randombg() {
-    fs.readdirSync('./data/playcardbgs/');
-    fs.readdir('./data/playcardbgs/', (err, files) => {
-        var number = Math.round(Math.random() * (files.length - 1)).toString();
-        return './data/playcardbgs/playcard-' + number + '.png';
-    });  
+    var files = fs.readdirSync('./data/playcardbgs/');
+    var number = Math.round(Math.random() * (files.length - 1)).toString();
+    return './data/playcardbgs/playcard-' + number + '.png';
 }

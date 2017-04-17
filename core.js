@@ -37,8 +37,8 @@ var core = {
 
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    if (core.bot.channels.get(core.ch.gekkylog) != undefined) {
-        core.bot.channels.get(core.ch.gekkylog).sendMessage('<@143399021740818432>').then(() => {
+    if (core.bot.channels.get(core.ch.gekkyerrorlog) != undefined) {
+        core.bot.channels.get(core.ch.gekkyerrorlog).sendMessage('<@143399021740818432>').then(() => {
             core.bot.channels.get(core.ch.gekkyerrorlog).sendMessage('```' + error.stack + '```').then(() => {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
