@@ -15,6 +15,10 @@ module.exports = (core) => {
                 j++;
             }
             if (j < members.length) { megvan = true; }
+            else {
+                console.log('legekka isnt on any voice channel');
+                return;
+            }
         }
     } while (i < vchannels.length && !megvan);
     console.log(megvan);
