@@ -104,6 +104,7 @@ module.exports = (core) => {
 
             clients.getConn(id).on('close', function (reasonCode, description) {
                 console.log(YRpref() + username + ' from ' + clients.getConn(id).remoteAddress + ' disconnected.');
+
             });
         })
     });
@@ -123,8 +124,8 @@ function getKey(username) {
 }
 
 function generateID() {
-    var i = 0;
-    while (clients.connections.length < i && clients.connections[i].id == i) { i++ };
+    console.log('connections length: ', clients.connections.length);
+    while (i < clients.connections.length && clients.connections[i].id == i) { i++ };
     return i;
 }
 
