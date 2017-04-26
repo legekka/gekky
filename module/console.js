@@ -60,7 +60,7 @@ module.exports = function (core) {
             } else if (cmd == 'osu_stopchecker') {
                 reqreload('./osutrack.js').stopChecker(core);
             } else if (cmd == 'teszt') {
-                reqreload('./music.js')(core);
+                reqreload('./music.js').teszt(core);
             }
             else if (cmd == '') {
                 // no input
