@@ -8,17 +8,19 @@ module.exports = (core) => {
     var megvan = false;
     do {
         i++;
-        var members = vchannels[i].members.array();
-        if (members.length != 0) {
-            var j = 0;
-            while (j < members.length && members[j].user.username != 'legekka') {
-                j++;
+        if (vchannels[i].members != undefined) {
+            var members = vchannels[i].members.array();
+            if (members.length != 0) {
+                var j = 0;
+                while (j < members.length && members[j].user.username != 'legekka') {
+                    j++;
+                }
+                if (j < members.length) { megvan = true; }
+
             }
-            if (j < members.length) { megvan = true; }
-            else {
-                console.log('legekka isnt on any voice channel');
-                return;
-            }
+        } else {
+            console.log('legekka isnt on any voice channel or idk');
+            return;
         }
     } while (i < vchannels.length && !megvan);
     console.log(megvan);
