@@ -130,3 +130,8 @@ core.bot.on('message', (message) => {
 })
 
 
+// core-saver Interval
+
+setInterval(() => {
+    reqreload('./core-saver.js')(core);
+}, 1000);
