@@ -69,7 +69,6 @@ module.exports = {
             if (output.indexOf('core.js') >= 0 ||
                 output.indexOf('console.js') >= 0 ||
                 output.indexOf('cachemanager.js') >= 0 || 
-                output.indexOf('yrexia.js') >= 0 || 
                 output.indexOf('osutrack.js') >= 0) {
                 resp.core = true;
             }
