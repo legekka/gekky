@@ -59,6 +59,11 @@ process.on('uncaughtException', function (error) {
 
 require('./module/console.js')(core);
 require('./module/cachemanager.js')(core);
+if (fs.existsSync('../Yrexia/yrexia.js')) {
+    require('../Yrexia/yrexia.js')(core);
+} else {
+    console.log('Yrexia server not found.');
+}
 
 core.bot.login(core.token);
 
@@ -128,10 +133,3 @@ core.bot.on('message', (message) => {
         }
     }
 })
-
-
-// core-saver Interval
-
-setInterval(() => {
-    reqreload('./core-saver.js')(core);
-}, 1000);
