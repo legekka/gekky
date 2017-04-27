@@ -62,7 +62,7 @@ require('./module/cachemanager.js')(core);
 if (fs.existsSync('../Yrexia/yrexia.js')) {
     require('../Yrexia/yrexia.js')(core);
 } else {
-    console.log('Yrexia server not found.');
+    console.log('[core] Yrexia server not found.');
 }
 
 core.bot.login(core.token);
