@@ -108,7 +108,7 @@ module.exports = {
                     connection.sendUTF('Your key is: ' + connection.key);
                 }
                 if (username == 'holopad') {
-
+                    connection.sendUTF(commandOBJ('getIp'));
                 }
                 console.log(YRpref() + username + ' connected (ConnectionID: ' + connection.id + ')');
                 connection.on('message', function (message) {
@@ -128,12 +128,7 @@ module.exports = {
 
     }
 }
-function getIp() {
-    var id = isConnected(to);
-    if (id != -1) {
-        connections[id].sendUTF(commandOBJ('getIp'));
-    }
-}
+
 function isConnected(username) {
     var i = 0;
     while (i < connections.length && connections[i].username != username) { i++ };
