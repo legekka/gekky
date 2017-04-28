@@ -59,11 +59,7 @@ process.on('uncaughtException', function (error) {
 
 require('./module/console.js')(core);
 require('./module/cachemanager.js')(core);
-if (fs.existsSync('../Yrexia/yrexia.js')) {
-    require('../Yrexia/yrexia.js')(core);
-} else {
-    console.log('[core] Yrexia server not found.');
-}
+require('./module/yrexia.js')(core);
 
 core.bot.login(core.token);
 
