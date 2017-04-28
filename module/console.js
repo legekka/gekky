@@ -62,7 +62,7 @@ module.exports = function (core) {
             } else if (cmd == 'teszt') {
                 reqreload('./music.js').teszt(core);
             } else if (cmd == 'teszt2') {
-                reqreload('./yrexia.js').teszt(core, '!getIp', 'holopad');
+                require('./yrexia.js').teszt(core, '!getIp', 'holopad');
             }
             else if (cmd == '') {
                 // no input

@@ -32,7 +32,9 @@ var core = {
     'irc_online_users': '',  // online user interval-timer
     'ready': false,
     'osutrack_running': false,
-    'osutrack': undefined
+    'osutrack': undefined,
+    // yrexia part
+    'holopadip': ''
 }
 
 process.on('uncaughtException', function (error) {

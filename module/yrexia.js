@@ -68,6 +68,8 @@ module.exports = {
         var id = isConnected(to);
         if (id != -1) {
             if (txt == '!getIp') {
+                console.log('már jó hely');
+                console.log(id);
                 connections[id].sendUTF(commandOBJ('getIp'));
             } else if (!txt.startsWith('!')) {
                 connections[id].sendUTF(messageOBJ(txt));
@@ -102,7 +104,6 @@ module.exports = {
                 connection.username = username;
                 connection.key = getKey(username);
                 connections.push(connection);
-
                 if (resp.newuser) {
                     connection.sendUTF('Your key is: ' + connection.key);
                 }
@@ -110,7 +111,7 @@ module.exports = {
                 console.log(YRpref() + username + ' connected (ConnectionID: ' + connection.id + ')');
                 connection.on('message', function (message) {
                     if (message.type === 'utf8') {
-                        parseMessage(message, connection.id);
+                        parseMessage(message, connection.id, core);
                         //console.log(c.cyan('[WS] ') + message.utf8Data.toString().trim());
                     }
                 });
@@ -135,8 +136,6 @@ function isConnected(username) {
         return i;
     }
 }
-
-
 function getKey(username) {
     var userlist = JSON.parse(fs.readFileSync(path));
     var i = 0;
@@ -148,13 +147,11 @@ function getKey(username) {
         return undefined;
     }
 }
-
 function generateID() {
     var i = 0;
     while (i < connections.length) { i++ };
     return i;
 }
-
 function originIsAllowed(originstr, callback) {
     var origin = JSON.parse(originstr);
     if (origin.key == 'newuser') {
@@ -177,7 +174,6 @@ function originIsAllowed(originstr, callback) {
     }
 
 }
-
 function addNewUser(origin) {
     var userlist = JSON.parse(fs.readFileSync(path));
     var i = 0;
@@ -203,7 +199,6 @@ function addNewUser(origin) {
         return true;
     }
 }
-
 function generateKey(length) {
     const chars = ['A', 'I', 'X', 'E', 'R', 'Y', 'P', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     var key = '';
@@ -212,23 +207,19 @@ function generateKey(length) {
     }
     return key;
 }
-
 function YRpref() {
     return c.cyan('[YR] ') + reqreload('./getTime.js')('full') + ' ';
 }
-
-
-function parseMessage(message, id) {
+function parseMessage(message, id, core) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
         console.log(YRpref() + `${connections[id].username}[${id}]: ${msg.content}`);
     }
     if (msg.type == 'command') {
-        parseCommand(msg, id);
+        parseCommand(msg, id, core);
     }
 }
-
-function parseCommand(msg, id) {
+function parseCommand(msg, id, core) {
     if (msg.command == 'userlist') {
         var data = 'Online Users: ';
         for (i in connections) {
@@ -238,18 +229,18 @@ function parseCommand(msg, id) {
         }
 
         connections[id].sendUTF(messageOBJ(data));
+    } else if (msg.command.startsWith('setIp') && msg.username == 'holopad') {
+        core.holopadip = msg.command.split(' ')[1];
+        console.log('Setting holopad-ip: ' + core.holopadip);
     }
 }
-
-
 function commandOBJ(data) {
     return JSON.stringify({
-        'username': 'Yrexias',
+        'username': 'Yrexia',
         'type': 'command',
         'command': data
     });
 }
-
 function messageOBJ(data) {
     return JSON.stringify({
         'username': 'Yrexia',
