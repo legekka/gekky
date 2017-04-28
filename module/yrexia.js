@@ -3,7 +3,7 @@
 
 const c = require('chalk');
 const fs = require('fs');
-var reqreload = require('./module/reqreload.js');
+var reqreload = require('./reqreload.js');
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 
