@@ -2,6 +2,7 @@
 // auto image conversion in few channels
 
 const webp = require('webp-converter');
+const reqreload = require('./reqreload.js');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
