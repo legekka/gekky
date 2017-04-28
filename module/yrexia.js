@@ -63,53 +63,79 @@ var clients = {
     }
 };
 
-module.exports = (core) => {
-
-    wsServer.on('request', function (request) {
-        var username = JSON.parse(request.origin).username;
-        originIsAllowed(request.origin, (resp) => {
-            if (!resp.allowed) {
-                if (!resp.newuser) {
-                    var conn = request.accept('echo-protocol', request.origin);
-                    conn.sendUTF('Bad username&key combo');
-                    conn.close();
-                    console.log(YRpref() + 'Connection(' + username + ') rejected: Bad username@key combo');
-                    return;
-                } else {
-                    var conn = request.accept('echo-protocol', request.origin);
-                    conn.sendUTF('Username in use.');
-                    conn.close();
-                    console.log(YRpref() + 'Connection(' + username + ') rejected: Username in use.');
-                    return;
-                }
+module.exports = {
+    teszt: (core, txt, to) => {
+        var id = isConnected(to);
+        if (id != -1) {
+            if (txt == '!getIp') {
+                connections[id].sendUTF(commandOBJ('getIp'));
+            } else if (!txt.startsWith('!')) {
+                connections[id].sendUTF(messageOBJ(txt));
             }
-            var connection = request.accept('echo-protocol', request.origin);
-            connection.id = generateID();
-            connection.username = username;
-            connection.key = getKey(username);
-            connections.push(connection);
+        } else {
+            console.log(`User '${to}' is not connected.`);
+        }
+    },
 
-            if (resp.newuser) {
-                connection.sendUTF('Your key is: ' + connection.key);
-            }
+    start: (core) => {
 
-            console.log(YRpref() + username + ' connected (ConnectionID: ' + connection.id + ')');
-            connection.on('message', function (message) {
-                if (message.type === 'utf8') {
-                    parseMessage(message, connection.id);
-                    //console.log(c.cyan('[WS] ') + message.utf8Data.toString().trim());
+        wsServer.on('request', function (request) {
+            var username = JSON.parse(request.origin).username;
+            originIsAllowed(request.origin, (resp) => {
+                if (!resp.allowed) {
+                    if (!resp.newuser) {
+                        var conn = request.accept('echo-protocol', request.origin);
+                        conn.sendUTF('Bad username&key combo');
+                        conn.close();
+                        console.log(YRpref() + 'Connection(' + username + ') rejected: Bad username@key combo');
+                        return;
+                    } else {
+                        var conn = request.accept('echo-protocol', request.origin);
+                        conn.sendUTF('Username in use.');
+                        conn.close();
+                        console.log(YRpref() + 'Connection(' + username + ') rejected: Username in use.');
+                        return;
+                    }
                 }
-            });
+                var connection = request.accept('echo-protocol', request.origin);
+                connection.id = generateID();
+                connection.username = username;
+                connection.key = getKey(username);
+                connections.push(connection);
 
-            connection.on('close', function (reasonCode, description) {
-                console.log(YRpref() + connection.username + ' from ' + connection.remoteAddress + ' disconnected.');
-                console.log(connection.id);
-                connections[connection.id] = 'disconnected';
-            });
-        })
-    });
+                if (resp.newuser) {
+                    connection.sendUTF('Your key is: ' + connection.key);
+                }
 
+                console.log(YRpref() + username + ' connected (ConnectionID: ' + connection.id + ')');
+                connection.on('message', function (message) {
+                    if (message.type === 'utf8') {
+                        parseMessage(message, connection.id);
+                        //console.log(c.cyan('[WS] ') + message.utf8Data.toString().trim());
+                    }
+                });
+
+                connection.on('close', function (reasonCode, description) {
+                    console.log(YRpref() + connection.username + ' from ' + connection.remoteAddress + ' disconnected.');
+                    console.log(connection.id);
+                    connections[connection.id] = 'disconnected';
+                });
+            })
+        });
+
+    }
 }
+
+function isConnected(username) {
+    var i = 0;
+    while (i < connections.length && connections[i].username != username) { i++ };
+    if (i >= connections.length) {
+        return -1;
+    } else {
+        return i;
+    }
+}
+
 
 function getKey(username) {
     var userlist = JSON.parse(fs.readFileSync(path));
@@ -211,16 +237,23 @@ function parseCommand(msg, id) {
             }
         }
 
-        connections[id].sendUTF(JSON.stringify(messageOBJ(data)));
+        connections[id].sendUTF(messageOBJ(data));
     }
 }
 
 
+function commandOBJ(data) {
+    return JSON.stringify({
+        'username': 'Yrexias',
+        'type': 'command',
+        'command': data
+    });
+}
 
 function messageOBJ(data) {
-    return {
+    return JSON.stringify({
         'username': 'Yrexia',
         'content': data.trim(),
         'type': 'message',
-    };
+    });
 }

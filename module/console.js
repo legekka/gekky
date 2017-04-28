@@ -61,6 +61,8 @@ module.exports = function (core) {
                 reqreload('./osutrack.js').stopChecker(core);
             } else if (cmd == 'teszt') {
                 reqreload('./music.js').teszt(core);
+            } else if (cmd == 'teszt2') {
+                reqreload('./yrexia.js').teszt(core, '!getIp', 'holopad');
             }
             else if (cmd == '') {
                 // no input
