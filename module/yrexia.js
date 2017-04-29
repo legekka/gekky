@@ -233,6 +233,8 @@ function parseCommand(msg, id, core) {
     } else if (msg.command.startsWith('setIp') && msg.username == 'holopad') {
         core.holopadip = msg.command.split(' ')[1];
         console.log('Setting holopad-ip: ' + core.holopadip);
+    } else if (msg.command == 'ping') {
+        connections[id].sendUTF(commandOBJ('pingEnd'));
     }
 }
 
