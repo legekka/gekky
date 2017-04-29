@@ -70,7 +70,7 @@ module.exports = {
             if (txt == '!getIp') {
                 connections[id].sendUTF(commandOBJ('getIp'));
             } else if (!txt.startsWith('!')) {
-                connections[id].sendUTF(messageOBJ(txt, 'Yrexia'));
+                connections[id].sendUTF(messageOBJ(txt));
             }
         } else {
             console.log(`User '${to}' is not connected.`);
@@ -98,6 +98,8 @@ module.exports = {
                     }
                 }
                 var connection = request.accept('echo-protocol', request.origin);
+                broadcast(messageOBJ(username + ' connected'));
+
                 connection.id = generateID();
                 connection.username = username;
                 connection.key = getKey(username);
@@ -119,6 +121,7 @@ module.exports = {
                 connection.on('close', function (reasonCode, description) {
                     console.log(YRpref() + connection.username + ' from ' + connection.remoteAddress + ' disconnected.');
                     connections[connection.id] = 'disconnected';
+                    broadcast(messageOBJ(connection.username + ' disconnected'));
                 });
             })
         });
@@ -229,7 +232,7 @@ function parseCommand(msg, id, core) {
         }
 
 
-        connections[id].sendUTF(messageOBJ(data, 'Yrexia'));
+        connections[id].sendUTF(messageOBJ(data));
     } else if (msg.command.startsWith('setIp') && msg.username == 'holopad') {
         core.holopadip = msg.command.split(' ')[1];
         console.log('Setting holopad-ip: ' + core.holopadip);
@@ -254,6 +257,9 @@ function commandOBJ(data) {
     });
 }
 function messageOBJ(data, username) {
+    if (username == undefined) {
+        username = 'Yrexia';
+    }
     return JSON.stringify({
         'username': username,
         'content': data.trim(),
