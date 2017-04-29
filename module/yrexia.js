@@ -68,11 +68,9 @@ module.exports = {
         var id = isConnected(to);
         if (id != -1) {
             if (txt == '!getIp') {
-                console.log('már jó hely');
-                console.log(id);
                 connections[id].sendUTF(commandOBJ('getIp'));
             } else if (!txt.startsWith('!')) {
-                connections[id].sendUTF(messageOBJ(txt));
+                connections[id].sendUTF(messageOBJ(txt, 'Yrexia'));
             }
         } else {
             console.log(`User '${to}' is not connected.`);
@@ -120,7 +118,6 @@ module.exports = {
 
                 connection.on('close', function (reasonCode, description) {
                     console.log(YRpref() + connection.username + ' from ' + connection.remoteAddress + ' disconnected.');
-                    console.log(connection.id);
                     connections[connection.id] = 'disconnected';
                 });
             })
@@ -216,6 +213,7 @@ function parseMessage(message, id, core) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
         console.log(YRpref() + `${connections[id].username}[${id}]: ${msg.content}`);
+        broadcast(messageOBJ(msg.content, msg.username));
     }
     if (msg.type == 'command') {
         parseCommand(msg, id, core);
@@ -230,12 +228,22 @@ function parseCommand(msg, id, core) {
             }
         }
 
-        connections[id].sendUTF(messageOBJ(data));
+
+        connections[id].sendUTF(messageOBJ(data, 'Yrexia'));
     } else if (msg.command.startsWith('setIp') && msg.username == 'holopad') {
         core.holopadip = msg.command.split(' ')[1];
         console.log('Setting holopad-ip: ' + core.holopadip);
     }
 }
+
+function broadcast(obj) {
+    for (i in connections) {
+        if (connections[i] != 'disconnected') {
+            connections[i].sendUTF(obj);
+        }
+    }
+}
+
 function commandOBJ(data) {
     return JSON.stringify({
         'username': 'Yrexia',
@@ -243,9 +251,9 @@ function commandOBJ(data) {
         'command': data
     });
 }
-function messageOBJ(data) {
+function messageOBJ(data, username) {
     return JSON.stringify({
-        'username': 'Yrexia',
+        'username': username,
         'content': data.trim(),
         'type': 'message',
     });
