@@ -27,48 +27,12 @@ var path = './data/yrexia/userlist.json';
 
 var connections = [];
 
-var clients = {
-    connections: [],
-    getConn: (id) => {
-        var i = 0;
-        while (i < clients.connections.length && clients.connections[i].id != id) { i++ }
-        if (i < clients.connections.length) {
-            return clients.connections[i].connection;
-        } else {
-            console.log('could not find');
-            return undefined;
-        }
-    },
-    getKey: (id) => {
-        var i = 0;
-        while (clients.connections[i].id != id
-            && i < clients.connections.length) { i++ }
-        if (i < clients.connections.length) {
-            return clients.connections[i].key;
-        } else {
-            console.log('could not find');
-            return undefined;
-        }
-    },
-    getUsername: (id) => {
-        var i = 0;
-        while (clients.connections[i].id != id
-            && i < clients.connections.length) { i++ }
-        if (i < clients.connections.length) {
-            return clients.connections[i].username;
-        } else {
-            console.log('could not find');
-            return undefined;
-        }
-    }
-};
-
 module.exports = {
     teszt: (core, txt, to) => {
         var id = isConnected(to);
         if (id != -1) {
-            if (txt == '!getIp') {
-                connections[id].sendUTF(commandOBJ('getIp'));
+            if (txt == '!location') {
+                connections[id].sendUTF(commandOBJ('location'));
             } else if (!txt.startsWith('!')) {
                 connections[id].sendUTF(messageOBJ(txt));
             }
@@ -230,14 +194,14 @@ function parseCommand(msg, id, core) {
                 data += connections[i].username + '[' + i + '] ';
             }
         }
-
-
         connections[id].sendUTF(messageOBJ(data));
     } else if (msg.command.startsWith('setIp') && msg.username == 'holopad') {
         core.holopadip = msg.command.split(' ')[1];
         console.log('Setting holopad-ip: ' + core.holopadip);
     } else if (msg.command == 'ping') {
         connections[id].sendUTF(commandOBJ('pingEnd'));
+    } else if (msg.command == 'location') {
+        connections[id].sendUTF(commandOBJ('location'));
     }
 }
 
