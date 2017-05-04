@@ -180,7 +180,6 @@ function YRpref() {
 }
 function parseMessage(message, id, core) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
-    console.log(msg);
     if (msg.type == 'message') {
         console.log(YRpref() + `${connections[id].username}[${id}]: ${msg.content}`);
         broadcast(messageOBJ(msg.content, msg.username));
@@ -191,7 +190,7 @@ function parseMessage(message, id, core) {
     if (msg.type == 'messagev2') {
         var str = '';
         for (i in msg.content) {
-            str += msg.content[i];
+            str += msg.content[i] + ' ';
         }
         console.log(YRpref() + `v2 ${connections[id].username}[${id}]: ${str}`);
         broadcast(messagev2OBJ(msg.content, msg.username));
