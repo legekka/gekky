@@ -188,11 +188,10 @@ function parseMessage(message, id, core) {
         parseCommand(msg, id, core);
     }
     if (msg.type == 'messagev2') {
-        var str = '';
+        process.stdout.write(YRpref() + `v2 ${connections[id].username}[${id}]: `);
         for (i in msg.content) {
-            str += msg.content[i] + ' ';
+            process.stdout.write(msg.content[i] + ' ');
         }
-        console.log(YRpref() + `v2 ${connections[id].username}[${id}]: ${str}`);
         broadcast(messagev2OBJ(msg.content, msg.username));
     }
 }
