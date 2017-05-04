@@ -192,6 +192,7 @@ function parseMessage(message, id, core) {
         for (i in msg.content) {
             process.stdout.write(msg.content[i] + ' ');
         }
+        process.stdout.write('\n');
         broadcast(messagev2OBJ(msg.content, msg.username));
     }
 }
