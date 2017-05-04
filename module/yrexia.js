@@ -180,6 +180,7 @@ function YRpref() {
 }
 function parseMessage(message, id, core) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
+    console.log(msg);
     if (msg.type == 'message') {
         console.log(YRpref() + `${connections[id].username}[${id}]: ${msg.content}`);
         broadcast(messageOBJ(msg.content, msg.username));
