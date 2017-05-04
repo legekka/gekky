@@ -21,9 +21,7 @@ wsServer = new WebSocketServer({
     autoAcceptConnections: false
 });
 
-
 var path = './data/yrexia/userlist.json';
-
 
 var connections = [];
 
@@ -32,6 +30,7 @@ module.exports = {
         var id = isConnected(to);
         if (id != -1) {
             if (txt == '!location') {
+                console.log('location-command sent');
                 connections[id].sendUTF(commandOBJ('location'));
             } else if (!txt.startsWith('!')) {
                 connections[id].sendUTF(messageOBJ(txt));
@@ -141,6 +140,9 @@ function originIsAllowed(originstr, callback) {
 
 }
 function addNewUser(origin) {
+    if (origin.username == 'Yrexia') {
+        return false;
+    }
     var userlist = JSON.parse(fs.readFileSync(path));
     var i = 0;
     while (i < userlist.length && userlist[i].username != origin.username) {
@@ -185,6 +187,14 @@ function parseMessage(message, id, core) {
     if (msg.type == 'command') {
         parseCommand(msg, id, core);
     }
+    if (msg.type == 'messagev2') {
+        var str = '';
+        for (i in msg.content) {
+            str += msg.content[i];
+        }
+        console.log(YRpref() + `v2 ${connections[id].username}[${id}]: ${str}`);
+        broadcast(messagev2OBJ(msg.content, msg.username));
+    }
 }
 function parseCommand(msg, id, core) {
     if (msg.command == 'userlist') {
@@ -204,7 +214,6 @@ function parseCommand(msg, id, core) {
         connections[id].sendUTF(commandOBJ('location'));
     }
 }
-
 function broadcast(obj) {
     for (i in connections) {
         if (connections[i] != 'disconnected') {
@@ -212,7 +221,6 @@ function broadcast(obj) {
         }
     }
 }
-
 function commandOBJ(data) {
     return JSON.stringify({
         'username': 'Yrexia',
@@ -228,5 +236,15 @@ function messageOBJ(data, username) {
         'username': username,
         'content': data.trim(),
         'type': 'message',
+    });
+}
+function messagev2OBJ(data, username) {
+    if (username == undefined) {
+        username = 'Yrexia';
+    }
+    return JSON.stringify({
+        'username': username,
+        'content': data,
+        'type': 'messagev2',
     });
 }
