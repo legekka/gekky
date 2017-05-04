@@ -183,18 +183,19 @@ function parseMessage(message, id, core) {
     if (msg.type == 'message') {
         console.log(YRpref() + `${connections[id].username}[${id}]: ${msg.content}`);
         broadcast(messageOBJ(msg.content, msg.username));
-    }
-    if (msg.type == 'command') {
+    } else if (msg.type == 'command') {
         parseCommand(msg, id, core);
-    }
-    if (msg.type == 'messagev2') {
+    } else if (msg.type == 'messagev2') {
         process.stdout.write(YRpref() + `v2 ${connections[id].username}[${id}]: `);
         for (i in msg.content) {
             process.stdout.write(msg.content[i] + ' ');
         }
         process.stdout.write('\n');
         broadcast(messagev2OBJ(msg.content, msg.username));
+    } else if (msg.type == 'file') {
+        parseFile(msg);
     }
+
 }
 function parseCommand(msg, id, core) {
     if (msg.command == 'userlist') {
@@ -247,4 +248,18 @@ function messagev2OBJ(data, username) {
         'content': data,
         'type': 'messagev2',
     });
+}
+function parseFile(msg) {
+    var filefolder = '';
+    if (msg.filetype == 'common') {
+        filefolder = './data/yrexia/bridge/common/';
+        fs.writeFileSync(filefolder + msg.filename, msg.content);
+        if (!fs.existsSync(filefolder + msg.filename)) {
+            console.log(YRpref() + 'filesave failed');
+        } else {
+            console.log(YRpref() + 'filesave completed');
+        }
+    } else {
+        //jó most nem, majd máskor
+    }
 }

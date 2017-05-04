@@ -4,5 +4,7 @@ data/pref.txt
 data/osu_scores.txt
 data/osu_scores_userlist.txt
 data/yrexia/userlist.json
+data/yrexia/bridge/common/*
+data/yrexia/bridge/private/*
 oppai_cache/
 /.vs
