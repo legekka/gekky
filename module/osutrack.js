@@ -52,12 +52,23 @@ function checkForNewScores(core) {
                             if (output[i].rank != 'F') {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
-                                    reqreload('./playcard.js')(playcard, filePath).then(() => {
-                                        reqreload('./webpconvert.js').file(filePath, (filep) => {
-                                            core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
-                                            console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+                                    var ppvalue = parseFloat(playcard.pp.substr(0, playcard.pp.length - 2));
+                                    if (ppvalue > 300) {
+                                        reqreload('./playcard.js')(playcard, filePath).then(() => {
+                                            reqreload('./webpconvert.js').file(filePath, (filep) => {
+                                                core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
+                                                console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+                                            });
                                         });
-                                    });
+                                    } else {
+                                        reqreload('./playcard.js')(playcard, filePath).then(() => {
+                                            reqreload('./webpconvert.js').file(filePath, (filep) => {
+                                                core.bot.channels.get(core.ch.hun_scorespam).sendFile(filep);
+                                                console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+                                            });
+                                        });
+                                    }
+
                                 });
                             }
                             addAsOld(output[i]);
@@ -301,7 +312,7 @@ function getMods(EnabledMods) {
     var Mods = EnabledMods;
     var FinalMods = "";
 
-    var Source = `NoMod: 0,NF: 1,EZ: 2,No Video: 4,HD: 8,HR: 16,SD: 32,DT: 64,RX: 128,HT: 256,NC: 512,FL: 1024,Auto play: 2048,Spun Out: 4096,Auto Cursor: 8192,PF: 16384,Key4: 32768,Key5: 65536,Key6: 131072,Key7: 262144,Key8: 524288,Keys: -1,Fade In: 1048576,Random: 2097152,Last Mod: 4194304,Free Mod Allowed: -2,Key9: 16777216,Key10: 33554432,Key1: 67108864,Key3: 134217728,Key2: 268435456`;
+    var Source = `NoMod: 0,NF: 1,EZ: 2,No Video: 4,HD: 8,HR: 16,SD: 32,DT: 64,RX: 128,HT: 256,NC: 512,FL: 1024,Auto play: 2048,SO: 4096,Auto Cursor: 8192,PF: 16384,Key4: 32768,Key5: 65536,Key6: 131072,Key7: 262144,Key8: 524288,Keys: -1,Fade In: 1048576,Random: 2097152,Last Mod: 4194304,Free Mod Allowed: -2,Key9: 16777216,Key10: 33554432,Key1: 67108864,Key3: 134217728,Key2: 268435456`;
 
     var Values = [];
     var Names = [];
