@@ -52,11 +52,8 @@ function checkForNewScores(core) {
                             if (output[i].rank != 'F') {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
-                                    console.log(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
-                                    console.log(playcard.play.pp);
                                     var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
-                                    console.log(ppvalue);
-                                    if (ppvalue > 200) {
+                                    if (ppvalue > 300) {
                                         reqreload('./playcard.js')(playcard, filePath).then(() => {
                                             reqreload('./webpconvert.js').file(filePath, (filep) => {
                                                 core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
