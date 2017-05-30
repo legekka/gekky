@@ -54,15 +54,13 @@ function checkForNewScores(core) {
                                 createPlayCard(output[i], playcard => {
                                     reqreload('./playcard.js')(playcard, filePath).then(() => {
                                         reqreload('./webpconvert.js').file(filePath, (filep) => {
-                                            console.log(playcard.play.pp);
                                             var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
-                                            console.log(ppvalue);
                                             if (ppvalue > 300) {
                                                 core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
                                             } else {
                                                 core.bot.channels.get(core.ch.hun_scorespam).sendFile(filep);
                                             }
-                                            console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username);
+                                            console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);
                                         });
                                     });
 
