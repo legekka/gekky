@@ -52,6 +52,7 @@ function checkForNewScores(core) {
                             if (output[i].rank != 'F') {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
+                                    console.log(playcard.pp);
                                     var ppvalue = parseFloat(playcard.pp.substr(0, playcard.pp.length - 2));
                                     console.log(ppvalue);
                                     if (ppvalue > 300) {
