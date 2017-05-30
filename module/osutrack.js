@@ -56,7 +56,7 @@ function checkForNewScores(core) {
                                     console.log(playcard.play.pp);
                                     var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
                                     console.log(ppvalue);
-                                    if (ppvalue > 300) {
+                                    if (ppvalue > 200) {
                                         reqreload('./playcard.js')(playcard, filePath).then(() => {
                                             reqreload('./webpconvert.js').file(filePath, (filep) => {
                                                 core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
