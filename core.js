@@ -26,6 +26,7 @@ var core = {
         'hun_scorespam': '319115815783759872',
         'current': '281188840084078594',
     },
+    'deadlist': [],
     'client': undefined,
     'irc_online': false,
     'irc_channel': 'legekka',
@@ -100,6 +101,8 @@ core.bot.on('message', (message) => {
 
     // webp converter when image attachment
     reqreload('./webpconvert.js').message(core, message);
+
+    reqreload('./kill.js').kill(core, message);
 
     // kilépés
     if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {

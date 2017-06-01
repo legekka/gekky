@@ -56,7 +56,12 @@ module.exports = (core, message, callback) => {
             if (lower.startsWith(cmdpref + 'nhentai')) {
                 // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
                 reqreload('./sankaku.js').nhentaiSearch(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
-            } else if (lower.startsWith(cmdpref + 'del')) {
+            } else if (lower.startsWith(cmdpref + 'kill')) {
+                reqreload('./kill.js').adddeadlist(core, message.content.split(' ')[1]);
+            } else if (lower.startsWith(cmdpref+'unkill')) {
+                reqreload('./kill.js').remdeadlist(core, message.content.split(' ')[1]);
+            }
+            else if (lower.startsWith(cmdpref + 'del')) {
                 // !del|Üzenet törlő. !del <üzenetszám>
                 var number = lower.split(' ')[1];
                 if (!isNaN(number)) {
@@ -176,7 +181,7 @@ module.exports = (core, message, callback) => {
                     reqreload('./osuirc.js').say(core, text);
                 }
             }
-        } else if (lower.startsWith(cmdpref)){
+        } else if (lower.startsWith(cmdpref)) {
             reqreload('./talk.js').wrongcommand(message);
         }
         return callback({
