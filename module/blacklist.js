@@ -8,25 +8,28 @@ var path2 = './data/channel_blacklist.txt';
 
 module.exports = {
     isBlacklisted: (message) => {
-        var blacklisted = false;
-        text = fs.readFileSync(path1).toString().split('\n');
-        for (i in text) {
-            if (message.author.id == text[i]) {
-                blacklisted = true;
-            }
+        var text = fs.readFileSync(path1).toString().split('\n');
+        var i = 0;
+        while (i < text.length && message.author.id != text[i]) {
+            i++;
         }
-        input = fs.createReadStream(path2);
-        text = fs.readFileSync(path2).toString().split('\n');
-        for (i in text) {
-            if (message.channel.id == text[i]) {
-                blacklisted = true;
-            }
+        if (i < text.length) {
+            return true;
         }
-        return blacklisted;
+        var text = fs.readFileSync(path2).toString().split('\n');
+        var i = 0;
+        while (i < text.length && message.channel.id != text[i]) {
+            i++;
+        }
+        if (i < text.length) {
+            return true;
+        } else {
+            return false;
+        }
     },
     addUser: (id, callback) => {
         if (!isNaN(id)) {
-            text = fs.readFileSync(path1).toString().split('\n');
+            var text = fs.readFileSync(path1).toString().split('\n');
             if (text.indexOf(id) < 0) {
                 text.push(id);
                 var msg = id + ' userID hozzáadva a blacklisthez.';
@@ -38,13 +41,16 @@ module.exports = {
                 }
                 str += text[text.length - 1];
                 fs.writeFileSync(path1, str);
+                return callback(msg);
             } else {
                 var msg = id + ' userID már szerepel a blacklistben.';
+                return callback(msg);
             }
         } else {
             var msg = 'Helytelen userID.';
+            return callback(msg);
         }
-        return callback(msg);
+
     },
     remUser: (id, callback) => {
         if (!isNaN(id)) {
@@ -60,13 +66,16 @@ module.exports = {
                 }
                 str += text[text.length - 1];
                 fs.writeFileSync(path1, str);
+                return callback(msg);
             } else {
                 var msg = id + ' userID nem szerepel a blacklistben.';
+                return callback(msg);
             }
         } else {
             var msg = 'Helytelen userID.';
+            return callback(msg);
         }
-        return callback(msg);
+
     },
     addChannel: (id, callback) => {
         if (!isNaN(id)) {
@@ -81,14 +90,17 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                fs.writeFileSync(path1, str);
+                fs.writeFileSync(path2, str);
+                return callback(msg);
             } else {
                 var msg = id + ' channelID már szerepel a blacklistben.';
+                return callback(msg);
             }
         } else {
             var msg = 'Helytelen channelID.';
+            return callback(msg);
         }
-        return callback(msg);
+
     },
     remChannel: (id, callback) => {
         if (!isNaN(id)) {
@@ -103,13 +115,16 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                fs.writeFileSync(path1, str);
+                fs.writeFileSync(path2, str);
+                return callback(msg);
             } else {
                 var msg = id + ' channelID nem szerepel a blacklistben.';
+                return callback(msg);
             }
         } else {
             var msg = 'Helytelen channelID.';
+            return callback(msg);
         }
-        return callback(msg);
+
     }
 }
