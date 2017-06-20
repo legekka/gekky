@@ -104,7 +104,7 @@ module.exports = {
     },
     remChannel: (id, callback) => {
         if (!isNaN(id)) {
-            text = fs.readFileSync(path1).toString().split('\n');
+            text = fs.readFileSync(path2).toString().split('\n');
             if (text.indexOf(id) >= 0) {
                 text.splice(text.indexOf(id), 1);
                 var msg = id + ' channelID eltávolítva a blacklistből.';
