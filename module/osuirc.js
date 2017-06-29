@@ -8,11 +8,11 @@ function afkmessage() {
     var da = new Date();
     var str = "Oy. I'm gekky. legekka is currently offline. ";
     if (da.getHours() > 23 || da.getHours() < 9) {
-        str+= "He's probably sleeping so... I don't think he'll answer. ";
+        str += "He's probably sleeping so... I don't think he'll answer. ";
     } else {
-        str+= "He's probably at work. Idk. Maybe he'll answer in a few hours. ";
+        str += "He's probably at work. Idk. Maybe he'll answer in a few hours. ";
     }
-    str+= "Anyways I notified him.";
+    str += "Anyways I notified him.";
     return str;
 }
 
@@ -78,10 +78,13 @@ module.exports = {
             core.client.addListener('action', (from, to, text, message) => {
                 if (to != 'legekka') {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' ' + to + ' ' + from + ' ' + text);
-                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` **' + from + '** *' + text + '*');
+                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
                 } else {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' PM' + from + ' ' + text);
-                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM` **' + from + '** *' + text + '*');
+                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM' + from + '` *' + text + '*');
+                    core.bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>').then((message) => {
+                        message.delete();
+                    });
                 }
             })
 
