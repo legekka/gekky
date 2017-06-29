@@ -76,10 +76,13 @@ module.exports = {
             });
 
             core.client.addListener('action', (from, to, text, message) => {
-                console.log(message);
-                console.log(from);
-                console.log(to);
-                console.log(text);
+                if (to != 'legekka') {
+                    console.log(c.yellow('[IRC] ') + timeStamp() + ' ' + to + ' ' + from + ' ' + text);
+                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` **' + from + '** *' + text + '*');
+                } else {
+                    console.log(c.yellow('[IRC] ') + timeStamp() + ' PM' + from + ' ' + text);
+                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM` **' + from + '** *' + text + '*');
+                }
             })
 
             core.irc_online_users = setInterval(() => {
