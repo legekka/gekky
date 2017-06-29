@@ -77,6 +77,9 @@ module.exports = {
 
             core.client.addListener('action', (from, to, text, message) => {
                 console.log(message);
+                console.log(from);
+                console.log(to);
+                console.log(text);
             })
 
             core.irc_online_users = setInterval(() => {
