@@ -72,8 +72,11 @@ module.exports = {
                     console.log(c.yellow('[IRC] ') + from + ' ' + c.green('gekky: ') + '[afk message]');
                     core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
                 }
-                core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
+
+            core.client.addListener('action', (from, to, text, message) => {
+                console.log(c.yellow('[IRC]' ) + message);
+            })
 
             core.irc_online_users = setInterval(() => {
                 if (core.irc_online) {
