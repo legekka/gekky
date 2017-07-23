@@ -55,58 +55,58 @@ module.exports = {
 
     message: (core, message) => {
         if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores) {
-            if (!reqreload('./blacklist.js').isBlacklisted(message)) {
-                if (message.channel.name == "nsfw" || message.channel.name == "weeb") {
-                    var qual = "-q 100";
-                } else {
-                    var qual = "-q 80";
-                }
-                if (message.attachments.first() != undefined) {
-                    var fname = message.attachments.first().filename;
-                    var ext = fname.substr(fname.length - 3, 3);
-                    if (extensions.indexOf(ext) >= 0) {
-                        httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
-                            webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
-                                core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
-                                    if (message.channel.type != 'dm') {
-                                        if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
-                                            message.delete();
-                                            var str = '';
-                                            if (message.content != '<attachment>') { str = message.content; }
-                                            message.channel.sendMessage('`' + message.author.username + '` ' + str, { file: filemsg.attachments.first().url });
-                                        } else {
-                                            core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
-                                        }
+            //if (!reqreload('./blacklist.js').isBlacklisted(message)) {
+            if (message.channel.name.indexOf("nsfw") >= 0 || message.channel.name == "weeb") {
+                var qual = "-q 100";
+            } else {
+                var qual = "-q 80";
+            }
+            if (message.attachments.first() != undefined) {
+                var fname = message.attachments.first().filename;
+                var ext = fname.substr(fname.length - 3, 3);
+                if (extensions.indexOf(ext) >= 0) {
+                    httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
+                        webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
+                            core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
+                                if (message.channel.type != 'dm') {
+                                    if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
+                                        message.delete();
+                                        var str = '';
+                                        if (message.content != '<attachment>') { str = message.content; }
+                                        message.channel.sendMessage('`' + message.author.username + '` ' + str, { file: filemsg.attachments.first().url });
+                                    } else {
+                                        core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                     }
+                                }
+                            });
+                        });
+                    });
+                }
+            } else if (message.content.indexOf('http') >= 0) {
+                var url = message.content.substr(message.content.indexOf('http')).split(' ')[0];
+                var ext = url.substr(url.length - 3, 3);
+                if (extensions.indexOf(ext) >= 0) {
+                    if (url.indexOf('https') >= 0) {
+                        httpsGet(url, message.id + '.' + ext, () => {
+                            webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
+                                core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
+                                    core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                });
+                            });
+                        });
+                    } else {
+                        httpGet(url, message.id + '.' + ext, () => {
+                            webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
+                                core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
+                                    core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                 });
                             });
                         });
                     }
-                } else if (message.content.indexOf('http') >= 0) {
-                    var url = message.content.substr(message.content.indexOf('http')).split(' ')[0];
-                    var ext = url.substr(url.length - 3, 3);
-                    if (extensions.indexOf(ext) >= 0) {
-                        if (url.indexOf('https') >= 0) {
-                            httpsGet(url, message.id + '.' + ext, () => {
-                                webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                    core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
-                                        core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
-                                    });
-                                });
-                            });
-                        } else {
-                            httpGet(url, message.id + '.' + ext, () => {
-                                webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                    core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
-                                        core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
-                                    });
-                                });
-                            });
-                        }
-                    }
-
                 }
+
             }
+            //}
         }
     }
 }
