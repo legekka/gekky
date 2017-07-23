@@ -55,7 +55,6 @@ module.exports = {
 
     message: (core, message) => {
         if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores) {
-            //if (!reqreload('./blacklist.js').isBlacklisted(message)) {
             if (message.channel.name.indexOf("nsfw") >= 0 || message.channel.name == "weeb") {
                 var qual = "-q 100";
             } else {
@@ -106,7 +105,6 @@ module.exports = {
                 }
 
             }
-            //}
         }
     }
 }
