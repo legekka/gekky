@@ -10,10 +10,10 @@ module.exports = (core, message, callback) => {
     var cmdpref = core.cmdpref;
     var tsun = core.tsun;
     delete require.cache[require.resolve('./blacklist.js')];
+    var lower = message.content.toLowerCase();
     if (lower.startsWith(cmdpref + 'nhentai') && message.author.id == ownerid) {
         reqreload('./sankaku.js').nhentaiSearch(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
     } else if (!require('./blacklist.js').isBlacklisted(message)) {
-        var lower = message.content.toLowerCase();
         var is_a_command = false;
         if (lower.startsWith(cmdpref + 'lenny')) {
             // !lenny|Beszúr egy lenny fejet.
