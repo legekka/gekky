@@ -10,7 +10,9 @@ module.exports = (core, message, callback) => {
     var cmdpref = core.cmdpref;
     var tsun = core.tsun;
     delete require.cache[require.resolve('./blacklist.js')];
-    if (!require('./blacklist.js').isBlacklisted(message)) {
+    if (lower.startsWith(cmdpref + 'nhentai') && message.author.id == ownerid) {
+        reqreload('./sankaku.js').nhentaiSearch(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
+    } else if (!require('./blacklist.js').isBlacklisted(message)) {
         var lower = message.content.toLowerCase();
         var is_a_command = false;
         if (lower.startsWith(cmdpref + 'lenny')) {
@@ -53,12 +55,9 @@ module.exports = (core, message, callback) => {
             });
         } else if (message.author.id == ownerid) {
             // legekka-only commands
-            if (lower.startsWith(cmdpref + 'nhentai')) {
-                // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
-                reqreload('./sankaku.js').nhentaiSearch(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
-            } else if (lower.startsWith(cmdpref + 'kill')) {
+            if (lower.startsWith(cmdpref + 'kill')) {
                 reqreload('./kill.js').adddeadlist(core, message.content.split(' ')[1]);
-            } else if (lower.startsWith(cmdpref+'unkill')) {
+            } else if (lower.startsWith(cmdpref + 'unkill')) {
                 reqreload('./kill.js').remdeadlist(core, message.content.split(' ')[1]);
             }
             else if (lower.startsWith(cmdpref + 'del')) {
