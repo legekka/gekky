@@ -12,7 +12,7 @@ module.exports = (core, message, callback) => {
     delete require.cache[require.resolve('./blacklist.js')];
     var lower = message.content.toLowerCase();
     if (lower.startsWith(cmdpref + 'nhentai') && message.author.id == ownerid) {
-        reqreload('./sankaku.js').nhentaiSearch(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1));
+        reqreload('./sankaku.js').search(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1), "nhentai");
     } else if (!require('./blacklist.js').isBlacklisted(message)) {
         var is_a_command = false;
         if (lower.startsWith(cmdpref + 'lenny')) {

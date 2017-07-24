@@ -23,19 +23,22 @@ function httpGet(url, filename) {
     });
 }
 
-function nsfwFilter(message, lower, mode, callback) {
+function nsfwFilter(core, message, searchword, mode) {
     if (mode == 'nhentai') {
-        if (message.channel.name != 'nsfw' && message.channel.name != 'fapmaterial' && message.channel.name != undefined) {
+        if (message.channel.name.indexOf('nsfw') < 0) {
             reqreload('./log.js').consoleLog(core, c.bgRed('Doujin search at wrong channel.'));
             message.channel.sendMessage('retard, itt nem kereshetsz.');
         } else {
-            nhentaiSearch(message, lower);
+            nhentaiSearch(core, message, searchword);
 
         }
     }
 }
 
 module.exports = {
+    search: (core, message, mode, searchword) => {
+      nsfwFilter(core, message, searchword, mode)
+    },
     nhentaiSearch: (core, message, searchword) => {
         var ncounter = message.id;
         var url_link = 'https://nhentai.net/search/?q=';
