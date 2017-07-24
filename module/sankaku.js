@@ -36,8 +36,8 @@ function nsfwFilter(core, message, searchword, mode) {
 }
 
 module.exports = {
-    search: (core, message, mode, searchword) => {
-      nsfwFilter(core, message, searchword, mode)
+    search: (core, message, searchword, mode) => {
+        nsfwFilter(core, message, searchword, mode)
     },
     nhentaiSearch: (core, message, searchword) => {
         var ncounter = message.id;
