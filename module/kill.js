@@ -1,9 +1,10 @@
 // nyugi csak egy vicc
 
 function getID(message) {
-    console.log(message.content);
-    var id = message.content.split('!')[1].split('>')[0];
-    console.log(id);
+    var id = message.content.split('@')[1].split('>')[0];
+    if (id.indexOf('!') >= 0) {
+        id = id.substr(1);
+    }
     return id;
 }
 
