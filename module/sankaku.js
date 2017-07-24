@@ -4,6 +4,7 @@
 const reqreload = require('./reqreload.js');
 const fs = require('fs');
 const http = require('https');
+const c = require('chalk');
 
 var path = '../cache/';
 
