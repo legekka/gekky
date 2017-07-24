@@ -55,9 +55,9 @@ module.exports = (core, message, callback) => {
     } else if (message.author.id == ownerid) {
         // legekka-only commands
         if (lower.startsWith(cmdpref + 'kill')) {
-            reqreload('./kill.js').adddeadlist(core, message.content.split(' ')[1]);
+            reqreload('./kill.js').adddeadlist(core, message);
         } else if (lower.startsWith(cmdpref + 'unkill')) {
-            reqreload('./kill.js').remdeadlist(core, message.content.split(' ')[1]);
+            reqreload('./kill.js').remdeadlist(core, message);
         }
         else if (lower.startsWith(cmdpref + 'del')) {
             // !del|Üzenet törlő. !del <üzenetszám>

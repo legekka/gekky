@@ -1,17 +1,23 @@
 // nyugi csak egy vicc
 
+function getID(message) {
+    var id = message.content.split('@')[1].split('>')[0];
+    return id;
+}
+
+
 module.exports = {
     kill: (core, message) => {
-        if (core.deadlist.indexOf(message.author.username) >= 0) {
+        if (core.deadlist.indexOf(message.author.id) >= 0) {
             message.delete();
         }
     },
-    adddeadlist: (core, name) => {
-        core.deadlist.push(name);
+    adddeadlist: (core, message) => {
+        core.deadlist.push(getID(message));
         return core;
     },
-    remdeadlist: (core, name) => {
-        core.deadlist.splice(core.deadlist.indexOf(name));
+    remdeadlist: (core, message) => {
+        core.deadlist.splice(core.deadlist.indexOf(getID(message)));
         return core;
     }
 }
