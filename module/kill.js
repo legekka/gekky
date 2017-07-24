@@ -2,6 +2,7 @@
 
 function getID(message) {
     var id = message.content.split('@')[1].split('>')[0];
+    console.log(id)
     return id;
 }
 
