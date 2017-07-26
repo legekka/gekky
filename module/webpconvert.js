@@ -81,17 +81,17 @@ module.exports = {
                                                 "url": fileoriginalmsg.attachments.first().url,
                                                 "color": message.member.highestRole.color
                                             });*/
-                                            message.channel.sendEmbed({embed: {
+                                            message.channel.send({embed: {
                                                 title: "",
                                                 url: "",
                                                 description: (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
                                                 image: filemsg.attachments.first(),
                                                 color: message.member.highestRole.color,
-						                        footer: {
-						                           text: `[Original Image](${fileoriginalmsg.attachments.first().url})`
-						                        }
-				                              }
-			                                });
+						footer: {
+						   text: `[Original Image](${fileoriginalmsg.attachments.first().url})`
+						}
+				              }
+			                    });
                                         } else {
                                             core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                         }
