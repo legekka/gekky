@@ -74,12 +74,18 @@ module.exports = {
                                             var str = '';
                                             if (message.content != '<attachment>') { str = message.content; }
                                             //message.channel.sendMessage('`' + (message.member != null ? message.member.displayName : message.author.username) + '` ' + str, { file: filemsg.attachments.first().url });
-                                            message.channel.sendEmbed({
+                                            /*message.channel.sendEmbed({
                                                 "title": "Original Image",
                                                 "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
                                                 "image": filemsg.attachments.first(),
                                                 "url": fileoriginalmsg.attachments.first().url,
                                                 "color": message.member.highestRole.color
+                                            });*/
+                                            message.channel.sendEmbed({
+                                                "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
+                                                "image": filemsg.attachments.first(),
+                                                "color": message.member.highestRole.color,
+                                                "footer": "[Original Image](fileoriginalmsg.attachments.first().url)"
                                             });
                                         } else {
                                             core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
