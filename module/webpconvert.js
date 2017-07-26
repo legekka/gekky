@@ -82,6 +82,8 @@ module.exports = {
                                                 "color": message.member.highestRole.color
                                             });*/
                                             message.channel.sendEmbed({
+                                                "title": "",
+                                                "url": "",
                                                 "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
                                                 "image": filemsg.attachments.first(),
                                                 "color": message.member.highestRole.color,
