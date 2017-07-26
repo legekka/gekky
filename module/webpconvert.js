@@ -75,13 +75,12 @@ module.exports = {
                                             if (message.content != '<attachment>') { str = message.content; }
                                             //message.channel.sendMessage('`' + (message.member != null ? message.member.displayName : message.author.username) + '` ' + str, { file: filemsg.attachments.first().url });
                                             message.channel.sendEmbed({
-                                                "title": (message.member != null ? message.member.displayName : message.author.username),
-                                                "description": str,
+                                                "title": "Original Image",
+                                                "description": (message.member != null ? message.member.displayName : message.author.username) + (str != '' ? ": " + str : ""),
                                                 "image": filemsg.attachments.first(),
                                                 "url": fileoriginalmsg.attachments.first().url,
-                                                "color": message.member.highestRole.color
-                                            })
-                                            console.log(message.member.highestRole.color);
+                                                "color": message.member.displaColor
+                                            });
                                         } else {
                                             core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
                                         }
