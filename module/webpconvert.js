@@ -79,7 +79,7 @@ module.exports = {
                                                 "description": (message.member != null ? message.member.displayName : message.author.username) + (str != '' ? ": " + str : ""),
                                                 "image": filemsg.attachments.first(),
                                                 "url": fileoriginalmsg.attachments.first().url,
-                                                "color": message.member.displaColor
+                                                "color": message.member.displayColor
                                             });
                                         } else {
                                             core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
