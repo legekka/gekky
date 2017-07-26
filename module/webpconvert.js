@@ -66,7 +66,7 @@ module.exports = {
                 if (extensions.indexOf(ext) >= 0) {
                     httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                         webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
-                            core.bot.channels.get(core.ch.gekkylog).sendFile(path, message.id + '.' + ext).then((fileoriginalmsg) => {
+                            core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.' + ext).then((fileoriginalmsg) => {
                                 core.bot.channels.get(core.ch.gekkylog).sendFile(path + message.id + '.webp').then((filemsg) => {
                                     if (message.channel.type != 'dm') {
                                         if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
