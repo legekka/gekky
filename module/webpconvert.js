@@ -78,7 +78,8 @@ module.exports = {
                                                 "title": (message.member != null ? message.member.displayName : message.author.username),
                                                 "description": str,
                                                 "image": filemsg.attachments.first(),
-                                                "url": fileoriginalmsg.attachments.first().url
+                                                "url": fileoriginalmsg.attachments.first().url,
+                                                "color": message.member.colorRole
                                             })
                                         } else {
                                             core.bot.channels.get(core.ch.webps).sendMessage('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
