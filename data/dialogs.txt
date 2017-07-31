@@ -1,8 +1,8 @@
 ﻿s_tsun_def	Meg a jó édes...
 s_tsun_def	Nem vagyok tsundere!
 s_tsun_def	Tudod ki a tsundere...
-s_tsun_def	http://cdn.myanimelist.net/s/common/uploaded_files/1455525093-54b2ee0e1c71b65272f997e5b87464c1.png
-s_tsun_def	http://puu.sh/o9YAy/41217373c2.PNG
+s_tsun_def	https://legekka.s-ul.eu/vTJPVGBP.jpg
+s_tsun_def	https://legekka.s-ul.eu/abohYXMY.jpg
 s_tsun_hi	Nem szia.
 s_tsun_hi	Nem.
 s_tsun_hi	Neked nem.
