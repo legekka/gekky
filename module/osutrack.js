@@ -7,6 +7,7 @@ var reqreload = require('./reqreload.js');
 const apikey = fs.readFileSync('../osuapikey.txt').toString();
 const path = './data/osu_scores.txt';
 const userlistpath = './data/osu_scores_userlist.txt';
+const playpath = './data/osu_plays.txt';
 const https = require('https');
 const c = require('chalk');
 
@@ -38,6 +39,10 @@ module.exports = {
     }
 }
 
+function saveScore(playcard) {
+    fs.appendFileSync(playpath,JSON.stringify(playcard)+'\n');
+}
+
 function checkForNewScores(core) {
     var userlist = fs.readFileSync(userlistpath).toString().split('\n');
     for (i in userlist) {
@@ -60,6 +65,7 @@ function checkForNewScores(core) {
                                             } else {
                                                 core.bot.channels.get(core.ch.hun_scorespam).sendFile(filep);
                                             }
+                                            saveScore(playcard);
                                             console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);
                                         });
                                     });
