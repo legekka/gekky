@@ -120,11 +120,11 @@ module.exports = (core, message, callback) => {
             is_a_command = true;
         } else if (lower.startsWith(cmdpref + 'checkcache')) {
             // !checkcache|Cache mappa mérete
-            require('./module/cachemanager.js').check(core, message);
+            require('./cachemanager.js').check(core, message);
             is_a_command = true;
         } else if (lower.startsWith(cmdpref + 'delcache')) {
             // !delcache|Cache mappa tartalmának törlése
-            require('./module/cachemanager.js').del(message);
+            require('./cachemanager.js').del(message);
             is_a_command = true;
         }
         // blacklist commands 

@@ -64,9 +64,9 @@ module.exports = function (core) {
             } else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
             } else if (cmd == 'checkcache') {
-                require('./module/cachemanager.js').check(core);
+                require('./cachemanager.js').check(core);
             } else if (cmd == 'delcache') {
-                require('./module/cachemanager.js').del();
+                require('./cachemanager.js').del();
             }
             else if (cmd == '') {
                 // no input
