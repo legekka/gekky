@@ -138,6 +138,8 @@ module.exports = {
                     }
                     else if (lower.indexOf('ayy') >= 0) {
                         message.channel.sendMessage('Ayy ayy ayy...');
+                    } else if (lower.indexOf('nazi') >= 0 || lower.indexOf('náci') >= 0 && lower.indexOf('mod') >= 0) {
+                        message.channel.sendMessage('https://legekka.s-ul.eu/fC1ku6D2.jpg');
                     }
                 }
             }
