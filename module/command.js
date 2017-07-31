@@ -122,8 +122,8 @@ module.exports = (core, message, callback) => {
             // !checkcache|Cache mappa mérete
             require('./cachemanager.js').check(core, message);
             is_a_command = true;
-        } else if (lower.startsWith(cmdpref + 'delcache')) {
-            // !delcache|Cache mappa tartalmának törlése
+        } else if (lower.startsWith(cmdpref + 'clearcache')) {
+            // !clearcache|Cache mappa tartalmának törlése
             require('./cachemanager.js').del(message);
             is_a_command = true;
         }
