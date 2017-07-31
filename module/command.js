@@ -96,7 +96,7 @@ module.exports = (core, message, callback) => {
             motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
             core.bot.user.setGame(motd);
             is_a_command = true;
-        } else if (lower == cmdpref + 'inv') {
+        } else if (lower.startsWith(cmdpref + 'inv')) {
             // !inv|Gekky invite linkje.
             message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
             is_a_command = true;
@@ -109,7 +109,7 @@ module.exports = (core, message, callback) => {
             message.channel.sendMessage('New prefix: `' + cmdpref + '`');
             fs.writeFileSync('./data/pref.txt', cmdpref);
             is_a_command = true;
-        } else if (lower == cmdpref + 'tsun') {
+        } else if (lower.startsWith(cmdpref + 'tsun')) {
             // !tsun|Tsundere mód kapcsoló
             tsun = !tsun;
             if (tsun) {
@@ -118,7 +118,16 @@ module.exports = (core, message, callback) => {
                 message.channel.sendMessage('O-okay.');
             }
             is_a_command = true;
-        } // blacklist commands 
+        } else if (lower.startsWith(cmdpref + 'checkcache')) {
+            // !checkcache|Cache mappa mérete
+            require('./module/cachemanager.js').check(core, message);
+            is_a_command = true;
+        } else if (lower.startsWith(cmdpref + 'delcache')) {
+            // !delcache|Cache mappa tartalmának törlése
+            require('./module/cachemanager.js').del(message);
+            is_a_command = true;
+        }
+        // blacklist commands 
         else if (lower.startsWith(cmdpref + 'addbluser')) {
             // !addbluser|UserID hozzáadása blacklisthez
             delete require.cache[require.resolve('./blacklist.js')];
