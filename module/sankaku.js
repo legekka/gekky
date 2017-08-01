@@ -60,7 +60,7 @@ function nsfwFilter(core, message, searchword, mode) {
     }
 }
 
-function sankakuSearch(core, message, searchword) {
+function sankakuSearch(core, message, searchword, callback) {
     var ncounter = message.id;
     var url_link = 'https://chan.sankakucomplex.com/?tags=';
     while (searchword != searchword.replace(' ', '+')) {
@@ -76,14 +76,14 @@ function sankakuSearch(core, message, searchword) {
         if (err) {
             console.log(err);
             message.channel.sendMessage('Ajjaj... valami nem jó... (search-html)');
-            return;
+            return callback();
         }
     });
     curl.on('exit', (code) => {
         if (!fs.existsSync(path + message.fname1)) {
             console.log('File has been not downloaded.1');
             message.channel.sendMessage('Valamiért nem jött le a html~');
-            return;
+            return callback();
         }
         var text = fs.readFileSync(path + message.fname1).toString().split('\n');
         var postlist = [];
@@ -107,14 +107,14 @@ function sankakuSearch(core, message, searchword) {
             if (err) {
                 console.log(err);
                 message.channel.sendMessage('Ajjaj... valami nem jó... (post-html)');
-                return;
+                return callback();
             }
         });
         curl2.on('exit', (code) => {
             if (!fs.existsSync(path + message.fname2)) {
                 console.log('File has been not downloaded.2');
                 message.channel.sendMessage('Valamiért nem jött le a html~');
-                return;
+                return callback();
             }
             var text = fs.readFileSync(path + message.fname2).toString().split('\n');
 
@@ -132,7 +132,7 @@ function sankakuSearch(core, message, searchword) {
             } else {
                 console.log("FUCK.");
                 message.channel.sendMessage('FUCK.');
-                return;
+                return callback();
             }
             var i = 0;
             while (i < text.length && text[i].indexOf("Original:") < 0) { i++ }
@@ -142,7 +142,7 @@ function sankakuSearch(core, message, searchword) {
             } else {
                 console.log("Kurwa.");
                 message.channel.sendMessage('Kurwa.');
-                return;
+                return callback();
             }
             var ext = original_url.substr(original_url.length - 3, 3);
             if (ext != 'jpg' && ext != 'png') {
@@ -154,7 +154,7 @@ function sankakuSearch(core, message, searchword) {
                 if (err) {
                     console.log(err);
                     message.channel.sendMessage('Ajjaj... valami nem jó... (post-image)');
-                    return;
+                    return callback();
                 }
             });
             var teszt = false;
@@ -162,7 +162,7 @@ function sankakuSearch(core, message, searchword) {
                 if (!fs.existsSync(path + message.fname3)) {
                     console.log('File has been not downloaded.');
                     message.channel.sendMessage('Valamiért nem jött le a kép~');
-                    return;
+                    return callback();
                 }
                 if (!teszt) {
                     teszt = true;
