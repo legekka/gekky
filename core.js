@@ -67,7 +67,7 @@ process.on('uncaughtException', function (error) {
     }
 })
 
-require('./channelpicker.js').build(core);
+require('./module/channelpicker.js').build(core);
 require('./module/console.js')(core);
 require('./module/cachemanager.js').start(core);
 require('./module/yrexia.js').start(core);
