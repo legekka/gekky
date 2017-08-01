@@ -168,7 +168,8 @@ function sankakuSearch(core, message, searchword) {
                     teszt = true;
                     reqreload('./webpconvert.js').file(path + message.fname3, (image) => {
                         core.bot.channels.get(core.ch.gekkylog).sendFile(image).then(response => {
-                            message.channel.sendEmbed({
+                            // >itt
+                            message.channel.send({
                                 "title": "Full size",
                                 "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
                                 "image": response.attachments.first(),
