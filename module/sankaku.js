@@ -171,8 +171,10 @@ function sankakuSearch(core, message, searchword) {
                         core.bot.channels.get(core.ch.gekkylog).sendFile(image).then(response => {
                             message.channel.sendEmbed({
                                 "title": "Full size",
-                                //"description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
-                                "image": response.attachments.first(),
+                                "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
+                                "image": {
+                                    "url": response.attachments.first().url
+                                },
                                 "url": original_url,
                                 "color": ratingColor(rating)
                             });

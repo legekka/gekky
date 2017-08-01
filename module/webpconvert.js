@@ -77,7 +77,9 @@ module.exports = {
                                             message.channel.sendEmbed({
                                                 "title": "Original Image",
                                                 "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
-                                                "image": filemsg.attachments.first(),
+                                                "image": {
+                                                    "url": filemsg.attachments.first().url
+                                                },
                                                 "url": fileoriginalmsg.attachments.first().url,
                                                 "color": message.member.highestRole.color
                                             }
