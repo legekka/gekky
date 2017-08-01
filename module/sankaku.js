@@ -168,14 +168,15 @@ function sankakuSearch(core, message, searchword) {
                     teszt = true;
                     reqreload('./webpconvert.js').file(path + message.fname3, (image) => {
                         core.bot.channels.get(core.ch.gekkylog).sendFile(image).then(response => {
-                            // >itt
-                            message.channel.send({
-                                "title": "Full size",
-                                "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
-                                "image": response.attachments.first(),
-                                "url": original_url,
-                                "color": ratingColor(rating)
-                            });
+                            message.channel.send(
+                                new require('discord.js').RichEmbed({
+                                    "title": "Full size",
+                                    "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
+                                    "image": response.attachments.first(),
+                                    "url": original_url,
+                                    "color": ratingColor(rating)
+                                })
+                            );
                         });
                     });
                 }
