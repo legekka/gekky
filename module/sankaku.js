@@ -31,10 +31,22 @@ function nsfwFilter(core, message, searchword, mode) {
             message.channel.sendMessage('retard, itt nem kereshetsz.');
         } else {
             nhentaiSearch(core, message, searchword);
-
+        }
+    } else if (mode == 'sankaku') {
+        if (message.channel.name.indexOf('nsfw') < 0) {
+            reqreload('./log.js').consoleLog(core, c.bgRed('Sankaku search at wrong channel.'));
+            message.channel.sendMessage('retard, itt nem kereshetsz.');
+        } else {
+            sankakuSearch(core, message, searchword);
         }
     }
 }
+
+function sankakuSearch(core, message, searchword) {
+    
+}
+
+
 
 function nhentaiSearch(core, message, searchword) {
     var ncounter = message.id;

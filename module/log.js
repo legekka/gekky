@@ -10,27 +10,27 @@ var path = '../log.txt';
 module.exports = {
     messageConsoleLog: (core, message, is_a_command) => {
         var ch = core.ch;
-        if (!reqreload('./blacklist.js').isBlacklisted(message)) {
+        //if (!reqreload('./blacklist.js').isBlacklisted(message)) {
             var chID = message.channel.id;
-            if (chID == undefined) { chname = 'private#'; } else { chname = core.bot.channels.get(chID).name; }
+            if (chID == undefined) { chname = '#private#'; } else { chname = '#'+message.channel.name+'@'+message.channel.guild.name; }
             if (message.content == '') { message.content = '<attachment>'; }
             if (ch.current == chID) {
-                var text = reqreload('./getTime.js')('full') + c.yellow(' #' + chname) + ' ' + usercolor(message.author) + ': ' + c.grey(message.content);
+                var text = reqreload('./getTime.js')('full') + c.yellow(' ' + chname) + ' ' + usercolor(message.author) + ': ' + c.grey(message.content);
                 console.log(text);
                 core.bot.channels.get(ch.gekkylog).sendMessage(rawtext(text));
                 log(text + '\r\n');
             } else {
                 if (is_a_command) {
-                    var text = c.gray(reqreload('./getTime.js')('full') + ' #' + chname + ' ' + message.author.username + ': ' + message.content);
+                    var text = c.gray(reqreload('./getTime.js')('full') + ' ' + chname + ' ' + message.author.username + ': ' + message.content);
                     console.log(text);
                     core.bot.channels.get(ch.gekkylog).sendMessage(rawtext(text));
                     log(text + '\r\n');
                 }
                 if (!is_a_command) {
-                    log(reqreload('./getTime.js')('full') + ' #' + chname + ' ' + message.author.username + ': ' + message.content + '\r\n');
+                    log(reqreload('./getTime.js')('full') + ' ' + chname + ' ' + message.author.username + ': ' + message.content + '\r\n');
                 }
             }
-        }
+        //}
     },
     consoleLog: (core, text) => {
         console.log(text);
@@ -58,11 +58,12 @@ function usercolor(user) {
             break;
         case 'gekky': return c.bgWhite.green(user.username);
         default:
-            if (is_a_friend(user.id)) {
+            /*if (is_a_friend(user.id)) {
                 return c.green(user.username);
             } else {
                 return c.cyan(user.username);
-            }
+            }*/
+            return c.cyan(user.username);
             break;
     }
 }

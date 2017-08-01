@@ -26,6 +26,12 @@ var core = {
         'hun_scorespam': '319115815783759872',
         'current': '281188840084078594',
     },
+    'servers': [],
+    'picker': {
+        'server': false,
+        'id': '',
+        'channel': false
+    },
     'deadlist': [],
     'client': undefined,
     'irc_online': false,
@@ -61,6 +67,7 @@ process.on('uncaughtException', function (error) {
     }
 })
 
+require('./channelpicker.js').build(core);
 require('./module/console.js')(core);
 require('./module/cachemanager.js').start(core);
 require('./module/yrexia.js').start(core);

@@ -55,6 +55,9 @@ module.exports = {
         tsun = core.tsun;
         cmdpref = core.cmdpref;
         var lower = message.content.toLowerCase();
+        if (lower.indexOf('gekky') >= 0 && message.channel.id != core.ch.gekkylog) {
+            reqreload('./channelpicker.js').come(core, message);
+        }
         if (!reqreload('./blacklist.js').isBlacklisted(message)) {
             if (lower == ':dddddd' && message.author.username == core.bot.user.username) {
                 setTimeout(() => {

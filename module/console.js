@@ -6,8 +6,10 @@ const c = require('chalk');
 module.exports = function (core) {
     var inp = process.openStdin();
     inp.addListener('data', (d) => {
-        if (d.toString().startsWith('>')) {
-            // sending messages here from console
+        if (core.picker.server || core.picker.channel) {
+            reqreload('./channelpicker.js').go(core, d);
+        } else if (d.toString().startsWith('>')) {
+            core.bot.channels.get(core.ch.current).sendMessage(d.toString().substr(1));
         } else {
             var cmd = d.toString().toLowerCase().trim();
             if (cmd == 'close' || cmd == 'stop') {
@@ -59,14 +61,33 @@ module.exports = function (core) {
                 reqreload('./osutrack.js').startChecker(core);
             } else if (cmd == 'osu_stopchecker') {
                 reqreload('./osutrack.js').stopChecker(core);
-            } else if (cmd == 'teszt') {
-                reqreload('./music.js').teszt(core);
-            } else if (cmd == 'teszt2') {
-                require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
             } else if (cmd == 'checkcache') {
                 require('./cachemanager.js').check(core);
             } else if (cmd == 'delcache') {
                 require('./cachemanager.js').del();
+            } else if (cmd == 'teszt') {
+                reqreload('./channelpicker.js').build(core);
+            } else if (cmd == 'go') {
+                reqreload('./channelpicker.js').go(core);
+            } else if (cmd == 'dnd') {
+                core.bot.user.setPresence({
+                    "status": "dnd",
+                });
+                console.log('Presence: dnd');
+            } else if (cmd == 'online') {
+                core.bot.user.setPresence({
+                    "status": "online",
+                });
+                console.log('Presence: online');
+            }
+            /* else if (cmd == 'teszt2') {
+                require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
+            }*/
+
+            // HAGYD UTOLSÓNAK!!!
+            else if (cmd.startsWith('motd')) {
+                core.bot.user.setGame(d.toString().trim().substr(5));
+                console.log('New motd: ' + d.toString().trim().substr(5));
             }
             else if (cmd == '') {
                 // no input
