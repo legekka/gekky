@@ -67,7 +67,7 @@ process.on('uncaughtException', function (error) {
     }
 })
 
-require('./module/channelpicker.js').build(core);
+
 require('./module/console.js')(core);
 require('./module/cachemanager.js').start(core);
 require('./module/yrexia.js').start(core);
@@ -88,6 +88,7 @@ core.bot.on('ready', function () {
     reqreload('./updater.js').ver((motd) => {
         core.bot.user.setGame(motd);
     });
+    require('./module/channelpicker.js').build(core);
 });
 
 core.bot.on('message', (message) => {
