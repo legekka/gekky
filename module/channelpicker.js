@@ -21,7 +21,6 @@ module.exports = {
                     server.channels.push(channel);
                 }
             }
-            console.log(server);
             core.servers.push(server);
         }
         return core;
