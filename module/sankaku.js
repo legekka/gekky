@@ -55,7 +55,7 @@ function nsfwFilter(core, message, searchword, mode) {
             reqreload('./log.js').consoleLog(core, c.bgRed('Sankaku search at wrong channel.'));
             message.channel.sendMessage('retard, itt nem kereshetsz.');
         } else {
-            sankakuSearch(core, message, searchword);
+            sankakuSearch(core, message, searchword, () => {});
         }
     }
 }
