@@ -74,7 +74,7 @@ module.exports = {
                                             var str = '';
                                             if (message.content != '<attachment>') { str = message.content; }
                                             //message.channel.sendMessage('`' + (message.member != null ? message.member.displayName : message.author.username) + '` ' + str, { file: filemsg.attachments.first().url });
-                                            message.channel.send({
+                                            message.channel.sendEmbed({
                                                 "title": "Original Image",
                                                 "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
                                                 "image": filemsg.attachments.first(),
