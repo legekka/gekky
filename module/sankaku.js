@@ -71,8 +71,8 @@ function sankakuSearch(core, message, searchword) {
     if (url_link.indexOf('order:') < 0) {
         url_link += '+order:random';
     }
-    var fname = ncounter + '.html';
-    var curl = exec(`curl -s -b ${path}cookies.txt "${url_link}" > "${path}${fname}"`, (err, stdout, stderr) => {
+    message.fname1 = ncounter + '.html';
+    var curl = exec(`curl -s -b ${path}cookies.txt "${url_link}" > "${path}${message.fname1}"`, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
             message.channel.sendMessage('Ajjaj... valami nem jó... (search-html)');
@@ -80,13 +80,12 @@ function sankakuSearch(core, message, searchword) {
         }
     });
     curl.on('exit', (code) => {
-        console.log('EXIT CODE ' + code);
-        if (!fs.exists(path + fname)) {
-            console.log('File has been not downloaded.');
+        if (!fs.existsSync(path + message.fname1)) {
+            console.log('File has been not downloaded.1');
             message.channel.sendMessage('Valamiért nem jött le a html~');
             return;
         }
-        var text = fs.readFileSync(path + fname).toString().split('\n');
+        var text = fs.readFileSync(path + message.fname1).toString().split('\n');
         var postlist = [];
         for (i in text) {
             if (text[i].indexOf("thumb blacklisted") >= 0) {
@@ -103,8 +102,8 @@ function sankakuSearch(core, message, searchword) {
         }
         random = Math.round(Math.random() * postlist.length) - 1;
         var post_url = 'https://chan.sankakucomplex.com/post/show/' + postlist[random];
-        var fname = postlist[random] + '.html';
-        var curl2 = exec(`curl -s -b ${path}cookies.txt "${post_url}" > "${path}${fname}"`, (err, stdout, stderr) => {
+        message.fname2 = postlist[random] + '.html';
+        var curl2 = exec(`curl -s -b ${path}cookies.txt "${post_url}" > "${path}${message.fname2}"`, (err, stdout, stderr) => {
             if (err) {
                 console.log(err);
                 message.channel.sendMessage('Ajjaj... valami nem jó... (post-html)');
@@ -112,71 +111,75 @@ function sankakuSearch(core, message, searchword) {
             }
         });
         curl2.on('exit', (code) => {
-            if (!fs.existsSync(path + fname)) {
-                console.log('File has been not downloaded.');
+            if (!fs.existsSync(path + message.fname2)) {
+                console.log('File has been not downloaded.2');
                 message.channel.sendMessage('Valamiért nem jött le a html~');
                 return;
             }
-            var text = fs.readFileSync(path + fname);
-            for (i in text) {
-                var original_url = '';
-                var rating = '';
-                var ind = -1;
-                for (i = 0; i < array.length; i++) {
-                    if (array[i].indexOf("<li>Rating: ") >= 0) {
-                        ind = i;
-                    }
+            var text = fs.readFileSync(path + message.fname2).toString().split('\n');
+
+            var original_url = '';
+            var rating = '';
+            var ind = -1;
+            for (j = 0; j < text.length; j++) {
+                if (text[j].indexOf("<li>Rating: ") >= 0) {
+                    ind = j;
                 }
-                if (ind != -1) {
-                    rating = array[ind].substr(array[ind].indexOf(' '));
-                    rating = rating.substr(0, rating.indexOf('<')).trim().toLowerCase();
-                } else {
-                    console.log("FUCK.");
-                    message.channel.sendMessage('FUCK.');
+            }
+            if (ind != -1) {
+                rating = text[ind].substr(text[ind].indexOf(' '));
+                rating = rating.substr(0, rating.indexOf('<')).trim().toLowerCase();
+            } else {
+                console.log("FUCK.");
+                message.channel.sendMessage('FUCK.');
+                return;
+            }
+            var i = 0;
+            while (i < text.length && text[i].indexOf("Original:") < 0) { i++ }
+            if (i < text.length) {
+                original_url = text[i].trim().substr(text[i].indexOf('/'));
+                original_url = "https:" + original_url.substr(0, original_url.indexOf('?'));
+            } else {
+                console.log("Kurwa.");
+                message.channel.sendMessage('Kurwa.');
+                return;
+            }
+            var ext = original_url.substr(original_url.length - 3, 3);
+            if (ext != 'jpg' && ext != 'png') {
+                console.log('Ez... Nem kép.');
+                message.channel.sendMessage('Ez... Nem kép. Nem kell.');
+            }
+            message.fname3 = postlist[random] + '.' + ext;
+            var curl3 = exec(`curl -s -b ${path}cookies.txt "${original_url}" > "${path}${message.fname3}"`, (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err);
+                    message.channel.sendMessage('Ajjaj... valami nem jó... (post-image)');
                     return;
                 }
-                var i = 0;
-                while (i < array.length && array[i].indexOf("Original:") < 0) { i++ }
-                if (i < array.length) {
-                    original_url = array[i].trim().substr(array[i].indexOf('/'));
-                    original_url = "https:" + original_url.substr(0, original_url.indexOf('?'));
-                } else {
-                    console.log("Kurwa.");
-                    message.channel.sendMessage('Kurwa.');
+            });
+            var teszt = false;
+            curl3.on('exit', (code) => {
+                if (!fs.existsSync(path + message.fname3)) {
+                    console.log('File has been not downloaded.');
+                    message.channel.sendMessage('Valamiért nem jött le a kép~');
                     return;
                 }
-                var ext = original_url.substr(original_url.length - 3, 3);
-                if (ext != 'jpg' || ext != 'png') {
-                    console.log('Ez... Nem kép.');
-                    message.channel.sendMessage('Ez... Nem kép. Nem kell.');
-                }
-                var fname = postlist[random] + '.' + ext;
-                var curl3 = exec(`curl -s -b ${path}cookies.txt "${original_url}" > "${path}${fname}"`, (err, stdout, stderr) => {
-                    if (err) {
-                        console.log(err);
-                        message.channel.sendMessage('Ajjaj... valami nem jó... (post-image)');
-                        return;
-                    }
-                });
-                curl3.on('exit', (code) => {
-                    if (!fs.existsSync(path + fname)) {
-                        console.log('File has been not downloaded.');
-                        message.channel.sendMessage('Valamiért nem jött le a kép~');
-                        return;
-                    }
-                    reqreload('./webpconvert.js').file(path+fname,(image)=>{
+                if (!teszt) {
+                    teszt = true;
+                    reqreload('./webpconvert.js').file(path + message.fname3, (image) => {
                         core.bot.channels.get(core.ch.gekkylog).sendFile(image).then(response => {
                             message.channel.sendEmbed({
                                 "title": "Full size",
                                 "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
-                                "color": ratingColor(rating),
                                 "image": response.attachments.first(),
-                                "url": original_url
+                                "url": original_url,
+                                "color": ratingColor(rating)
                             });
                         });
                     });
-                });
-            }
+                }
+            });
+
         });
     });
 }
