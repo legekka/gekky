@@ -1,11 +1,12 @@
 {
     "name": "gekky",
-    "version": "1.9.10",
+    "version": "1.9.10.1",
     "description": "The tsundere bot.",
     "repository": "https://github.com/legekka/gekky",
     "author": "legekka",
     "dependencies": {
         "chalk": ">=1.1.3",
+        "discord.js": ">=11.1.0",
         "get-folder-size": ">=1.0.0",
         "github-webhook-handler": ">=0.6.0",
         "irc": ">=0.5.2",
