@@ -54,7 +54,7 @@ module.exports = {
     },
 
     message: (core, message) => {
-        if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores && message.channel.name != "general") {
+        if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores && message.channel.id != "157644576939704320") {
             if (message.channel.name.indexOf("nsfw") >= 0 || message.channel.name == "weeb") {
                 var qual = "-q 100";
             } else {
