@@ -5,6 +5,7 @@ const reqreload = require('./reqreload.js');
 const fs = require('fs');
 const http = require('https');
 const c = require('chalk');
+const exec = require('child_process').exec;
 
 var path = '../cache/';
 
@@ -22,6 +23,23 @@ function httpGet(url, filename) {
             done = true;
         });
     });
+}
+
+function ratingColor(rating) {
+    switch (rating) {
+        case 'safe':
+            return parseInt('7aef34', 16);
+            break;
+        case 'explicit':
+            return parseInt('fa2525', 16);
+            break;
+        case 'questionable':
+            return parseInt('f4ee3d', 16);
+            break;
+        default:
+            return parseInt('ff761d', 16);
+            break;
+    }
 }
 
 function nsfwFilter(core, message, searchword, mode) {
@@ -43,7 +61,124 @@ function nsfwFilter(core, message, searchword, mode) {
 }
 
 function sankakuSearch(core, message, searchword) {
-    
+    var ncounter = message.id;
+    var url_link = 'https://chan.sankakucomplex.com/?tags=';
+    while (searchword != searchword.replace(' ', '+')) {
+        searchword = searchword.replace(' ', '+');
+    }
+    url_link = url_link + searchword;
+
+    if (url_link.indexOf('order:') < 0) {
+        url_link += '+order:random';
+    }
+    var fname = ncounter + '.html';
+    var curl = exec(`curl -s -b ${path}cookies.txt "${url_link}" > "${path}${fname}"`, (err, stdout, stderr) => {
+        if (err) {
+            console.log(err);
+            message.channel.sendMessage('Ajjaj... valami nem jó... (search-html)');
+            return;
+        }
+    });
+    curl.on('exit', (code) => {
+        console.log('EXIT CODE ' + code);
+        if (!fs.exists(path + fname)) {
+            console.log('File has been not downloaded.');
+            message.channel.sendMessage('Valamiért nem jött le a html~');
+            return;
+        }
+        var text = fs.readFileSync(path + fname).toString().split('\n');
+        var postlist = [];
+        for (i in text) {
+            if (text[i].indexOf("thumb blacklisted") >= 0) {
+                var str = text[i].substr(text[i].indexOf("thumb blacklisted"));
+                str = str.substr(str.indexOf('p'));
+                str = str.substr(1, str.indexOf('>') - 1);
+                postlist.push(str);
+            }
+        }
+        if (postlist.length == 0) {
+            message.channel.sendMessage('Nincs találat. https://cs.sankakucomplex.com/data/3d/0e/3d0e02f9ebd984d7af5891f693e82f6f.jpg');
+        } else if (postlist.length > 4) {
+            postlist.splice(0, 4);
+        }
+        random = Math.round(Math.random() * postlist.length) - 1;
+        var post_url = 'https://chan.sankakucomplex.com/post/show/' + postlist[random];
+        var fname = postlist[random] + '.html';
+        var curl2 = exec(`curl -s -b ${path}cookies.txt "${post_url}" > "${path}${fname}"`, (err, stdout, stderr) => {
+            if (err) {
+                console.log(err);
+                message.channel.sendMessage('Ajjaj... valami nem jó... (post-html)');
+                return;
+            }
+        });
+        curl2.on('exit', (code) => {
+            if (!fs.existsSync(path + fname)) {
+                console.log('File has been not downloaded.');
+                message.channel.sendMessage('Valamiért nem jött le a html~');
+                return;
+            }
+            var text = fs.readFileSync(path + fname);
+            for (i in text) {
+                var original_url = '';
+                var rating = '';
+                var ind = -1;
+                for (i = 0; i < array.length; i++) {
+                    if (array[i].indexOf("<li>Rating: ") >= 0) {
+                        ind = i;
+                    }
+                }
+                if (ind != -1) {
+                    rating = array[ind].substr(array[ind].indexOf(' '));
+                    rating = rating.substr(0, rating.indexOf('<')).trim().toLowerCase();
+                } else {
+                    console.log("FUCK.");
+                    message.channel.sendMessage('FUCK.');
+                    return;
+                }
+                var i = 0;
+                while (i < array.length && array[i].indexOf("Original:") < 0) { i++ }
+                if (i < array.length) {
+                    original_url = array[i].trim().substr(array[i].indexOf('/'));
+                    original_url = "https:" + original_url.substr(0, original_url.indexOf('?'));
+                } else {
+                    console.log("Kurwa.");
+                    message.channel.sendMessage('Kurwa.');
+                    return;
+                }
+                var ext = original_url.substr(original_url.length - 3, 3);
+                if (ext != 'jpg' || ext != 'png') {
+                    console.log('Ez... Nem kép.');
+                    message.channel.sendMessage('Ez... Nem kép. Nem kell.');
+                }
+                var fname = postlist[random] + '.' + ext;
+                var curl3 = exec(`curl -s -b ${path}cookies.txt "${original_url}" > "${path}${fname}"`, (err, stdout, stderr) => {
+                    if (err) {
+                        console.log(err);
+                        message.channel.sendMessage('Ajjaj... valami nem jó... (post-image)');
+                        return;
+                    }
+                });
+                curl3.on('exit', (code) => {
+                    if (!fs.existsSync(path + fname)) {
+                        console.log('File has been not downloaded.');
+                        message.channel.sendMessage('Valamiért nem jött le a kép~');
+                        return;
+                    }
+                    reqreload('./webpconvert.js').file(path+fname,(image)=>{
+                        core.bot.channels.get(core.ch.gekkylog).sendFile(image).then(response => {
+                            message.channel.sendEmbed({
+                                "title": "Full size",
+                                "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
+                                "color": ratingColor(rating),
+                                "image": response.attachments.first(),
+                                "url": original_url
+                            });
+                        });
+                    });
+                });
+            }
+        });
+    });
 }
 
 

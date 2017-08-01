@@ -52,6 +52,9 @@ module.exports = (core, message, callback) => {
     } else if (lower.startsWith(cmdpref + 'nhentai')) {
         // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
         reqreload('./sankaku.js').search(core, message, lower.substr(cmdpref.length + 'nhentai'.length + 1), "nhentai");
+    } else if (lower.startsWith(cmdpref + "sankaku")) {
+        // !sankaku|Sankaku kép kereső. !sankaku <tagek>
+        reqreload('./sankaku.js').search(core, message, lower.substr(cmdpref.length + 'sankaku'.length + 1), "sankaku");
     } else if (message.author.id == ownerid) {
         // legekka-only commands
         if (lower.startsWith(cmdpref + 'kill')) {
