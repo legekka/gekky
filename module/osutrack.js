@@ -57,19 +57,23 @@ function checkForNewScores(core) {
                             if (output[i].rank != 'F') {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
-                                    reqreload('./playcard.js')(playcard, filePath).then(() => {
-                                        reqreload('./webpconvert.js').file(filePath, (filep) => {
-                                            var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
-                                            if (ppvalue > 300) {
-                                                core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
-                                            } else {
-                                                core.bot.channels.get(core.ch.hun_scorespam).sendFile(filep);
-                                            }
-                                            saveScore(playcard);
-                                            console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);
+                                    if (playcard.map.background == 'Err' || playcard.player.username == 'Err') {
+                                        core.bot.channels.get(core.ch.hun_scorespam).sendMessage('[osu!api error]');
+                                        console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' osu!api error');
+                                    } else {
+                                        reqreload('./playcard.js')(playcard, filePath).then(() => {
+                                            reqreload('./webpconvert.js').file(filePath, (filep) => {
+                                                var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
+                                                if (ppvalue > 300) {
+                                                    core.bot.channels.get(core.ch.hun_scores).sendFile(filep);
+                                                } else {
+                                                    core.bot.channels.get(core.ch.hun_scorespam).sendFile(filep);
+                                                }
+                                                saveScore(playcard);
+                                                console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);
+                                            });
                                         });
-                                    });
-
+                                    }
                                 });
                             }
                             addAsOld(output[i]);
@@ -202,27 +206,50 @@ function createPlayCard(score, callback) {
 
     var userdone = false;
     osu.getUser(parseInt(score.user_id), (err, output) => {
-        playcard.player.username = output.username;
-        playcard.player.global_rank = '#' + output.pp_rank;
-        playcard.player.country_rank = '#' + output.pp_country_rank;
-        playcard.player.allpp = allppformat(output.pp_raw);
-        userdone = true;
+        if (output != null) {
+            playcard.player.username = output.username;
+            playcard.player.global_rank = '#' + output.pp_rank;
+            playcard.player.country_rank = '#' + output.pp_country_rank;
+            playcard.player.allpp = allppformat(output.pp_raw);
+            userdone = true;
+        } else {
+            playcard.player.username = 'Err';
+            playcard.player.global_rank = 'Err';
+            playcard.player.country_rank = 'Err';
+            playcard.player.allpp = 'Err';
+            userdone = true;
+        }
     });
 
     var beatmapdone = false;
     osu.getBeatmap(score.beatmap_id, (err, output) => {
-        playcard.map.background = 'https://b.ppy.sh/thumb/' + output.beatmapset_id + 'l.jpg'
-        playcard.map.title = output.artist + ' - ' + output.title;
-        playcard.map.diff = '[' + output.version + ']';
-        playcard.map.length = timeformat(output.total_length);
-        playcard.map.bpm = output.bpm + 'bpm';
-        playcard.map.sdiff = sdiffformat(output.difficultyrating);
-        playcard.map.maxcombo = output.max_combo + 'x';
-        playcard.map.cs = 'cs' + output.diff_size;
-        playcard.map.ar = 'ar' + output.diff_approach;
-        playcard.map.od = 'od' + output.diff_overall;
-        playcard.map.hp = 'hp' + output.diff_drain;
-        beatmapdone = true;
+        if (output != null) {
+            playcard.map.background = 'https://b.ppy.sh/thumb/' + output.beatmapset_id + 'l.jpg'
+            playcard.map.title = output.artist + ' - ' + output.title;
+            playcard.map.diff = '[' + output.version + ']';
+            playcard.map.length = timeformat(output.total_length);
+            playcard.map.bpm = output.bpm + 'bpm';
+            playcard.map.sdiff = sdiffformat(output.difficultyrating);
+            playcard.map.maxcombo = output.max_combo + 'x';
+            playcard.map.cs = 'cs' + output.diff_size;
+            playcard.map.ar = 'ar' + output.diff_approach;
+            playcard.map.od = 'od' + output.diff_overall;
+            playcard.map.hp = 'hp' + output.diff_drain;
+            beatmapdone = true;
+        } else {
+            playcard.map.background = 'Err'
+            playcard.map.title = 'Err';
+            playcard.map.diff = 'Err';
+            playcard.map.length = 'Err';
+            playcard.map.bpm = 'Err';
+            playcard.map.sdiff = 'Err';
+            playcard.map.maxcombo = 'Err';
+            playcard.map.cs = 'Err';
+            playcard.map.ar = 'Err';
+            playcard.map.od = 'Err';
+            playcard.map.hp = 'Err';
+            beatmapdone = true;
+        }
     });
 
     var waiter = setInterval(() => {
