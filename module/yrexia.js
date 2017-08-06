@@ -26,6 +26,20 @@ var path = './data/yrexia/userlist.json';
 var connections = [];
 
 module.exports = {
+    waifu2x: (core, message, url) => {
+        var id = isConnected('GeckoPC');
+        if (id == -1) {
+            message.channel.sendMessage('Jelenleg nem elérhető a cudapower qwq...');
+        } else {
+            connections[id].sendUTF(JSON.stringify({
+                'username': 'Yrexia',
+                'type': 'convert',
+                'url': url
+            }));
+
+        }
+    },
+
     teszt: (core, txt, to) => {
         var id = isConnected(to);
         if (id != -1) {

@@ -55,14 +55,16 @@ module.exports = (core, message, callback) => {
     } else if (lower.startsWith(cmdpref + "sankaku")) {
         // !sankaku|Sankaku kép kereső. !sankaku <tagek>
         reqreload('./sankaku.js').search(core, message, lower.substr(cmdpref.length + 'sankaku'.length + 1), "sankaku");
+    } else if (lower.startsWith(cmdpref + 'waifu2x')) {
+        // !waifu2x|waifu2x-caffe imageupconvert. !waifu2x <image-url> [BETA]
+        require('./yrexia.js').waifu2x(core, message, lower.split(' ')[1].trim());
     } else if (message.author.id == ownerid) {
         // legekka-only commands
         if (lower.startsWith(cmdpref + 'kill')) {
             reqreload('./kill.js').adddeadlist(core, message);
         } else if (lower.startsWith(cmdpref + 'unkill')) {
             reqreload('./kill.js').remdeadlist(core, message);
-        }
-        else if (lower.startsWith(cmdpref + 'del')) {
+        } else if (lower.startsWith(cmdpref + 'del')) {
             // !del|Üzenet törlő. !del <üzenetszám>
             var number = lower.split(' ')[1];
             if (!isNaN(number)) {
