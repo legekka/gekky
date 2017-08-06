@@ -118,7 +118,7 @@ module.exports = {
                         message.channel.sendMessage('De!');
                     }
                     //TODO
-                    else if ((lower.indexOf(core.bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(core.bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
+                    else if ((lower.indexOf(core.bot.user.username) >= 0 ||/* lower.indexOf('momi') >= 0 ||*/ lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(core.bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
                         message.channel.sendMessage(dg.random(dg.emlites));
                     }
                     else if (lower.startsWith('kus')) {
