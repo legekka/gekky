@@ -31,6 +31,7 @@ module.exports = {
         if (id == -1) {
             message.channel.sendMessage('Jelenleg nem elérhető a cudapower qwq...');
         } else {
+            console.log(url);
             connections[id].sendUTF(JSON.stringify({
                 'username': 'Yrexia',
                 'type': 'convert',
