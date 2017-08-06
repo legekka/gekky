@@ -195,8 +195,8 @@ module.exports = (core, message, callback) => {
         reqreload('./talk.js').wrongcommand(message);
     }
     return callback({
-        'tsun': core.tsun,
-        'cmdpref': core.cmdpref,
+        'tsun': tsun,
+        'cmdpref': cmdpref,
         'is_a_command': is_a_command
     });
     //}
