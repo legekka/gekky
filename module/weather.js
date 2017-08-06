@@ -14,12 +14,12 @@ module.exports = (city, callback) => {
             })
         } else {
             var desc = "Temperature: " + result[0].current.temperature + " °C" +
-                "\nSky: " + result[0].current.skytext +
-                "\nHumidity: " + result[0].current.humidity + " %" +
-                "\nWind Speed: " + result[0].current.windspeed +
-                "\nObservation Time: " + result[0].current.observationtime;
+                "\nÉgbolt: " + result[0].current.skytext +
+                "\nPáratartalom: " + result[0].current.humidity + " %" +
+                "\nSzél: " + result[0].current.windspeed +
+                "\nUtoljára frissítve: " + result[0].current.observationtime;
             return callback({
-                "title": "Weather: " + result[0].location.name,
+                "title": "Időjárás: " + result[0].location.name,
                 "description": desc,
                 "thumbnail": {
                     "url": result[0].current.imageUrl
