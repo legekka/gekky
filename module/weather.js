@@ -2,6 +2,7 @@
 // weather info
 
 const weather = require('weather-js');
+const fs = require('fs');
 
 module.exports = (city, callback) => {
     weather.find({ search: city, degreeType: 'C' }, function (err, result) {
@@ -14,7 +15,7 @@ module.exports = (city, callback) => {
             })
         } else {
             var desc = "Hőmérséklet: " + result[0].current.temperature + " °C" +
-                "\nÉgbolt: " + result[0].current.skytext +
+                "\nÉgbolt: " + translate(result[0].current.skytext) +
                 "\nPáratartalom: " + result[0].current.humidity + " %" +
                 "\nSzél: " + result[0].current.windspeed +
                 "\nUtoljára frissítve: " + result[0].current.observationtime;
@@ -28,3 +29,21 @@ module.exports = (city, callback) => {
         }
     });
 } 
+
+function translate(eng){
+    switch(eng){
+        case "T-Storms":
+            return "Zivatarok";
+        case "Sunny":
+            return "Napos";
+        case "Mostly Sunny":
+            return "Főleg napos";
+        case "Cloudy":
+            return "Felhős";
+        case "Rainy":
+            return "Esős";
+        default:
+            fs.appendFileSync('../missing.txt',eng);
+            return eng;
+    }
+}
