@@ -43,7 +43,7 @@ function translate(eng){
         case "Rainy":
             return "Esős";
         default:
-            fs.appendFileSync('../missing.txt',eng);
+            fs.appendFileSync('../missing.txt',eng+'\n');
             return eng;
     }
 }
