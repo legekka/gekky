@@ -13,7 +13,7 @@ module.exports = (city, callback) => {
                 "description": err
             })
         } else {
-            var desc = "Temperature: " + result[0].current.temperature + " °C" +
+            var desc = "Hőmérséklet: " + result[0].current.temperature + " °C" +
                 "\nÉgbolt: " + result[0].current.skytext +
                 "\nPáratartalom: " + result[0].current.humidity + " %" +
                 "\nSzél: " + result[0].current.windspeed +
