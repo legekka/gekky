@@ -32,16 +32,32 @@ module.exports = (city, callback) => {
 
 function translate(eng){
     switch(eng){
-        case "T-Storms":
-            return "Zivatarok";
+        //Napos
         case "Sunny":
             return "Napos";
+        case "Partly Sunny":
+            return "Részben napos";
         case "Mostly Sunny":
-            return "Főleg napos";
+            return "Többnyire napos";
+        //Felhős
         case "Cloudy":
             return "Felhős";
-        case "Rainy":
+        case "Partly Cloudy":
+            return "Részben felhős";
+        case "Mostly Cloudy":
+            return "Többnyire felhős";
+        //Tiszta
+        case "Clear":
+            return "Derült";
+        case "Partly Clear":
+            return "Részben derült";
+        case "Mostly Clear":
+            return "Többnyire derült";
+        //Egyéb
+        case "Rain":
             return "Esős";
+        case "T-Storms":
+            return "Zivatarok";
         default:
             fs.appendFileSync('../missing.txt',eng+'\n');
             return eng;
