@@ -68,8 +68,10 @@ module.exports = {
                         httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
                                 let origImg = path + message.id + '.' + ext;
+                                let webpImg = path + message.id + '.webp';
+                                console.log(`Original image: ${origImg}
+                                webp image: ${webpImg}`);
                                 core.bot.channels.get(core.ch.gekkylog).send({files:[origImg]}).then((fileoriginalmsg) => {
-                                    let webpImg = path + message.id + '.webp';
                                     core.bot.channels.get(core.ch.gekkylog).send({files:[webpImg]}).then((filemsg) => {
                                         if (message.channel.type != 'dm') {
                                             if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
