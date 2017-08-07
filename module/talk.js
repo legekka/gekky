@@ -2,7 +2,6 @@
 // talking part, including tsundere mode
 
 var fs = require('fs');
-var Math = require('mathjs');
 var reqreload = require('./reqreload.js');
 
 var path = './data/dialogs.txt';
