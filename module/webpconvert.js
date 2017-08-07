@@ -67,8 +67,10 @@ module.exports = {
                     if (extensions.indexOf(ext) >= 0) {
                         httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
-                                core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.' + ext]}).then((fileoriginalmsg) => {
-                                    core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.webp']}).then((filemsg) => {
+                                let origImg = path + message.id + '.' + ext;
+                                core.bot.channels.get(core.ch.gekkylog).send({files:[origImg]}).then((fileoriginalmsg) => {
+                                    let webpImg = path + message.id + '.webp';
+                                    core.bot.channels.get(core.ch.gekkylog).send({files:[webpImg]}).then((filemsg) => {
                                         if (message.channel.type != 'dm') {
                                             if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
                                                 message.delete();
@@ -97,7 +99,7 @@ module.exports = {
                                   }
                                     });*/
                                             } else {
-                                                core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                                core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                             }
                                         }
                                     });
@@ -113,7 +115,7 @@ module.exports = {
                             httpsGet(url, message.id + '.' + ext, () => {
                                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
                                     core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.webp']}).then((filemsg) => {
-                                        core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                        core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                     });
                                 });
                             });
@@ -121,7 +123,7 @@ module.exports = {
                             httpGet(url, message.id + '.' + ext, () => {
                                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
                                     core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.webp']}).then((filemsg) => {
-                                        core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { file: filemsg.attachments.first().url });
+                                        core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                     });
                                 });
                             });
