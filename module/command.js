@@ -57,7 +57,7 @@ module.exports = (core, message, callback) => {
         reqreload('./sankaku.js').search(core, message, lower.substr(cmdpref.length + 'sankaku'.length + 1), "sankaku");
     } else if (lower.startsWith(cmdpref + 'waifu2x')) {
         // !waifu2x|waifu2x-caffe imageupconvert. !waifu2x <image-url> [BETA]
-        require('./yrexia.js').waifu2x(core, message, lower.split(' ')[1].trim());
+        require('./yrexia.js').waifu2x(core, message, message.content.split(' ')[1].trim());
     } else if (message.author.id == ownerid) {
         // legekka-only commands
         if (lower.startsWith(cmdpref + 'kill')) {
