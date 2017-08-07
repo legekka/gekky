@@ -214,6 +214,7 @@ function parseMessage(message, id, core) {
         console.log(msg);
         core.bot.channels.get(msg.channel_id).sendEmbed({
             "title": "waifu2x boosted",
+            "description": "Url: " + msg.url,
             "image": {
                 "url": msg.url
             },
