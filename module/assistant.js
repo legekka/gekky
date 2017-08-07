@@ -18,14 +18,14 @@ module.exports = {
                 str = "Hétalvó...";
             }
         }
-        message.channel.sendMessage("**Ohio legekka!**\n*" + str + "*\n\nTessék, itt van pár infó, hogy jól kezdd a napod:");
+        message.channel.send("**Ohio legekka!**\n*" + str + "*\n\nTessék, itt van pár infó, hogy jól kezdd a napod:");
         delete require.cache[require.resolve('./weather.js')];
         require('./weather.js')("Budapest", (response) => {
-            message.channel.sendEmbed(response);
+            message.channel.send({embed:response});
         });
         delete require.cache[require.resolve('./workdayinfo.js')];
         require('./workdayinfo')((response) => {
-            message.channel.sendEmbed(response);
+            message.channel.send({embed:response});
         });
     }
 }

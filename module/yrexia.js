@@ -29,7 +29,7 @@ module.exports = {
     waifu2x: (core, message, url) => {
         var id = isConnected('GeckoPC');
         if (id == -1) {
-            message.channel.sendMessage('Jelenleg nem elérhető a cudapower qwq...');
+            message.channel.send('Jelenleg nem elérhető a cudapower qwq...');
         } else {
             connections[id].sendUTF(JSON.stringify({
                 'username': 'Yrexia',
@@ -213,14 +213,14 @@ function parseMessage(message, id, core) {
     } else if (msg.type == 'file') {
         parseFile(msg);
     } else if (msg.type == 'convert') {
-        core.bot.channels.get(msg.channel_id).sendEmbed({
+        core.bot.channels.get(msg.channel_id).send({embed:{
             "title": "waifu2x boosted",
             "description": "Original url: " + msg.original_url + '\nWaifu2x url: ' + msg.url,
             "image": {
                 "url": msg.url
             },
             "color": msg.color
-        });
+        }});
     }
 
 }

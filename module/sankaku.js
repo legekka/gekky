@@ -46,14 +46,14 @@ function nsfwFilter(core, message, searchword, mode) {
     if (mode == 'nhentai') {
         if (message.channel.name.indexOf('nsfw') < 0) {
             reqreload('./log.js').consoleLog(core, c.bgRed('Doujin search at wrong channel.'));
-            message.channel.sendMessage('retard, itt nem kereshetsz.');
+            message.channel.send('retard, itt nem kereshetsz.');
         } else {
             nhentaiSearch(core, message, searchword);
         }
     } else if (mode == 'sankaku') {
         if (message.channel.name.indexOf('nsfw') < 0) {
             reqreload('./log.js').consoleLog(core, c.bgRed('Sankaku search at wrong channel.'));
-            message.channel.sendMessage('retard, itt nem kereshetsz.');
+            message.channel.send('retard, itt nem kereshetsz.');
         } else {
             sankakuSearch(core, message, searchword, () => {});
         }
@@ -75,14 +75,14 @@ function sankakuSearch(core, message, searchword, callback) {
     var curl = exec(`curl -s -b ${path}cookies.txt "${url_link}" > "${path}${message.fname1}"`, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
-            message.channel.sendMessage('Ajjaj... valami nem jó... (search-html)');
+            message.channel.send('Ajjaj... valami nem jó... (search-html)');
             return callback();
         }
     });
     curl.on('exit', (code) => {
         if (!fs.existsSync(path + message.fname1)) {
             console.log('File has been not downloaded.1');
-            message.channel.sendMessage('Valamiért nem jött le a html~');
+            message.channel.send('Valamiért nem jött le a html~');
             return callback();
         }
         var text = fs.readFileSync(path + message.fname1).toString().split('\n');
@@ -96,7 +96,7 @@ function sankakuSearch(core, message, searchword, callback) {
             }
         }
         if (postlist.length == 0) {
-            message.channel.sendMessage('Nincs találat. https://cs.sankakucomplex.com/data/3d/0e/3d0e02f9ebd984d7af5891f693e82f6f.jpg');
+            message.channel.send('Nincs találat. https://cs.sankakucomplex.com/data/3d/0e/3d0e02f9ebd984d7af5891f693e82f6f.jpg');
         } else if (postlist.length > 4) {
             postlist.splice(0, 4);
         }
@@ -106,14 +106,14 @@ function sankakuSearch(core, message, searchword, callback) {
         var curl2 = exec(`curl -s -b ${path}cookies.txt "${post_url}" > "${path}${message.fname2}"`, (err, stdout, stderr) => {
             if (err) {
                 console.log(err);
-                message.channel.sendMessage('Ajjaj... valami nem jó... (post-html)');
+                message.channel.send('Ajjaj... valami nem jó... (post-html)');
                 return callback();
             }
         });
         curl2.on('exit', (code) => {
             if (!fs.existsSync(path + message.fname2)) {
                 console.log('File has been not downloaded.2');
-                message.channel.sendMessage('Valamiért nem jött le a html~');
+                message.channel.send('Valamiért nem jött le a html~');
                 return callback();
             }
             var text = fs.readFileSync(path + message.fname2).toString().split('\n');
@@ -131,7 +131,7 @@ function sankakuSearch(core, message, searchword, callback) {
                 rating = rating.substr(0, rating.indexOf('<')).trim().toLowerCase();
             } else {
                 console.log("FUCK.");
-                message.channel.sendMessage('FUCK.');
+                message.channel.send('FUCK.');
                 return callback();
             }
             var i = 0;
@@ -141,19 +141,19 @@ function sankakuSearch(core, message, searchword, callback) {
                 original_url = "https:" + original_url.substr(0, original_url.indexOf('?'));
             } else {
                 console.log("Kurwa.");
-                message.channel.sendMessage('Kurwa.');
+                message.channel.send('Kurwa.');
                 return callback();
             }
             var ext = original_url.substr(original_url.length - 3, 3);
             if (ext != 'jpg' && ext != 'png') {
                 console.log('Ez... Nem kép.');
-                message.channel.sendMessage('Ez... Nem kép. Nem kell.');
+                message.channel.send('Ez... Nem kép. Nem kell.');
             }
             message.fname3 = postlist[random] + '.' + ext;
             var curl3 = exec(`curl -s -b ${path}cookies.txt "${original_url}" > "${path}${message.fname3}"`, (err, stdout, stderr) => {
                 if (err) {
                     console.log(err);
-                    message.channel.sendMessage('Ajjaj... valami nem jó... (post-image)');
+                    message.channel.send('Ajjaj... valami nem jó... (post-image)');
                     return callback();
                 }
             });
@@ -161,15 +161,15 @@ function sankakuSearch(core, message, searchword, callback) {
             curl3.on('exit', (code) => {
                 if (!fs.existsSync(path + message.fname3)) {
                     console.log('File has been not downloaded.');
-                    message.channel.sendMessage('Valamiért nem jött le a kép~');
+                    message.channel.send('Valamiért nem jött le a kép~');
                     return callback();
                 }
                 if (!teszt) {
                     teszt = true;
                     reqreload('./webpconvert.js').file(path + message.fname3, (image) => {
                         console.log(image);
-                        core.bot.channels.get(core.ch.gekkylog).sendFile(image).then(response => {
-                            message.channel.sendEmbed({
+                        core.bot.channels.get(core.ch.gekkylog).send({files:[image]}).then(response => {
+                            message.channel.send({embed:{
                                 "title": "Full size",
                                 "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
                                 "image": {
@@ -177,7 +177,7 @@ function sankakuSearch(core, message, searchword, callback) {
                                 },
                                 "url": original_url,
                                 "color": ratingColor(rating)
-                            });
+                            }});
                         });
                     });
                 }
@@ -248,21 +248,21 @@ function nhentaiSearch(core, message, searchword) {
                                 }
                                 var rnumber = Math.round((Math.random() * (doujinlist.length - 1) + 1));
                                 if (doujinlist[rnumber] != undefined) {
-                                    message.channel.sendMessage(doujinlist[rnumber]);
+                                    message.channel.send(doujinlist[rnumber]);
                                     reqreload('./log.js').consoleLog(core, doujinlist[rnumber]);
                                 } else {
-                                    message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
+                                    message.channel.send('Nincs találat. ¯\\_(ツ)_/¯');
                                     reqreload('./log.js').consoleLog(core, 'Nincs találat. ¯\\_(ツ)_/¯');
                                 }
                             }
                         }, 100);
                     }
                 } else {
-                    message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
+                    message.channel.send('Nincs találat. ¯\\_(ツ)_/¯');
                     reqreload('./log.js').consoleLog(core, 'Nincs találat. ¯\\_(ツ)_/¯');
                 }
             } else {
-                message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
+                message.channel.send('Nincs találat. ¯\\_(ツ)_/¯');
                 reqreload('./log.js').consoleLog(core, 'Nincs találat. ¯\\_(ツ)_/¯');
             }
         }

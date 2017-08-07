@@ -9,7 +9,7 @@ module.exports = function (core) {
         if (core.picker.server || core.picker.channel) {
             reqreload('./channelpicker.js').go(core, d);
         } else if (d.toString().startsWith('>')) {
-            core.bot.channels.get(core.ch.current).sendMessage(d.toString().substr(1));
+            core.bot.channels.get(core.ch.current).send(d.toString().substr(1));
         } else {
             var cmd = d.toString().toLowerCase().trim();
             if (cmd == 'close' || cmd == 'stop') {

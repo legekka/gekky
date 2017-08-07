@@ -20,8 +20,8 @@ const http = require('https');
 // error logging
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    bot.channels.get(ch.NtoI('gekkylog')).sendMessage('<@143399021740818432>').then(() => {
-        bot.channels.get(ch.NtoI('gekkylog')).sendMessage('```' + error.stack + '```').then(() => {
+    bot.channels.get(ch.NtoI('gekkylog')).send('<@143399021740818432>').then(() => {
+        bot.channels.get(ch.NtoI('gekkylog')).send('```' + error.stack + '```').then(() => {
             exit(3);
         });
     });
@@ -344,7 +344,7 @@ function reminderStart() {
         for (i in reminders) {
             if (da.getFullYear() == reminders[i].ev && (da.getMonth() + 1) == reminders[i].ho && da.getDate() == reminders[i].nap && da.getHours() == reminders[i].ora && da.getMinutes() == reminders[i].perc && reminders[i].armed == true) {
                 reminders[i].armed = false;
-                bot.channels.get(ch.defaultID).sendMessage("<@143399021740818432> **" + reminders[i].text + "**\n" + reminders[i].ora + ':' + reminders[i].perc);
+                bot.channels.get(ch.defaultID).send("<@143399021740818432> **" + reminders[i].text + "**\n" + reminders[i].ora + ':' + reminders[i].perc);
             }
         }
     }, 1000);
@@ -509,12 +509,12 @@ function ohio(message) {
             str = "Hétalvó...";
         }
     }
-    message.channel.sendMessage("**Ohio legekka!**\n*" + str + "*\n\nTessék, itt van pár infó, hogy jól kezdd a napod:");
+    message.channel.send("**Ohio legekka!**\n*" + str + "*\n\nTessék, itt van pár infó, hogy jól kezdd a napod:");
     weatherInfo("Budapest", (response) => {
-        message.channel.sendEmbed(response);
+        message.channel.send({embed:response});
     });
     workdayinfo((response) => {
-        message.channel.sendEmbed(response);
+        message.channel.send({embed:response});
     });
 }
 
@@ -527,7 +527,7 @@ function dailyReloader() {
         var currdate = new Date();
         var currday = currdate.getDate();
         if (day != currday) {
-            bot.channels.get(ch.defaultID).sendMessage('[daily reload]');
+            bot.channels.get(ch.defaultID).send('[daily reload]');
             consoleLog('[daily reload]');
             exit(3);
         }
@@ -551,7 +551,7 @@ function updateListener() {
 function consoleLog(text) {
     console.log(text);
     if (botonline) {
-        bot.channels.get(ch.NtoI('gekkylog')).sendMessage(text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''));
+        bot.channels.get(ch.NtoI('gekkylog')).send(text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''));
     }
     log(text + '\r\n');
 }
@@ -666,22 +666,22 @@ function messageConsoleLog(message, is_a_command) {
 function exit(code) {
     switch (code) {
         case 2:
-            bot.channels.get(ch.defaultID).sendMessage('[closing]').then(() => { bot.destroy(); });
+            bot.channels.get(ch.defaultID).send('[closing]').then(() => { bot.destroy(); });
             log('[closing]\r\n');
             setTimeout(function () { process.exit(code); }, 2000);
             break;
         case 3:
-            bot.channels.get(ch.defaultID).sendMessage('[reloading]').then(() => { bot.destroy(); });
+            bot.channels.get(ch.defaultID).send('[reloading]').then(() => { bot.destroy(); });
             log('[reloading]\r\n');
             setTimeout(function () { process.exit(code); }, 2000);
             break;
         case 4:
-            bot.channels.get(ch.defaultID).sendMessage('[updating]').then(() => { bot.destroy(); });
+            bot.channels.get(ch.defaultID).send('[updating]').then(() => { bot.destroy(); });
             log('[updating]\r\n');
             setTimeout(function () { process.exit(3); }, 2000);
             break;
         default:
-            bot.channels.get(ch.defaultID).sendMessage('[exiting with code:' + code + ']').then(() => { bot.destroy(); });
+            bot.channels.get(ch.defaultID).send('[exiting with code:' + code + ']').then(() => { bot.destroy(); });
             log('[exiting with code:' + code + ']\r\n');
             setTimeout(function () { process.exit(code); }, 2000);
             break;
@@ -693,9 +693,10 @@ function exit(code) {
 
 function sendFile(message, filename) {
     if (fs.existsSync(filename)) {
-        bot.sendFile(message, filename);
+        //bot.sendFile(message, filename);
+        message.channel.send({files:[filename]});
     } else {
-        message.channel.sendMessage('Nincs ilyen fájl: ' + filename);
+        message.channel.send('Nincs ilyen fájl: ' + filename);
     }
 }
 // sankakupath-->cmd
@@ -716,12 +717,12 @@ function checkCache(path, limit, message) {
     var size = Math.round(parseInt(text) / 1024, 3);
     if (size > limit) {
         if (message != undefined) {
-            message.channel.sendMessage('Cache size is over the limit. ' + size + ' MB / ' + limit + ' MB');
+            message.channel.send('Cache size is over the limit. ' + size + ' MB / ' + limit + ' MB');
         }
         //consoleLog('Cache size is over the limit. ' + size + ' MB / ' + limit + ' MB');
     } else {
         if (message != undefined) {
-            message.channel.sendMessage('Cache size is under the limit. ' + size + ' MB / ' + limit + ' MB');
+            message.channel.send('Cache size is under the limit. ' + size + ' MB / ' + limit + ' MB');
         }
         //consoleLog('Cache size is under the limit. '+ size + ' MB / ' + limit + ' MB');
     }
@@ -803,21 +804,21 @@ function nhentaiSearch(message, searchword) {
                                 }
                                 var rnumber = Math.round((Math.random() * (doujinlist.length - 1) + 1));
                                 if (doujinlist[rnumber] != undefined) {
-                                    message.channel.sendMessage(doujinlist[rnumber]);
+                                    message.channel.send(doujinlist[rnumber]);
                                     consoleLog(doujinlist[rnumber]);
                                 } else {
-                                    message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
+                                    message.channel.send('Nincs találat. ¯\\_(ツ)_/¯');
                                     consoleLog('Nincs találat. ¯\\_(ツ)_/¯');
                                 }
                             }
                         }, 100);
                     }
                 } else {
-                    message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
+                    message.channel.send('Nincs találat. ¯\\_(ツ)_/¯');
                     consoleLog('Nincs találat. ¯\\_(ツ)_/¯');
                 }
             } else {
-                message.channel.sendMessage('Nincs találat. ¯\\_(ツ)_/¯');
+                message.channel.send('Nincs találat. ¯\\_(ツ)_/¯');
                 consoleLog('Nincs találat. ¯\\_(ツ)_/¯');
             }
         }
@@ -854,12 +855,12 @@ function ratingColor(rating) {
 function sendHelp(message) {
     var input = fs.createReadStream(files.sankakuhelp);
     var array = fs.readFileSync(files.sankakuhelp).toString();
-    //message.channel.sendMessage('```'+array+'```');
-    message.channel.sendEmbed({
+    //message.channel.send('```'+array+'```');
+    message.channel.send({embed:{
         "title": "Sankaku Help",
         "description": '```' + array + '```',
         "color": parseInt('ff761d', 16)
-    });
+    }});
 }
 
 // image search on sankaku
@@ -1000,14 +1001,14 @@ function sankakuSearch(message, searchword, mode) {
             counter++;
             code = execSync('curl -s "' + resized_url + '" > ' + SankakuPath + counter + '.' + ext);
 
-            bot.channels.get(ch.NtoI('gekkylog')).sendFile(SankakuPath + counter + "." + ext).then((response) => {
-                message.channel.sendEmbed({
+            bot.channels.get(ch.NtoI('gekkylog')).send({files:[SankakuPath + counter + "." + ext]}).then((response) => {
+                message.channel.send({embed:{
                     "title": "Full size",
                     "description": "Post ID: " + imagelist[rnumber] + "\nPost link: " + url_link,
                     "color": ratingColor(rating),
                     "image": response.attachments.first(),
                     "url": original_url
-                });
+                }});
             });
             process.stdout.write('.\n');
         }
@@ -1054,13 +1055,13 @@ function sankakuSearch(message, searchword, mode) {
 						bot.channels.get(ch.NtoI('gekkylog')).sendFile(SankakuPath + counter + "." + ext[j], undefined, imagelist[j] + '|' + original_url[j]).then( (response) => {
 							var ipost = response.attachments.first().message.content.split('|')[0];
 							var orurl = response.attachments.first().message.content.split('|')[1];
-							message.channel.sendEmbed({
+							message.channel.send({embed:{
 								"title" : "Full size",
 								"description" : "Post ID: " + ipost + "\nPost link: https://chan.sankakucomplex.com/post/show/" + ipost,
 								"color" : parseInt('ff761d',16),
 								"image" : response.attachments.first(),
 								"url" : orurl
-							});
+							}});
 						});
 					}
 				}
@@ -1141,17 +1142,17 @@ function sankakuSearch(message, searchword, mode) {
                     ext[j] = resized_url[j].substr(resized_url[j].length - 3, 3);
                     counter++;
                     code = execSync('curl -s "' + resized_url[j] + '" > ' + SankakuPath + counter + '.' + ext[j]);
-                    bot.channels.get(ch.NtoI('gekkylog')).sendFile(SankakuPath + counter + "." + ext[j], undefined, charactername[j] + '|' + imagepost[j] + '|' + original_url[j]).then((response) => {
+                    bot.channels.get(ch.NtoI('gekkylog')).send({files:[SankakuPath + counter + "." + ext[j], undefined, charactername[j] + '|' + imagepost[j] + '|' + original_url[j]]}).then((response) => {
                         var cname = response.attachments.first().message.content.split('|')[0];
                         var ipost = response.attachments.first().message.content.split('|')[1];
                         var orurl = response.attachments.first().message.content.split('|')[2];
-                        message.channel.sendEmbed({
+                        message.channel.send({embed:{
                             "title": nameify(cname),
                             "description": "Post ID: " + ipost + "\nPost link: https://chan.sankakucomplex.com/post/show/" + ipost,
                             "color": parseInt('ff761d', 16),
                             "image": response.attachments.first(),
                             "url": orurl
-                        });
+                        }});
                     });
                 } else {
                     j = j - 1;
@@ -1165,7 +1166,7 @@ function sankakuSearch(message, searchword, mode) {
         if (is_private) { local_msg = local_msg + ' Privát.'; }
         if (no_user) { local_msg = local_msg + ' Nincs ilyen user.'; }
         if (timed_out) { local_msg = local_msg + ' Nincs kapcsolat.'; }
-        message.channel.sendMessage(local_msg + ' https://cs.sankakucomplex.com/data/3d/0e/3d0e02f9ebd984d7af5891f693e82f6f.jpg');
+        message.channel.send(local_msg + ' https://cs.sankakucomplex.com/data/3d/0e/3d0e02f9ebd984d7af5891f693e82f6f.jpg');
     }
     bot.user.setGame(motd);
 
@@ -1202,7 +1203,7 @@ function nsfw_filter(message, lower, mode) {
                 keresoszo += ' rating:safe';
             }
             consoleLog(c.bgRed(keresoszo));
-            //message.channel.sendMessage('Itt nem kereshetsz nsfw képet.\nDe semmi gond, kijavítottam a hibád.\n' + keresoszo);
+            //message.channel.send('Itt nem kereshetsz nsfw képet.\nDe semmi gond, kijavítottam a hibád.\n' + keresoszo);
             sankakuSearch(message, keresoszo, 0);
         } else {
             sankakuSearch(message, lower.substr(9), 0);
@@ -1223,7 +1224,7 @@ function nsfw_filter(message, lower, mode) {
                 keresoszo += ' rating:safe';
             }
             consoleLog(c.bgRed(keresoszo));
-            //message.channel.sendMessage('Itt nem kereshetsz nsfw képet.\nDe semmi gond, kijavítottam a hibád.\n' + keresoszo);
+            //message.channel.send('Itt nem kereshetsz nsfw képet.\nDe semmi gond, kijavítottam a hibád.\n' + keresoszo);
             sankakuSearch(message, keresoszo, 1);
         } else {
             sankakuSearch(message, lower.substr(6), 1);
@@ -1251,7 +1252,7 @@ function nsfw_filter(message, lower, mode) {
     } else if (mode == 3) {
         if (message.channel.name != 'nsfw' && message.channel.name != 'fapmaterial' && message.channel.name != undefined) {
             consoleLog(c.bgRed('Doujin search at wrong channel.'));
-            message.channel.sendMessage('retard, itt nem kereshetsz.');
+            message.channel.send('retard, itt nem kereshetsz.');
         } else {
             nhentaiSearch(message, lower);
 
@@ -1280,12 +1281,12 @@ function tsun_mode(message) {
     if (tsun) {
         tsun = false;
         consoleLog(c.bgBlue('## gekky currently is not tsundere.'));
-        message.channel.sendMessage('O-okay.');
+        message.channel.send('O-okay.');
     }
     else {
         tsun = true;
         consoleLog(c.bgBlue('## gekky currently is tsundere.'));
-        message.channel.sendMessage('Nah.');
+        message.channel.send('Nah.');
     }
 }
 
@@ -1319,45 +1320,45 @@ bot.on('message', function (message) {
         // one word commands
         switch (lower) {
             case 'scuoa':
-                message.channel.sendMessage('aoucs');
+                message.channel.send('aoucs');
                 messageConsoleLog(message, true);
                 break;
             case 'multi':
-                message.channel.sendMessage('kurwa');
+                message.channel.send('kurwa');
                 messageConsoleLog(message, true);
                 break;
             case 'juj':
-                message.channel.sendMessage('lyuly');
+                message.channel.send('lyuly');
                 messageConsoleLog(message, true);
                 break;
             case 'ping':
-                message.channel.sendMessage('Pong!');
+                message.channel.send('Pong!');
                 messageConsoleLog(message, true);
                 break;
         }
         // complex commands
         if (lower.startsWith('loli') && message.author.username != bot.user.username) {
-            message.channel.sendMessage('loliraid');
+            message.channel.send('loliraid');
             messageConsoleLog(message, true);
         }
         if (lower.indexOf(',,') >= 0) {
-            message.channel.sendMessage('nemnemnemNEMNEMNEM!!! Nem.');
+            message.channel.send('nemnemnemNEMNEMNEM!!! Nem.');
             messageConsoleLog(message, true);
         }
         if (lower.indexOf('¯\\_(ツ)_/¯') >= 0 && message.author.username != bot.user.username) {
-            message.channel.sendMessage('¯\\_(ツ)_/¯');
+            message.channel.send('¯\\_(ツ)_/¯');
             messageConsoleLog(message, true);
         }
         if (lower.startsWith(cmdpref + "response")) {
             checkSecret(lower.substr(cmdpref.length + "response ".length), (valasz) => {
-                message.channel.sendMessage(valasz);
+                message.channel.send(valasz);
             });
             messageConsoleLog(message, true);
         }
 
         // troll part
         if (lower == 'rop' && troll) {
-            message.channel.sendMessage('rip');
+            message.channel.send('rip');
             messageConsoleLog(message, true);
         }
         // tsundere part
@@ -1370,94 +1371,94 @@ bot.on('message', function (message) {
 
             if (message.author.username != bot.user.username) {
                 if (lower.indexOf('kurwa') >= 0 || lower.indexOf('kurva') >= 0) {
-                    message.channel.sendMessage('Anyád.');
+                    message.channel.send('Anyád.');
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('minden szar') >= 0) {
-                    message.channel.sendMessage('A gmod nem szar.');
+                    message.channel.send('A gmod nem szar.');
                     messageConsoleLog(message, true);
                 }
                 /*if (lower.indexOf('new score by') >=0 && message.channel.name == 'hun-scores'){
-					message.channel.sendMessage('noob');
+					message.channel.send('noob');
 					messageConsoleLog(message,true);
 				}*/
                 if (lower.indexOf('tsun') >= 0 && lower.indexOf('bot') > 0) {
-                    message.channel.sendMessage(dg.random(dg.def));
+                    message.channel.send(dg.random(dg.def));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('xd') >= 0) {
-                    message.channel.sendMessage(dg.random(dg.xd));
+                    message.channel.send(dg.random(dg.xd));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('zsolt') >= 0 && message.channel.id == '144787515268661248') {
-                    message.channel.sendMessage(dg.random(dg.zsolt));
+                    message.channel.send(dg.random(dg.zsolt));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('ante') >= 0 && message.channel.id == '144787515268661248') {
-                    message.channel.sendMessage(dg.random(dg.ante));
+                    message.channel.send(dg.random(dg.ante));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('nana') >= 0 && message.channel.id == '144787515268661248') {
-                    message.channel.sendMessage(dg.random(dg.nana));
+                    message.channel.send(dg.random(dg.nana));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('szabi') >= 0 && message.channel.id == '144787515268661248') {
-                    message.channel.sendMessage(dg.random(dg.szabi));
+                    message.channel.send(dg.random(dg.szabi));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('márk') >= 0 && message.channel.id == '144787515268661248') {
-                    message.channel.sendMessage(dg.random(dg.mark));
+                    message.channel.send(dg.random(dg.mark));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('sono') >= 0 && message.channel.id == '144787515268661248') {
-                    message.channel.sendMessage(dg.random(dg.sono));
+                    message.channel.send(dg.random(dg.sono));
                     messageConsoleLog(message, true);
                 }
                 if (lower == 'de') {
-                    message.channel.sendMessage('Nem!');
+                    message.channel.send('Nem!');
                     messageConsoleLog(message, true);
                 }
                 if (lower == 'nem') {
-                    message.channel.sendMessage('De!');
+                    message.channel.send('De!');
                     messageConsoleLog(message, true);
                 }
                 //TODO
                 if ((lower.indexOf(bot.user.username) >= 0 || lower.indexOf('momi') >= 0 || lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
-                    message.channel.sendMessage(dg.random(dg.emlites));
+                    message.channel.send(dg.random(dg.emlites));
                     messageConsoleLog(message, true);
                 }
                 if (lower.startsWith('kus')) {
-                    message.channel.sendMessage(dg.random(dg.kus));
+                    message.channel.send(dg.random(dg.kus));
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('slaps') >= 0 && lower.indexOf('<@') && message.author.username == 'Ratina') {
                     var elso, masodik;
                     elso = lower.substring(1, 22);
-                    message.channel.sendMessage('*' + fullID + ' slaps ' + elso + '*');
+                    message.channel.send('*' + fullID + ' slaps ' + elso + '*');
                     messageConsoleLog(message, true);
                 }
                 if ((lower.indexOf('szia') >= 0 || lower == 'hi')) {
-                    message.channel.sendMessage(dg.random(dg.hi));
+                    message.channel.send(dg.random(dg.hi));
                     messageConsoleLog(message, true);
                 }
                 if (lower.startsWith('jó éjt')) {
-                    message.channel.sendMessage(dg.random(dg.hi));
+                    message.channel.send(dg.random(dg.hi));
                     messageConsoleLog(message, true);
                 }
                 if ((lower.indexOf('>.>') >= 0) || (lower.indexOf('<.<') >= 0)) {
-                    message.channel.sendMessage(dg.random(dg.eye));
+                    message.channel.send(dg.random(dg.eye));
                     messageConsoleLog(message, true);
                 }
                 if ((lower.indexOf('jajne') >= 0 || lower.indexOf('jaj ne') >= 0)) {
-                    message.channel.sendMessage('Jaj, de. :3');
+                    message.channel.send('Jaj, de. :3');
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('osu.ppy.sh/ss') >= 0) {
-                    message.channel.sendMessage("noob");
+                    message.channel.send("noob");
                     messageConsoleLog(message, true);
                 }
                 if (lower.indexOf('ayy') >= 0) {
-                    message.channel.sendMessage('Ayy ayy ayy...');
+                    message.channel.send('Ayy ayy ayy...');
                     messageConsoleLog(message, true);
                 }
                 if (lower.startsWith(cmdpref) &&
@@ -1470,7 +1471,7 @@ bot.on('message', function (message) {
                     !lower.startsWith(cmdpref + 'weather') &&
                     !lower.startsWith(cmdpref + 'response') &&
                     message.author.username != 'legekka') {
-                    message.channel.sendMessage(dg.random(dg.proba));
+                    message.channel.send(dg.random(dg.proba));
                     messageConsoleLog(message, true);
                 }
             }
@@ -1478,7 +1479,7 @@ bot.on('message', function (message) {
         // weather info
         if (lower.startsWith(cmdpref + 'weather')) {
             weatherInfo(lower.substr(cmdpref.length + 8), (response) => {
-                message.channel.sendEmbed(response);
+                message.channel.send({embed:response});
             });
             messageConsoleLog(message, true);
         }
@@ -1513,21 +1514,21 @@ bot.on('message', function (message) {
         if (message.author.username == 'legekka') {
             if (lower.startsWith(cmdpref + 'secret')) {
                 giveSecret(lower.split(' ')[1],lower.split(' ')[2],(response) => {
-                    message.channel.sendMessage(response);
+                    message.channel.send(response);
                 });
                 messageConsoleLog(message, true);
             }
             // console commands
             if (lower.startsWith(cmdpref + 'remlist')) {
                 reminderLister(lower.substr(cmdpref.length + 'remlist'.length + 1), (response) => {
-                    message.channel.sendEmbed(response);
+                    message.channel.send({embed:response});
                 });
                 messageConsoleLog(message, true);
             }
 
             if ((lower.startsWith(cmdpref + 'workdayinfo'))) {
                 workdayinfo((response) => {
-                    message.channel.sendEmbed(response);
+                    message.channel.send({embed:response});
                 });
                 messageConsoleLog(message, true);
             }
@@ -1542,12 +1543,12 @@ bot.on('message', function (message) {
                 messageConsoleLog(message, true);
             }
             if (lower == cmdpref + 'inv') {
-                message.channel.sendMessage('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
+                message.channel.send('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
                 messageConsoleLog(message, true);
             }
             if (lower == cmdpref + 'delcache') {
                 code = execSync('rm -f ' + SankakuPath + '*');
-                message.channel.sendMessage('Cache deleted.');
+                message.channel.send('Cache deleted.');
                 messageConsoleLog(message, true);
             }
             if (message.content.startsWith(cmdpref + 'send')) {
@@ -1557,10 +1558,10 @@ bot.on('message', function (message) {
                 cmdpref = lower.substr(9);
                 if (cmdpref == '') {
                     cmdpref = '!';
-                    message.channel.sendMessage('New prefix: `!`');
+                    message.channel.send('New prefix: `!`');
                     messageConsoleLog(message, true);
                 } else {
-                    message.channel.sendMessage('New prefix: `' + cmdpref + '`');
+                    message.channel.send('New prefix: `' + cmdpref + '`');
                     messageConsoleLog(message, true);
                 }
             }
@@ -1587,7 +1588,7 @@ bot.on('ready', function () {
 
     // first heartbeat
     if (!botonline) {
-        bot.channels.get(ch.defaultID).sendMessage('[online]');
+        bot.channels.get(ch.defaultID).send('[online]');
         botonline = true;
     }
 });
@@ -1601,7 +1602,7 @@ bot.on('disconnected', function () {
 inp.addListener('data', function (d) {
     var cmd = d.toString().trim();
     if (cmd.startsWith('>')) {
-        bot.channels.get(ch.NtoI(ch.current)).sendMessage(cmd.substr(1));
+        bot.channels.get(ch.NtoI(ch.current)).send(cmd.substr(1));
     }
     else {
         cmd = cmd.toLowerCase();

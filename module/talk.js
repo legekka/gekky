@@ -66,89 +66,89 @@ module.exports = {
             }
             else if (message.author.username != core.bot.user.username) {
                 if (lower == 'ping') {
-                    message.channel.sendMessage('Pong!');
+                    message.channel.send('Pong!');
                 }
                 else if (lower == 'juj') {
-                    message.channel.sendMessage('lyuly');
+                    message.channel.send('lyuly');
                 }
                 else if (lower.indexOf('loli') >= 0) {
-                    message.channel.sendMessage('loliraid');
+                    message.channel.send('loliraid');
                 }
                 else if (lower.indexOf(',,') >= 0) {
-                    message.channel.sendMessage('nemnemnemNEMNEMNEM!!! Nem.');
+                    message.channel.send('nemnemnemNEMNEMNEM!!! Nem.');
                 }
                 else if (lower.indexOf('¯\\_(ツ)_/¯') >= 0) {
-                    message.channel.sendMessage('¯\\_(ツ)_/¯');
+                    message.channel.send('¯\\_(ツ)_/¯');
                 }
                 else if (tsun) {
                     if (lower.indexOf('kurwa') >= 0 || lower.indexOf('kurva') >= 0) {
-                        message.channel.sendMessage('Anyád.');
+                        message.channel.send('Anyád.');
                     }
                     else if (lower.indexOf('minden szar') >= 0) {
-                        message.channel.sendMessage('A gmod nem szar.');
+                        message.channel.send('A gmod nem szar.');
                     }
                     else if (lower.indexOf('tsun') >= 0 && lower.indexOf('bot') > 0) {
-                        message.channel.sendMessage(dg.random(dg.def));
+                        message.channel.send(dg.random(dg.def));
                     }
                     else if (lower.indexOf('xd') >= 0) {
-                        message.channel.sendMessage(dg.random(dg.xd));
+                        message.channel.send(dg.random(dg.xd));
                     }
                     else if (lower.indexOf('zsolt') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.sendMessage(dg.random(dg.zsolt));
+                        message.channel.send(dg.random(dg.zsolt));
                     }
                     else if (lower.indexOf('ante') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.sendMessage(dg.random(dg.ante));
+                        message.channel.send(dg.random(dg.ante));
                     }
                     else if (lower.indexOf('nana') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.sendMessage(dg.random(dg.nana));
+                        message.channel.send(dg.random(dg.nana));
                     }
                     else if (lower.indexOf('szabi') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.sendMessage(dg.random(dg.szabi));
+                        message.channel.send(dg.random(dg.szabi));
                     }
                     else if (lower.indexOf('márk') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.sendMessage(dg.random(dg.mark));
+                        message.channel.send(dg.random(dg.mark));
                     }
                     else if (lower.indexOf('sono') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.sendMessage(dg.random(dg.sono));
+                        message.channel.send(dg.random(dg.sono));
                     }
                     else if (lower == 'de') {
-                        message.channel.sendMessage('Nem!');
+                        message.channel.send('Nem!');
                     }
                     else if (lower == 'nem') {
-                        message.channel.sendMessage('De!');
+                        message.channel.send('De!');
                     }
                     //TODO
                     else if ((lower.indexOf(core.bot.user.username) >= 0 ||/* lower.indexOf('momi') >= 0 ||*/ lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(core.bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
-                        message.channel.sendMessage(dg.random(dg.emlites));
+                        message.channel.send(dg.random(dg.emlites));
                     }
                     else if (lower.startsWith('kus')) {
-                        message.channel.sendMessage(dg.random(dg.kus));
+                        message.channel.send(dg.random(dg.kus));
                     }
                     else if ((lower.indexOf('szia') >= 0 || lower == 'hi')) {
-                        message.channel.sendMessage(dg.random(dg.hi));
+                        message.channel.send(dg.random(dg.hi));
                     }
                     else if (lower.indexOf('jó éjt') >= 0) {
-                        message.channel.sendMessage(dg.random(dg.hi));
+                        message.channel.send(dg.random(dg.hi));
                     }
                     else if ((lower.indexOf('>.>') >= 0) || (lower.indexOf('<.<') >= 0)) {
-                        message.channel.sendMessage(dg.random(dg.eye));
+                        message.channel.send(dg.random(dg.eye));
                     }
                     else if (lower.indexOf('jajne') >= 0 || lower.indexOf('jaj ne') >= 0) {
-                        message.channel.sendMessage('Jaj, de. :3');
+                        message.channel.send('Jaj, de. :3');
                     }
                     else if (lower.indexOf('osu.ppy.sh/ss') >= 0) {
-                        message.channel.sendMessage("noob");
+                        message.channel.send("noob");
                     }
                     else if (lower.indexOf('ayy') >= 0) {
-                        message.channel.sendMessage('Ayy ayy ayy...');
+                        message.channel.send('Ayy ayy ayy...');
                     } else if (lower.indexOf('nazi') >= 0 || lower.indexOf('náci') >= 0 && lower.indexOf('mod') >= 0) {
-                        message.channel.sendMessage('https://legekka.s-ul.eu/fC1ku6D2.jpg');
+                        message.channel.send('https://legekka.s-ul.eu/fC1ku6D2.jpg');
                     }
                 }
             }
         }
     },
     wrongcommand: (message) => {
-        message.channel.sendMessage(dg.random(dg.proba));
+        message.channel.send(dg.random(dg.proba));
     }
 }

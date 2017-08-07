@@ -13,18 +13,18 @@ module.exports = {
     check: (core, message) => {
         checkSize(core.cachelimit, (size) => {
             if (message != undefined) {
-                message.channel.sendMessage('Cache folder size: ' + size + '/' + core.cachelimit + ' Mb')
+                message.channel.send('Cache folder size: ' + size + '/' + core.cachelimit + ' Mb')
             }
             console.log('Cache folder size: ' + size + '/' + core.cachelimit + ' Mb')
         })
     },
     del: (message) => {
         if (message != undefined) {
-            message.channel.sendMessage('Clearing...');
+            message.channel.send('Clearing...');
         }
         delCache();
         if (message != undefined) {
-            message.channel.sendMessage('Cache deleted.');
+            message.channel.send('Cache deleted.');
         }
         console.log('Cache deleted.');
     }

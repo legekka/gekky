@@ -17,13 +17,13 @@ module.exports = {
             if (ch.current == chID) {
                 var text = reqreload('./getTime.js')('full') + c.yellow(' ' + chname) + ' ' + usercolor(message.author) + ': ' + c.grey(message.content);
                 console.log(text);
-                core.bot.channels.get(ch.gekkylog).sendMessage(rawtext(text));
+                core.bot.channels.get(ch.gekkylog).send(rawtext(text));
                 log(text + '\r\n');
             } else {
                 if (is_a_command) {
                     var text = c.gray(reqreload('./getTime.js')('full') + ' ' + chname + ' ' + message.author.username + ': ' + message.content);
                     console.log(text);
-                    core.bot.channels.get(ch.gekkylog).sendMessage(rawtext(text));
+                    core.bot.channels.get(ch.gekkylog).send(rawtext(text));
                     log(text + '\r\n');
                 }
                 if (!is_a_command) {
@@ -34,7 +34,7 @@ module.exports = {
     },
     consoleLog: (core, text) => {
         console.log(text);
-        core.bot.channels.get('281189261355515915').sendMessage(rawtext(text));
+        core.bot.channels.get('281189261355515915').send(rawtext(text));
         log(text + '\r\n');
     }
 }

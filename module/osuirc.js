@@ -33,9 +33,9 @@ module.exports = {
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
                     if (messag != undefined) {
-                        messag.channel.sendMessage('**[IRC] is connected**');
+                        messag.channel.send('**[IRC] is connected**');
                     }
-                    core.bot.channels.get(ch.osuirc).sendMessage('**[IRC] is connected**').then((message) => {
+                    core.bot.channels.get(ch.osuirc).send('**[IRC] is connected**').then((message) => {
                         core.irc_pin = message.id;
                         message.pin();
                     });
@@ -48,12 +48,12 @@ module.exports = {
                         msg = c.grey(msg);
                     }
                     if (message.indexOf('gekka') >= 0 && from != 'legekka') {
-                        core.bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>').then((message) => {
+                        core.bot.channels.get(ch.osuirc).send('<@143399021740818432>').then((message) => {
                             message.delete();
                         });
                     }
                     console.log(c.yellow('[IRC] ') + msg);
-                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
+                    core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
                 }
             });
 
@@ -63,26 +63,26 @@ module.exports = {
                 if (core.bot.users.get('143399021740818432').presence.status != 'online' || (
                     core.bot.users.get('143399021740818432').presence.status == 'online' &&
                     core.bot.users.get('143399021740818432').presence.game != 'osu!')) {
-                    core.bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>').then((message) => {
+                    core.bot.channels.get(ch.osuirc).send('<@143399021740818432>').then((message) => {
                         message.delete();
                     });
                 }
                 if (core.bot.users.get('143399021740818432').presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
                     core.client.say(from, afkmessage());
                     console.log(c.yellow('[IRC] ') + from + ' ' + c.green('gekky: ') + '[afk message]');
-                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
+                    core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
                 }
-                core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + from + ':` ' + text);
+                core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + from + ':` ' + text);
             });
 
             core.client.addListener('action', (from, to, text, message) => {
                 if (to != 'legekka') {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' ' + to + ' ' + from + ' ' + text);
-                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
+                    core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
                 } else {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' PM' + from + ' ' + text);
-                    core.bot.channels.get(ch.osuirc).sendMessage('`' + timeStamp() + '` `PM' + from + '` *' + text + '*');
-                    core.bot.channels.get(ch.osuirc).sendMessage('<@143399021740818432>').then((message) => {
+                    core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM' + from + '` *' + text + '*');
+                    core.bot.channels.get(ch.osuirc).send('<@143399021740818432>').then((message) => {
                         message.delete();
                     });
                 }
@@ -127,7 +127,7 @@ module.exports = {
         } else {
             console.log(c.yellow('[IRC]') + ' is already running');
             if (messag != undefined) {
-                messag.channel.sendMessage('[IRC] is already running');
+                messag.channel.send('[IRC] is already running');
             }
         }
         return core.client;
@@ -141,13 +141,13 @@ module.exports = {
             core.client.disconnect();
             console.log(c.yellow('[IRC]') + ' is disconnected.');
             if (messag != undefined) {
-                messag.channel.sendMessage('**[IRC] is disconnected**');
+                messag.channel.send('**[IRC] is disconnected**');
             }
-            core.bot.channels.get(ch.osuirc).sendMessage('**[IRC] is disconnected**');
+            core.bot.channels.get(ch.osuirc).send('**[IRC] is disconnected**');
         } else {
             console.log(c.yellow('[IRC]') + ' is already disconnected.');
             if (messag != undefined) {
-                messag.channel.sendMessage('[IRC] is already disconnected');
+                messag.channel.send('[IRC] is already disconnected');
             }
         }
         return core.client;
@@ -162,7 +162,7 @@ module.exports = {
             var msg2 = '`' + timeStamp() + '` `PM ' + core.irc_channel + '` `legekka:` ' + text;
         }
         console.log(c.yellow('[IRC] ') + msg);
-        core.bot.channels.get(core.ch.osuirc).sendMessage(msg2);
+        core.bot.channels.get(core.ch.osuirc).send(msg2);
         return core.client;
     },
     teszt: (core) => {

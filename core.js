@@ -48,8 +48,8 @@ var core = {
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
     if (core.bot.channels.get(core.ch.gekkyerrorlog) != undefined) {
-        core.bot.channels.get(core.ch.gekkyerrorlog).sendMessage('<@143399021740818432>').then(() => {
-            core.bot.channels.get(core.ch.gekkyerrorlog).sendMessage('```' + error.stack + '```').then(() => {
+        core.bot.channels.get(core.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
+            core.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
                     setTimeout(() => {
@@ -79,12 +79,10 @@ core.bot.on('ready', function () {
         core.ready = true;
         if (core.autorun.irc) { core.client = require('./module/osuirc.js').start(core); }
         if (core.autorun.osutrack) { core.osutrack = require('./module/osutrack.js').startChecker(core); }
-        core.bot.channels.get(core.ch.main).sendMessage('[online]');
+        core.bot.channels.get(core.ch.main).send('[online]');
         console.log('[Discord] online');
     }
-    core.bot.user.setPresence({
-        "status": "online",
-    });
+    core.bot.user.setStatus("online");
     reqreload('./updater.js').ver((motd) => {
         core.bot.user.setGame(motd);
     });
