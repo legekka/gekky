@@ -36,7 +36,8 @@ module.exports = {
                 'username': 'Yrexia',
                 'type': 'convert',
                 'url': url,
-                'channel_id': message.channel.id
+                'channel_id': message.channel.id,
+                'color': message.member.highestRole.color
             }));
         }
     },
@@ -211,7 +212,13 @@ function parseMessage(message, id, core) {
         parseFile(msg);
     } else if (msg.type == 'convert') {
         console.log(msg);
-        core.bot.channels.get(msg.channel_id).sendMessage(msg.url);
+        core.bot.channels.get(msg.channel_id).sendEmbed({
+            "title": "waifu2x boosted",
+            "image": {
+                "url": msg.url
+            },
+            "color": msg.color
+        });
     }
 
 }
