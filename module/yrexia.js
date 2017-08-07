@@ -210,6 +210,7 @@ function parseMessage(message, id, core) {
     } else if (msg.type == 'file') {
         parseFile(msg);
     } else if (msg.type == 'convert') {
+        console.log(msg);
         core.bot.channels.get(msg.channel_id).sendMessage(msg.url);
     }
 
