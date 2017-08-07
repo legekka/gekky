@@ -38,7 +38,9 @@ module.exports = {
                 'channel_id': message.channel.id,
                 'color': message.member.highestRole.color
             }));
-            message.delete();
+            setTimeout(()=> {
+                message.delete();
+            },10000);
         }
     },
 
@@ -211,7 +213,6 @@ function parseMessage(message, id, core) {
     } else if (msg.type == 'file') {
         parseFile(msg);
     } else if (msg.type == 'convert') {
-        console.log(msg);
         core.bot.channels.get(msg.channel_id).sendEmbed({
             "title": "waifu2x boosted",
             "description": "Original url: " + msg.original_url + '\nWaifu2x url: ' + msg.url,
