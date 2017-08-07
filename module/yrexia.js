@@ -31,7 +31,6 @@ module.exports = {
         if (id == -1) {
             message.channel.sendMessage('Jelenleg nem elérhető a cudapower qwq...');
         } else {
-            console.log(url);
             connections[id].sendUTF(JSON.stringify({
                 'username': 'Yrexia',
                 'type': 'convert',
@@ -39,6 +38,7 @@ module.exports = {
                 'channel_id': message.channel.id,
                 'color': message.member.highestRole.color
             }));
+            message.delete();
         }
     },
 
@@ -214,7 +214,7 @@ function parseMessage(message, id, core) {
         console.log(msg);
         core.bot.channels.get(msg.channel_id).sendEmbed({
             "title": "waifu2x boosted",
-            "description": "Url: " + msg.url,
+            "description": "Original url: " + msg.original_url + '\nWaifu2x url: ' + msg.url,
             "image": {
                 "url": msg.url
             },
