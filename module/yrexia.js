@@ -210,13 +210,9 @@ function parseMessage(message, id, core) {
     } else if (msg.type == 'file') {
         parseFile(msg);
     } else if (msg.type == 'convert') {
-        parseConvert(msg);
+        core.bot.channels.get(msg.channel_id).sendMessage(msg.url);
     }
 
-}
-
-function parseConvert(msg) {
-    core.bot.channels.get(msg.channel_id).sendMessage(msg.url);
 }
 
 function parseCommand(msg, id, core) {
