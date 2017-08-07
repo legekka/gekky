@@ -35,9 +35,9 @@ module.exports = {
             connections[id].sendUTF(JSON.stringify({
                 'username': 'Yrexia',
                 'type': 'convert',
-                'url': url
+                'url': url,
+                'channel_id': message.channel.id
             }));
-
         }
     },
 
@@ -209,9 +209,16 @@ function parseMessage(message, id, core) {
         broadcast(messagev2OBJ(msg.content, msg.username));
     } else if (msg.type == 'file') {
         parseFile(msg);
+    } else if (msg.type == 'convert') {
+        parseConvert(msg);
     }
 
 }
+
+function parseConvert(msg) {
+    core.bot.channels.get(msg.channel_id).sendMessage(msg.url);
+}
+
 function parseCommand(msg, id, core) {
     if (msg.command == 'userlist') {
         var data = 'Online Users: ';
