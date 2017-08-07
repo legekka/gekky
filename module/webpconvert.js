@@ -67,8 +67,8 @@ module.exports = {
                     if (extensions.indexOf(ext) >= 0) {
                         httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
-                                let origImg = path + message.id + '.' + ext;
-                                let webpImg = path + message.id + '.webp';
+                                var origImg = './data/playcardbgs/playcard-0.png';
+                                var webpImg = './data/playcardbgs/playcard-0.png';
                                 console.log(`Original image: ${origImg}
                                 webp image: ${webpImg}`);
                                 core.bot.channels.get(core.ch.gekkylog).send({files:[origImg]}).then((fileoriginalmsg) => {
