@@ -1,13 +1,18 @@
 const exec = require("child_process").exec;
 const request = require("request");
 const fs = require("fs");
+const os = require("os");
 
 
 
 module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
     getBeatmap(beatmapID, (osuFile) => {
-        // EZT sűrgősen multiplatformmá tenni!!
-        var oppai = exec(`./oppai.sh ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
+        if (os.platform == "linux") {
+            var cmd = "./oppai.sh";
+        } else {
+            var cmd = "./oppai.exe";
+        }
+        var oppai = exec(`${cmd} ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
             if (error) { return callback("###"); }
             if (stdout.toString().indexOf("pp") >= 0) {
                 stdout.toString().split("\n").forEach(t => {
