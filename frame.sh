@@ -1,6 +1,6 @@
 #!/bin/bash
 
-until [ $? -nq 2 ]
+until [ $? -ne 2 ]
 do
   node --no-warnings ./frame.js
 done
