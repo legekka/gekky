@@ -184,7 +184,7 @@ function executeCommand(d, WSmode) {
             bot.channels.get(main).send('[Frame] Stopping frame...').then(() => {
                 bot.destroy().then(() => {
                     log(c.red('[Frame]') + ' Stopping frame...', WSmode);
-                    process.exit(1);
+                    process.exit(3);
                 });
             });
         } else if (cmd == '!reload') {
