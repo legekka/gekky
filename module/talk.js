@@ -54,7 +54,11 @@ module.exports = {
         tsun = core.tsun;
         cmdpref = core.cmdpref;
         var lower = message.content.toLowerCase();
-        if (lower.indexOf('gekky') >= 0 && message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.osuirc) {
+        if (lower.indexOf('gekky') >= 0 &&
+            message.channel.id != core.ch.gekkylog &&
+            message.channel.id != core.ch.osuirc &&
+            message.channel.id != core.ch.gekkyerrorlog &&
+            message.channel.id != core.ch.webps) {
             reqreload('./channelpicker.js').come(core, message);
         }
         if (!reqreload('./blacklist.js').isBlacklisted(message)) {
