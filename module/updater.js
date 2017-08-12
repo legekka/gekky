@@ -22,7 +22,7 @@ var resp = {
 module.exports = {
     isRegistered: false,
     ver: (callback) => {
-        lastcomm = exec('git log --name-status HEAD^..HEAD');
+        lastcomm = exec('git log -n 1');
         lastcomm.stdout.on('data', (data) => {
             var title = data.toString().split('\n')[4].trim();
             return callback(title);
@@ -30,7 +30,7 @@ module.exports = {
     },
 
     fullver: (callback) => {
-        lastcomm = exec('git log --name-status HEAD^..HEAD');
+        lastcomm = exec('git log -n 1');
         lastcomm.stdout.on('data', (data) => {
             var text = data.toString().split('\n');
             var title = data.toString().split('\n')[4].trim();
