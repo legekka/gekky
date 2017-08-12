@@ -13,7 +13,10 @@ module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
             var cmd = "./oppai.exe";
         }
         var oppai = exec(`${cmd} ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
-            if (error) { return callback("###"); }
+            if (error) {
+                console.log(error);
+                return callback("###");
+            }
             if (stdout.toString().indexOf("pp") >= 0) {
                 stdout.toString().split("\n").forEach(t => {
                     if (t.indexOf("pp") >= 0 && t.indexOf("acc pp bonus") < 0) {
