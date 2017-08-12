@@ -10,11 +10,11 @@ module.exports = (beatmapID, accuracy, combo, misses, mods, callback) => {
         if (os.platform == "linux") {
             var cmd = "./oppai.sh";
         } else {
-            var cmd = "./oppai.exe";
+            var cmd = "oppai.exe";
         }
         var oppai = exec(`${cmd} ${osuFile} ${accuracy} +${getOppaiMods(mods)} ${combo} ${misses}m`, (error, stdout, stderr) => {
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return callback("###");
             }
             if (stdout.toString().indexOf("pp") >= 0) {
