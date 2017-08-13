@@ -12,6 +12,7 @@ var core = {
         'osutrack': true,
     },
     'bot': new Discord.Client(),
+    'ready': false,
     'cachelimit': 50,
     'tsun': true,       // tsundere mode
     'cmdpref': fs.readFileSync('../pref.txt').toString(),     // default command prefix
@@ -33,16 +34,25 @@ var core = {
         'channel': false
     },
     'deadlist': [],
-    'client': undefined,
-    'irc_online': false,
-    'irc_channel': 'legekka',
-    'irc_pin': '',
-    'irc_online_users': '',  // online user interval-timer
-    'ready': false,
+    // osu!irc part
+    'osuirc': {
+        'client': undefined,
+        'irc_online': false,
+        'irc_channel': 'legekka',
+        'irc_pin': '',
+        'irc_online_users': '',  // online user interval-timer
+    },
+    // osu!track part
     'osutrack_running': false,
     'osutrack': undefined,
     // yrexia part
-    'holopadip': ''
+    'holopadip': '',
+    // waifucloud client
+    'waifucloud': {
+        "client": undefined,
+        "connection": undefined
+    }
+
 }
 
 process.on('uncaughtException', function (error) {
@@ -71,6 +81,7 @@ process.on('uncaughtException', function (error) {
 require('./module/console.js')(core);
 require('./module/cachemanager.js').start(core);
 require('./module/yrexia.js').start(core);
+require('./module/waifucloud.js').start(core);
 
 core.bot.login(core.token);
 

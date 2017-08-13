@@ -65,7 +65,7 @@ module.exports = function (core) {
                 require('./cachemanager.js').check(core);
             } else if (cmd == 'delcache') {
                 require('./cachemanager.js').del();
-            } else if (cmd == 'teszt') {
+            } else if (cmd == 'channelbuilder') {
                 reqreload('./channelpicker.js').build(core);
             } else if (cmd == 'go') {
                 reqreload('./channelpicker.js').go(core);
@@ -79,6 +79,8 @@ module.exports = function (core) {
                     "status": "online",
                 });
                 console.log('Presence: online');
+            } else if (cmd == 'teszt') {
+                reqreload('./waifucloud.js').teszt();
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
