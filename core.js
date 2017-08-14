@@ -50,7 +50,8 @@ var core = {
     // waifucloud client
     'waifucloud': {
         "client": undefined,
-        "connection": undefined
+        "connection": undefined,
+        "waifuEmitter": undefined
     }
 
 }

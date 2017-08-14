@@ -20,7 +20,7 @@ module.exports = (core, message, callback) => {
     } else if (lower.startsWith(cmdpref + 'weather')) {
         // !weather|Időjárás információ. !weather <város>
         reqreload('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
-            message.channel.send({embed:response});
+            message.channel.send({ embed: response });
         });
         is_a_command = true;
     } else if (lower.startsWith(cmdpref + 'help')) {
@@ -33,10 +33,12 @@ module.exports = (core, message, callback) => {
             while (str.replace('!', cmdpref) != str) {
                 str = str.replace('!', cmdpref);
             }
-            message.channel.send({embed:{
-                'title': 'Parancsok',
-                'description': str
-            }})
+            message.channel.send({
+                embed: {
+                    'title': 'Parancsok',
+                    'description': str
+                }
+            })
         });
     } else if (lower.startsWith(cmdpref + 'git')) {
         // !git|Kiírja gekky githubját.
@@ -44,10 +46,12 @@ module.exports = (core, message, callback) => {
     } else if (lower.startsWith(cmdpref + 'ver')) {
         // !ver|Kiírja a jelenlegi verziót.
         reqreload('./updater.js').fullver((resp) => {
-            message.channel.send({embed:{
-                'title': resp.ver,
-                'description': resp.desc
-            }})
+            message.channel.send({
+                embed: {
+                    'title': resp.ver,
+                    'description': resp.desc
+                }
+            })
         });
     } else if (lower.startsWith(cmdpref + 'nhentai')) {
         // !nhentai|Nhentai doujin kereső. !nhentai <tagek>
@@ -58,6 +62,13 @@ module.exports = (core, message, callback) => {
     } else if (lower.startsWith(cmdpref + 'waifu2x')) {
         // !waifu2x|waifu2x-caffe imageupconvert. !waifu2x <image-url> [BETA]
         require('./yrexia.js').waifu2x(core, message, message.content.split(' ')[1].trim());
+    } else if (lower.startsWith(cmdpref + 'waifucloud')) {
+        // !waifucloud|waifuCloud kép kereső. !waifucloud <tagek>
+        var tags = lower.split(' ');
+        tags.splice(0, 1);
+        reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
+    } else if (lower == cmdpref + 'waifustats'){
+        reqreload('./waifucloud.js').stats(core, message);
     } else if (message.author.id == ownerid) {
         // legekka-only commands
         if (lower.startsWith(cmdpref + 'kill')) {
@@ -89,7 +100,7 @@ module.exports = (core, message, callback) => {
             // !workdayinfo|Munkanappal kapcsolatos információk.
             delete require.cache[require.resolve('./workdayinfo.js')];
             require('./workdayinfo.js')((response) => {
-                message.channel.send({embed:response});
+                message.channel.send({ embed: response });
             });
             is_a_command = true;
         } else if ((lower.indexOf("reggel") >= 0 || lower.indexOf("ohio") >= 0) && (lower.indexOf("momi") >= 0 || lower.indexOf("gekk") >= 0)) {

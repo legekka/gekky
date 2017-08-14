@@ -79,16 +79,18 @@ module.exports = function (core) {
                     "status": "online",
                 });
                 console.log('Presence: online');
-            } else if (cmd == 'waifuconnect') {
+            } else if (cmd == 'waifu:connect') {
                 reqreload('./waifucloud.js').connect(core);
-            } else if (cmd == 'teszt') {
-                reqreload('./waifucloud.js').teszt(core);
-            } else if (cmd == 'teszt2') {
+            } else if (cmd == 'waifu:datacount') {
+                reqreload('./waifucloud.js').dataCount(core);
+            } else if (cmd == 'waifu:teszt2') {
                 reqreload('./waifucloud.js').teszt2(core);
-            } else if (cmd == 'teszt3') {
-                reqreload('./waifucloud.js').teszt3(core);
-            } else if (cmd == 'teszt4') {
-                reqreload('./waifucloud.js').teszt4(core);
+            } else if (cmd == 'waifu:save') {
+                reqreload('./waifucloud.js').save(core);
+            } else if (cmd == 'waifu:safp') {
+                reqreload('./waifucloud.js').searchAllFilePath(core);
+            } else if (cmd == 'waifu:stats') {
+                reqreload('./waifucloud.js').stats(core);
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');

@@ -55,7 +55,14 @@ function nsfwFilter(core, message, searchword, mode) {
             reqreload('./log.js').consoleLog(core, c.bgRed('Sankaku search at wrong channel.'));
             message.channel.send('retard, itt nem kereshetsz.');
         } else {
-            sankakuSearch(core, message, searchword, () => {});
+            sankakuSearch(core, message, searchword, () => { });
+        }
+    } else if (mode == 'waifucloud') {
+        if (message.channel.name.indexOf('nsfw') < 0) {
+            reqreload('./log.js').consoleLog(core, c.bgRed('WaifuCloud search at wrong channel.'));
+            message.channel.send('retard, itt nem kereshetsz.');
+        } else {
+            reqreload('./waifucloud.js').search_tags(core, "random", searchword, message);
         }
     }
 }
@@ -168,16 +175,18 @@ function sankakuSearch(core, message, searchword, callback) {
                     teszt = true;
                     reqreload('./webpconvert.js').file(path + message.fname3, (image) => {
                         console.log(image);
-                        core.bot.channels.get(core.ch.gekkylog).send({files:[image]}).then(response => {
-                            message.channel.send({embed:{
-                                "title": "Full size",
-                                "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
-                                "image": {
-                                    "url": response.attachments.first().url
-                                },
-                                "url": original_url,
-                                "color": ratingColor(rating)
-                            }});
+                        core.bot.channels.get(core.ch.gekkylog).send({ files: [image] }).then(response => {
+                            message.channel.send({
+                                embed: {
+                                    "title": "Full size",
+                                    "description": "Post ID: " + postlist[random] + "\nPost Link: " + post_url,
+                                    "image": {
+                                        "url": response.attachments.first().url
+                                    },
+                                    "url": original_url,
+                                    "color": ratingColor(rating)
+                                }
+                            });
                         });
                     });
                 }
@@ -271,7 +280,7 @@ function nhentaiSearch(core, message, searchword) {
 
 
 module.exports = {
-    search: (core, message, searchword, mode) => {
-        nsfwFilter(core, message, searchword, mode)
+    search: (core, message, searchword, mode, mode2) => {
+        nsfwFilter(core, message, searchword, mode, mode2)
     }
 }
