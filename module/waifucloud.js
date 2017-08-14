@@ -8,7 +8,7 @@ var reqreload = require('./reqreload.js');
 
 var username = "gekky";
 var password = "D:/waifucloud/waifucloud/"
-var serverip = 'ws://localhost:${D:/waifucloud/waifucloud}/';
+var serverip = 'ws://localhost:4243/';
 
 module.exports = {
     start: (core) => {
