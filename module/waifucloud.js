@@ -8,7 +8,7 @@ var reqreload = require('./reqreload.js');
 
 var username = "gekky";
 var password = "D:/waifucloud/waifucloud/"
-var serverip = 'ws://boltzmann.cf:4243/';
+var serverip = 'ws://localhost:4243/';
 
 module.exports = {
     start: (core) => {
@@ -38,6 +38,7 @@ module.exports = {
         });
         console.log(core.waifucloud.client);
         console.log(core.waifucloud.connection);
+
         core.waifucloud.client.connect(serverip, 'echo-protocol', JSON.stringify({
             "username": username,
             "password": password
