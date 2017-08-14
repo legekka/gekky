@@ -12,7 +12,6 @@ var serverip = 'ws://127.0.0.1:4243/';
 
 module.exports = {
     start: (core) => {
-        console.log('teszt');
         core.waifucloud.client = new WebSocketClient();
         core.waifucloud.client.on('connectFailed', function (error) {
             WC('Connect Error: ' + error.toString());
@@ -20,7 +19,6 @@ module.exports = {
 
         core.waifucloud.client.on('connect', function (connection) {
             core.waifucloud.connection = connection;
-            console.log(core.waifucloud.connection);
             WC('connected');
 
             core.waifucloud.connection.on('message', function (message) {
@@ -37,7 +35,6 @@ module.exports = {
                 WC('disconnected');
             });
         });
-        console.log(core.waifucloud.client);
         
 
         core.waifucloud.client.connect(serverip, 'echo-protocol', JSON.stringify({
