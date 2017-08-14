@@ -4,7 +4,7 @@
 var fs = require('fs');
 var c = require('chalk');
 var WebSocketClient = require('websocket').client;
-var reqreload = require('./module/reqreload.js');
+var reqreload = require('./reqreload.js');
 
 var username = "gekky";
 var password = "D:/waifucloud/waifucloud/"
