@@ -7,7 +7,7 @@ var WebSocketClient = require('websocket').client;
 var reqreload = require('./reqreload.js');
 
 var username = "gekky";
-var password = "D:/waifucloud/waifucloud/"
+var password = fs.readFileSync("D:/waifucloud/waifucloud/password.txt").toString().trim();
 var serverip = 'ws://localhost:4243/';
 
 module.exports = {
@@ -20,6 +20,7 @@ module.exports = {
 
         core.waifucloud.client.on('connect', function (connection) {
             core.waifucloud.connection = connection;
+            console.log(core.waifucloud.connection);
             WC('connected');
 
             core.waifucloud.connection.on('message', function (message) {
@@ -37,7 +38,7 @@ module.exports = {
             });
         });
         console.log(core.waifucloud.client);
-        console.log(core.waifucloud.connection);
+        
 
         core.waifucloud.client.connect(serverip, 'echo-protocol', JSON.stringify({
             "username": username,
@@ -56,5 +57,5 @@ module.exports = {
 
 
 function WC(string) {
-    return c.cyan('[WaifuCloud] ') + string;
+    return console.log(c.cyan('[WaifuCloud] ') + string);
 }
