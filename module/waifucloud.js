@@ -10,7 +10,7 @@ var username = "gekky";
 var password = "D:/waifucloud/waifucloud/"
 var serverip = 'ws://localhost:${D:/waifucloud/waifucloud}/';
 
-module.export({
+module.exports = {
     start: (core) => {
         core.waifucloud.client = new WebSocketClient();
         core.waifucloud.client.on('connectFailed', function (error) {
@@ -50,7 +50,7 @@ module.export({
             }))
         }
     }
-});
+};
 
 
 function WC(string) {
