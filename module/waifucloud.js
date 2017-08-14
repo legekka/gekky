@@ -44,7 +44,7 @@ module.exports = {
     },
     teszt: (core) => {
         if (core.waifucloud.connection != undefined) {
-            core.waifucloud.connection.sendUTF8(JSON.stringify({
+            core.waifucloud.connection.sendUTF(JSON.stringify({
                 name: 'data_count',
                 job_id: 'teszt'
             }))

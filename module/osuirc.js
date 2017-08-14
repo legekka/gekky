@@ -78,7 +78,7 @@ module.exports = {
             core.osuirc.client.addListener('action', (from, to, text, message) => {
                 if (to != 'legekka') {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' ' + to + ' ' + from + ' ' + text);
-                    core.osuirc.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
+                    core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
                 } else {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' PM' + from + ' ' + text);
                     core.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM' + from + '` *' + text + '*');
