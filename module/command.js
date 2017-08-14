@@ -28,7 +28,7 @@ module.exports = (core, message, callback) => {
         reqreload('./help.js').list(message, (list) => {
             var str = '';
             for (i in list) {
-                str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n\n';
+                str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n';
             }
             while (str.replace('!', cmdpref) != str) {
                 str = str.replace('!', cmdpref);
@@ -67,7 +67,8 @@ module.exports = (core, message, callback) => {
         var tags = lower.split(' ');
         tags.splice(0, 1);
         reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
-    } else if (lower == cmdpref + 'waifustats'){
+    } else if (lower == cmdpref + 'waifustats') {
+        // !waifustats|waifuCloud adatbázis adatok.
         reqreload('./waifucloud.js').stats(core, message);
     } else if (message.author.id == ownerid) {
         // legekka-only commands

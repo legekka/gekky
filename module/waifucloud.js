@@ -138,7 +138,7 @@ module.exports = {
                 message.channel.send({
                     embed: {
                         "title": stat.name,
-                        "description": `**Version:** *${stat.version}*\n**GitHub:** *${stat.git}*\n\n**Post count:** *${stat.post_count}*\n**File count:** *${stat.filepath_count}*\n**Database Size:** *${stat.size}*\n**Uptime:** *${stat.uptime}*`,
+                        "description": `**Version:** *${stat.version}*\n**GitHub:** *${stat.git}*\n\n**Post count:** *${stat.post_count}*\n**File count:** *${stat.filepath_count}*\n**Database Size:** *${stat.size}*\n**db.json's Size:** *${stat.dbsize}*\n**Uptime:** *${stat.uptime}*`,
                         "color": parseInt('7aef34', 16)
                     }
                 })
