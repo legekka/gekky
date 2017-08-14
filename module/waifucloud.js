@@ -33,14 +33,25 @@ module.exports = {
 
             core.waifucloud.connection.on('close', function () {
                 WC('disconnected');
+                core.waifucloud.connection = undefined;
             });
         });
-        
+
 
         core.waifucloud.client.connect(serverip, 'echo-protocol', JSON.stringify({
             "username": username,
             "password": password
         }));
+    },
+    connect: (core) => {
+        if (core.waifucloud.connection == undefined) {
+            core.waifucloud.client.connect(serverip, 'echo-protocol', JSON.stringify({
+                "username": username,
+                "password": password
+            }));
+        } else {
+            WC("is connected already");
+        }
     },
     teszt: (core) => {
         if (core.waifucloud.connection != undefined) {
@@ -48,6 +59,29 @@ module.exports = {
                 name: 'data_count',
                 job_id: 'teszt'
             }))
+        } else {
+            WC("is not connected");
+        }
+    },
+    teszt2: (core) => {
+        if (core.waifucloud.connection != undefined) {
+            core.waifucloud.connection.sendUTF(JSON.stringify({
+                name: 'add_post',
+                job_id: 'teszt2',
+                post: JSON.stringify(fs.readFileSync('../tesztpost.json').toString())
+            }))
+        } else {
+            WC("is not connected");
+        }
+    },
+    teszt3: (core) => {
+        if (core.waifucloud.connection != undefined) {
+            core.waifucloud.connection.sendUTF(JSON.stringify({
+                name: 'save',
+                job_id: 'teszt3',
+            }))
+        } else {
+            WC("is not connected");
         }
     }
 };

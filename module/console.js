@@ -79,8 +79,14 @@ module.exports = function (core) {
                     "status": "online",
                 });
                 console.log('Presence: online');
+            } else if (cmd == 'waifuconnect') {
+                reqreload('./waifucloud.js').connect(core);
             } else if (cmd == 'teszt') {
                 reqreload('./waifucloud.js').teszt(core);
+            } else if (cmd == 'teszt2') {
+                reqreload('./waifucloud.js').teszt2(core);
+            } else if (cmd == 'teszt3') {
+                reqreload('./waifucloud.js').teszt3(core);
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
