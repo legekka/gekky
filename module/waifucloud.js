@@ -68,7 +68,7 @@ module.exports = {
             core.waifucloud.connection.sendUTF(JSON.stringify({
                 name: 'add_post',
                 job_id: 'teszt2',
-                post: fs.readFileSync('../tesztpost.json').toString()
+                post: JSON.parse(fs.readFileSync('../tesztpost.json').toString())
             }))
         } else {
             WC("is not connected");
