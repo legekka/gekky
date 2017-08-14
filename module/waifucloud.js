@@ -113,7 +113,7 @@ module.exports = {
                                 message.channel.send({
                                     embed: {
                                         "title": "WaifuCloud",
-                                        "description": "**Post Link:** " + post.url,
+                                        "description": "**Post Link:** " + post.url + "\n**Tags:** " + post.tags,
                                         "image": {
                                             "url": converted.attachments.first().url
                                         },
