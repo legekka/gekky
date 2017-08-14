@@ -87,6 +87,8 @@ module.exports = function (core) {
                 reqreload('./waifucloud.js').teszt2(core);
             } else if (cmd == 'teszt3') {
                 reqreload('./waifucloud.js').teszt3(core);
+            } else if (cmd == 'teszt4') {
+                reqreload('./waifucloud.js').teszt4(core);
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');

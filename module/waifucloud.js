@@ -54,38 +54,40 @@ module.exports = {
         }
     },
     teszt: (core) => {
-        if (core.waifucloud.connection != undefined) {
-            core.waifucloud.connection.sendUTF(JSON.stringify({
-                name: 'data_count',
-                job_id: 'teszt'
-            }))
-        } else {
-            WC("is not connected");
-        }
+        sendCommand(core, {
+            name: 'data_count',
+            job_id: 'teszt'
+        })
     },
     teszt2: (core) => {
-        if (core.waifucloud.connection != undefined) {
-            core.waifucloud.connection.sendUTF(JSON.stringify({
-                name: 'add_post',
-                job_id: 'teszt2',
-                post: JSON.parse(fs.readFileSync('../tesztpost.json').toString().trim())
-            }))
-        } else {
-            WC("is not connected");
-        }
+        sendCommand(core, {
+            name: 'add_post',
+            post: JSON.parse(fs.readFileSync('../tesztpost.json').toString().trim()),
+            job_id: 'teszt2'
+        });
     },
     teszt3: (core) => {
-        if (core.waifucloud.connection != undefined) {
-            core.waifucloud.connection.sendUTF(JSON.stringify({
-                name: 'save',
-                job_id: 'teszt3',
-            }))
-        } else {
-            WC("is not connected");
-        }
+        sendCommand(core, {
+            name: 'save',
+            job_id: 'teszt3',
+        });
+    },
+    teszt4: (core) => {
+        sendCommand(core, {
+            name: 'searchfilepaths',
+            mode: 'all',
+            job_id: 'teszt4'
+        });
     }
 };
 
+function sendCommand(core, commandObj) {
+    if (core.waifucloud.connection != undefined) {
+        core.waifucloud.connection.sendUTF(JSON.stringify(commandObj));
+    } else {
+        WC("is not connected");
+    }
+}
 
 function WC(string) {
     return console.log(c.cyan('[WaifuCloud] ') + string);
