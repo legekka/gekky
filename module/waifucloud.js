@@ -40,8 +40,6 @@ module.exports = {
             "username": username,
             "password": password
         }));
-
-        return core.waifucloud.client;
     },
     teszt: (core) => {
         if (core.waifucloud.connection != undefined) {
