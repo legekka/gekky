@@ -8,7 +8,7 @@ var reqreload = require('./reqreload.js');
 
 var username = "gekky";
 var password = fs.readFileSync("D:/waifucloud/waifucloud/password.txt").toString().trim();
-var serverip = 'ws://localhost:4243/';
+var serverip = 'ws://127.0.0.1:4243/';
 
 module.exports = {
     start: (core) => {

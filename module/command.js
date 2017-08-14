@@ -185,8 +185,8 @@ module.exports = (core, message, callback) => {
             if (lower.startsWith(cmdpref + 'to')) {
                 // !to|osu irc címzett váltás
                 message.delete();
-                core.irc_channel = message.content.substr(cmdpref.length + 3);
-                message.channel.send('[IRC] Címzett: `' + core.irc_channel + '`');
+                core.osuirc.irc_channel = message.content.substr(cmdpref.length + 3);
+                message.channel.send('[IRC] Címzett: `' + core.osuirc.irc_channel + '`');
             } else {
                 message.delete();
                 var text = message.content;
