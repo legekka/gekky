@@ -33,9 +33,10 @@ module.exports = {
             });
 
             core.waifucloud.connection.on('close', function () {
-                WC(' disconnected');
+                WC('disconnected');
             });
         });
+        console.log(core.waifucloud.client);
         core.waifucloud.client.connect(serverip, 'echo-protocol', JSON.stringify({
             "username": username,
             "password": password
