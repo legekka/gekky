@@ -80,7 +80,7 @@ module.exports = function (core) {
                 });
                 console.log('Presence: online');
             } else if (cmd == 'teszt') {
-                reqreload('./waifucloud.js').teszt();
+                reqreload('./waifucloud.js').teszt(core);
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
