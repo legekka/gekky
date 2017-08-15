@@ -65,7 +65,7 @@ var core = {
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
     if (core.bot.channels.get(core.ch.gekkyerrorlog) != undefined) {
-        core.bot.channels.get(core.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
+        if (error.message.startsWith('Heartbeat missed.')) {
             core.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
@@ -78,7 +78,22 @@ process.on('uncaughtException', function (error) {
                     process.exit(3);
                 }
             })
-        });
+        } else {
+            core.bot.channels.get(core.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
+                core.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
+                    if (core.irc_online) {
+                        reqreload('./osuirc.js').stop(core);
+                        setTimeout(() => {
+                            core.bot.destroy().then(() => {
+                                process.exit(3);
+                            });
+                        }, 2000);
+                    } else {
+                        process.exit(3);
+                    }
+                })
+            });
+        }
     } else {
         process.exit(3);
     }
@@ -99,7 +114,7 @@ core.bot.on('ready', function () {
         if (core.autorun.osutrack) { core.osutrack = require('./module/osutrack.js').startChecker(core); }
         if (core.autorun.heartbeat) { require('./module/heartbeat.js').start(core); }
         core.bot.channels.get(core.ch.main).send('[online]');
-        console.log(c.gray('[Discord]') +' online');
+        console.log(c.gray('[Discord]') + ' online');
     }
     core.bot.user.setStatus("online");
     reqreload('./updater.js').ver((motd) => {
