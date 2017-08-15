@@ -2,14 +2,16 @@
 // core of the bot
 
 
-const Discord = require('discord.js');
+var Discord = require('discord.js');
 var reqreload = require('./module/reqreload.js');
-const fs = require('fs');
+var fs = require('fs');
+var c = require('chalk');
 
 var core = {
     'autorun': {
         'irc': true,
         'osutrack': true,
+        'heartbeat': true
     },
     'bot': new Discord.Client(),
     'ready': false,
@@ -52,8 +54,12 @@ var core = {
         "client": undefined,
         "connection": undefined,
         "waifuEmitter": undefined
+    },
+    // heartbeat interval
+    'heartbeat': {
+        'interval': undefined,
+        'state': undefined
     }
-
 }
 
 process.on('uncaughtException', function (error) {
@@ -91,8 +97,9 @@ core.bot.on('ready', function () {
         core.ready = true;
         if (core.autorun.irc) { core.client = require('./module/osuirc.js').start(core); }
         if (core.autorun.osutrack) { core.osutrack = require('./module/osutrack.js').startChecker(core); }
+        if (core.autorun.heartbeat) { require('./module/heartbeat.js').start(core); }
         core.bot.channels.get(core.ch.main).send('[online]');
-        console.log('[Discord] online');
+        console.log(c.gray('[Discord]') +' online');
     }
     core.bot.user.setStatus("online");
     reqreload('./updater.js').ver((motd) => {
