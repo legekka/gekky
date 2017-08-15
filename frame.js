@@ -3,23 +3,15 @@
 // includes updater system
 
 const fs = require('fs');
-const Discord = require('discord.js');
 const c = require('chalk');
 var exec = require('child_process').exec;
-var bot = new Discord.Client();
 var reqreload = require('./module/reqreload.js');
-
-var motd = '[Frame]';
 
 var isStarted = false;  // events
 var Reloading = false;
 var Starting = true;
 
-var connected = false;  // is the frame ready
-
 var token = fs.readFileSync('../profile.txt').toString();
-
-var main = '281188840084078594';
 
 var gekky;  // The child process
 
@@ -29,41 +21,6 @@ var connection;  // for the WS connection
 var WSconnected = false;  // is WS client connected 
 
 setupUpdater();
-
-bot.login(token);
-
-bot.on('ready', function () {
-    connected = true;
-    if (!isStarted) {
-        bot.channels.get(main).send('[Frame] online');
-        log(c.red('[Frame]') + ' online');
-        bot.user.setStatus("dnd");
-        bot.user.setGame(motd);
-    }
-});
-
-bot.on('message', (message) => {
-    if (message.channel.id == main && (message.author.id == '143399021740818432' || message.author.id == bot.user.id)) {
-        var lower = message.content.toLowerCase();
-        if (lower == '!start') {
-            if (!isStarted) {
-                log(c.red('[Frame]') + ' Starting gekky...');
-                bot.channels.get(main).send('[Frame] Starting gekky...');
-                Starting = true;
-            } else {
-                log(c.red('[Frame]') + ' Gekky is already running...');
-                bot.channels.get(main).send('[Frame] Gekky is already running...');
-            }
-        } else if ((lower == '!reload' || lower == '!close' || lower == '!stop') && !isStarted) {
-            log(c.red('[Frame]') + ' Gekky is not running...');
-            bot.channels.get(main).send('[Frame] Gekky is not running...');
-        }
-        if (lower == '!isstarted') {
-            isStarted = !isStarted;
-            bot.channels.get(main).send('[Frame] isStarted = ' + isStarted);
-        }
-    }
-})
 
 function frame() {
     isStarted = true;
@@ -75,23 +32,16 @@ function frame() {
         if (code == 4) {
             isStarted = false;
             log(c.red('[Frame]') + ' Gekky has been stopped...');
-            bot.channels.get(main).send('[Frame] Gekky has been stopped...');
-            bot.user.setPresence({
-                "status": "dnd",
-            });
-            bot.user.setGame(motd);
         }
         if (code == 2) {
             isStarted = false;
             Reloading = true;
             log(c.red('[Frame]') + ' Reloading Gekky...');
-            bot.channels.get(main).send('[Frame] Reloading Gekky...');
         }
         if (code == 3) {
             isStarted = false;
             Reloading = true;
             log(c.red('[Frame]') + ' Fatal error, restarting Gekky...');
-            bot.channels.get(main).send('[Frame] Fatal error, restarting Gekky...')
         }
     });
 }
@@ -114,22 +64,15 @@ function setupUpdater() {
         if (response.update) {
             reqreload('./updater.js').fullver((resp) => {
                 log(c.green('[UPDATING]') + ' => ' + c.green(resp.ver));
-                if (connected) {
-                    bot.channels.get(main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
-                    bot.user.setGame(resp.ver);
-                }
                 if (response.full) {
                     log(c.green('[UPDATER] ') + 'frame.js updated, full reload needed.');
                     if (connected) {
                         if (isStarted) {
                             gekky.stdin.write('close');
                         }
-                        bot.channels.get(main).send('[Frame] Reloading frame...').then(() => {
-                            bot.destroy().then(() => {
-                                log(c.red('[Frame]') + ' Reloading frame...');
-                                process.exit(2);
-                            });
-                        });
+                        log(c.red('[Frame]') + ' Reloading frame...');
+                        process.exit(2);
+
                     }
                 } else if (response.core) {
                     if (isStarted) {
@@ -169,7 +112,6 @@ function executeCommand(d, WSmode) {
         if (cmd == '!start') {
             if (!isStarted) {
                 log(c.red('[Frame]') + ' Starting gekky...', WSmode);
-                bot.channels.get(main).send('[Frame] Starting gekky...');
                 Starting = true;
             } else {
                 log(c.red('[Frame]') + ' Gekky is already running...', WSmode);
@@ -177,26 +119,18 @@ function executeCommand(d, WSmode) {
         } else if (cmd == '!isstarted') {
             isStarted = !isStarted;
             log(c.red('[Frame]') + ' isStarted = ' + isStarted, WSmode);
-        } else if (cmd == '!close') {
+        } else if (cmd == '!close-frame') {
             if (isStarted) {
                 gekky.stdin.write('close');
             }
-            bot.channels.get(main).send('[Frame] Stopping frame...').then(() => {
-                bot.destroy().then(() => {
-                    log(c.red('[Frame]') + ' Stopping frame...', WSmode);
-                    process.exit(3);
-                });
-            });
-        } else if (cmd == '!reload') {
+            log(c.red('[Frame]') + ' Stopping frame...', WSmode);
+            process.exit(3);
+        } else if (cmd == '!reload-frame') {
             if (isStarted) {
                 gekky.stdin.write('close');
             }
-            bot.channels.get(main).send('[Frame] Reloading frame...').then(() => {
-                bot.destroy().then(() => {
-                    log(c.red('[Frame]') + ' Reloading frame...', WSmode);
-                    process.exit(2);
-                });
-            });
+            log(c.red('[Frame]') + ' Reloading frame...', WSmode);
+            process.exit(2);
         }
         else {
             log("[Frame] Undefined command: '" + cmd + "'", WSmode);
