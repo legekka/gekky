@@ -91,6 +91,10 @@ module.exports = function (core) {
                 reqreload('./waifucloud.js').searchAllFilePath(core);
             } else if (cmd == 'waifu:stats') {
                 reqreload('./waifucloud.js').stats(core);
+            } else if (cmd == 'update') {
+                reqreload('./updater.js').ver((motd) => {
+                    core.bot.user.setGame(motd);
+                });
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');

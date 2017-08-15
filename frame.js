@@ -84,6 +84,8 @@ function setupUpdater() {
                         log(c.green('[UPDATER] ') + 'osuirc.js updated, attempting to reload...');
                         gekky.stdin.write('ircreload');
                     }
+                } else {
+                    gekky.stdin.write('update');
                 }
             });
         }
