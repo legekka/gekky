@@ -85,7 +85,7 @@ function setupUpdater() {
                         gekky.stdin.write('ircreload');
                     }
                 } else {
-                    gekky.stdin.write('update-frame ' + JSON.stringify(response.data));
+                    gekky.stdin.write('update-frame ' + response.data);
                 }
             });
         }

@@ -96,7 +96,7 @@ module.exports = function (core) {
                     core.bot.user.setGame(motd);
                 });
             } else if (cmd.startsWith('update-frame')) {
-                var data = JSON.parse(cmd.substr(13));
+                var data = cmd.substr(13);
                 reqreload('./updater.js').fullver((resp) => {
                     core.bot.user.setGame(resp.ver);
                     core.bot.channels.get(core.ch.main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + data + '```');
