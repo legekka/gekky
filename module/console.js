@@ -95,6 +95,11 @@ module.exports = function (core) {
                 reqreload('./updater.js').ver((motd) => {
                     core.bot.user.setGame(motd);
                 });
+            } else if (cmd == 'update-frame') {
+                reqreload('./updater.js').fullver((motd) => {
+                    core.bot.user.setGame(motd);
+                    core.bot.channels.get(core.ch.main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + response.data + '```');
+                });
             }
             /* else if (cmd == 'teszt2') {
                 require('./yrexia.js').teszt(core, '!location', 'HoloPadQHD');
