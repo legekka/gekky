@@ -15,7 +15,7 @@ module.exports = {
                     } else {
                         core.heartbeat.state = !core.heartbeat.state;
                     }
-                }, 10000)
+                }, 15000)
             } else {
                 core.bot.guilds.get('281188840084078594').members.get('267741038230110210').addRole(role);
                 setTimeout(() => {
@@ -25,9 +25,9 @@ module.exports = {
                     else {
                         core.heartbeat.state = !core.heartbeat.state;
                     }
-                }, 10000)
+                }, 15000)
             }
-        }, 30000);
+        }, 20000);
         console.log(c.magenta('[Heartbeat]') + ' started');
     }
 }
