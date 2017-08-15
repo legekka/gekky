@@ -11,7 +11,7 @@ module.exports = {
                 core.bot.guilds.get('281188840084078594').members.get('267741038230110210').removeRole(role);
                 setTimeout(() => {
                     if (core.heartbeat.state == (core.bot.guilds.get('281188840084078594').members.get('267741038230110210')._roles.indexOf(role) >= 0)) {
-                        throw Error('Heartbeat missed.');
+                        throw Error('Heartbeat missed. ' + require('./getTime.js')());
                     } else {
                         core.heartbeat.state = !core.heartbeat.state;
                     }
@@ -20,7 +20,7 @@ module.exports = {
                 core.bot.guilds.get('281188840084078594').members.get('267741038230110210').addRole(role);
                 setTimeout(() => {
                     if (core.heartbeat.state == (core.bot.guilds.get('281188840084078594').members.get('267741038230110210')._roles.indexOf(role) >= 0)) {
-                        throw Error('Heartbeat missed.'); 
+                        throw Error('Heartbeat missed. ' + require('./getTime.js')()); 
                     }
                     else {
                         core.heartbeat.state = !core.heartbeat.state;
