@@ -40,7 +40,7 @@ module.exports = {
 }
 
 function saveScore(playcard) {
-    fs.appendFileSync(playpath,JSON.stringify(playcard)+'\n');
+    fs.appendFileSync(playpath, JSON.stringify(playcard) + '\n');
 }
 
 function checkForNewScores(core) {
@@ -65,9 +65,9 @@ function checkForNewScores(core) {
                                             reqreload('./webpconvert.js').file(filePath, (filep) => {
                                                 var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
                                                 if (ppvalue > 300) {
-                                                    core.bot.channels.get(core.ch.hun_scores).send({files:[filep]});
+                                                    core.bot.channels.get(core.ch.hun_scores).send({ files: [filep] });
                                                 } else {
-                                                    core.bot.channels.get(core.ch.hun_scorespam).send({files:[filep]});
+                                                    core.bot.channels.get(core.ch.hun_scorespam).send({ files: [filep] });
                                                 }
                                                 saveScore(playcard);
                                                 console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);
@@ -224,18 +224,33 @@ function createPlayCard(score, callback) {
     var beatmapdone = false;
     osu.getBeatmap(score.beatmap_id, (err, output) => {
         if (output != null) {
-            playcard.map.background = 'https://b.ppy.sh/thumb/' + output.beatmapset_id + 'l.jpg'
-            playcard.map.title = output.artist + ' - ' + output.title;
-            playcard.map.diff = '[' + output.version + ']';
-            playcard.map.length = timeformat(output.total_length);
-            playcard.map.bpm = output.bpm + 'bpm';
-            playcard.map.sdiff = sdiffformat(output.difficultyrating);
-            playcard.map.maxcombo = output.max_combo + 'x';
-            playcard.map.cs = 'cs' + output.diff_size;
-            playcard.map.ar = 'ar' + output.diff_approach;
-            playcard.map.od = 'od' + output.diff_overall;
-            playcard.map.hp = 'hp' + output.diff_drain;
-            beatmapdone = true;
+            if (output.creator.toString().toLowerCase() != "monstrata") {
+                playcard.map.background = 'https://b.ppy.sh/thumb/' + output.beatmapset_id + 'l.jpg'
+                playcard.map.title = output.artist + ' - ' + output.title;
+                playcard.map.diff = '[' + output.version + ']';
+                playcard.map.length = timeformat(output.total_length);
+                playcard.map.bpm = output.bpm + 'bpm';
+                playcard.map.sdiff = sdiffformat(output.difficultyrating);
+                playcard.map.maxcombo = output.max_combo + 'x';
+                playcard.map.cs = 'cs' + output.diff_size;
+                playcard.map.ar = 'ar' + output.diff_approach;
+                playcard.map.od = 'od' + output.diff_overall;
+                playcard.map.hp = 'hp' + output.diff_drain;
+                beatmapdone = true;
+            } else {
+                playcard.map.background = 'Err'
+                playcard.map.title = 'Err';
+                playcard.map.diff = 'Err';
+                playcard.map.length = 'Err';
+                playcard.map.bpm = 'Err';
+                playcard.map.sdiff = 'Err';
+                playcard.map.maxcombo = 'Err';
+                playcard.map.cs = 'Err';
+                playcard.map.ar = 'Err';
+                playcard.map.od = 'Err';
+                playcard.map.hp = 'Err';
+                beatmapdone = true;
+            }
         } else {
             playcard.map.background = 'Err'
             playcard.map.title = 'Err';
