@@ -48,7 +48,7 @@ function checkForNewScores(core) {
     for (i in userlist) {
         osu.getUserRecent(userlist[i], (err, output) => {
             if (err) {
-                console.log(err);
+                //console.log(err);
             }
             if (output != null) {
                 if (output[0] != undefined) {
