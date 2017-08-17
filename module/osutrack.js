@@ -69,7 +69,7 @@ function checkForNewScores(core) {
                                                 } else {
                                                     core.bot.channels.get(core.ch.hun_scorespam).send({ files: [filep] });
                                                 }
-                                                if (pp value >= 200) {
+                                                if (ppvalue >= 200) {
                                                     core.bot.channels.get(core.ch.osuscores).send({ files: [filep] });
                                                 } 
                                                 saveScore(playcard);
