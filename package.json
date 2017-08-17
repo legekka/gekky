@@ -17,7 +17,6 @@
         "node-opus": "^0.2.6",
         "opusscript": "0.0.3",
         "osu-api": ">=0.0.3",
-        "uws": "^0.14.1",
         "weather-js": ">=2.0.0",
         "webp-converter": ">=2.1.6",
         "websocket": ">=1.0.24"

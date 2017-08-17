@@ -69,6 +69,7 @@ function checkForNewScores(core) {
                                                 } else {
                                                     core.bot.channels.get(core.ch.hun_scorespam).send({ files: [filep] });
                                                 }
+                                                core.bot.channels.get(core.ch.osuscores).send({ files: [filep] });
                                                 saveScore(playcard);
                                                 console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);
                                             });

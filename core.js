@@ -28,6 +28,7 @@ var core = {
         'hun_scores': '261144312387993610',
         'hun_scorespam': '319115815783759872',
         'current': '281188840084078594',
+        'osuscores': '347807562202218498'
     },
     'servers': [],
     'picker': {
