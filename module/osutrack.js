@@ -134,7 +134,7 @@ function generateTop20list() {
                 counter++;
                 if (counter <= 20) {
                     var str = text[i].substr(text[i].indexOf('/u/') + 3, text[i].length);
-                    str = str.substr(0, str.indexOf("'"));
+                    str = str.substr(0, str.indexOf('"'));
                     if (counter == 20) {
                         fs.appendFileSync(userlistpath, str);
                     } else {
