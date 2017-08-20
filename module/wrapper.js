@@ -35,7 +35,7 @@ module.exports = {
                     filename: db[i].filename,
                     filepath: db[i].filepath
                 }
-                WR('Sending post: ' + db[i].url);
+                WR('Sending post: ' + WaifuCloudPost.url);
                 reqreload('./waifucloud.js').addPost(core, WaifuCloudPost);
             }
         }

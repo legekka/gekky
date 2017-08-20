@@ -86,8 +86,8 @@ module.exports = {
             job_id: post.filename
         });
         core.waifucloud.waifuEmitter.once('message', (response) => {
-            if (response.error) {
-                WC(response);
+            if (response.error == true) {
+                //WC(response.response);
             } else {
                 WC('post succesfully added.');
             }
@@ -128,12 +128,15 @@ module.exports = {
                             message.channel.send({
                                 embed: {
                                     "title": "WaifuCloud",
-                                    "description": "**Post Link:** " + post.url + "\n**Tags:** " + post.tags,
+                                    "description": "**Post Link:** " + post.url,
                                     "image": {
                                         "url": converted.attachments.first().url
                                     },
                                     "url": post.fileurl,
-                                    "color": message.member.highestRole.color
+                                    "color": message.member.highestRole.color,
+                                    "footer" : {
+                                        "text": "Tags: " + formatTags(post.tags)
+                                    }
                                 }
                             });
                         });
@@ -164,6 +167,16 @@ module.exports = {
     }
 };
 
+
+function formatTags(tags) {
+    var str = tags[0];
+    var i = 1;
+    while (i < tags.length) {
+        str = str + ' ' + tags[i];
+        i++;
+    }
+    return str;
+}
 
 function sendCommand(core, commandObj) {
     if (core.waifucloud.connection != undefined) {
