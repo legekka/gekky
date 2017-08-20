@@ -3,6 +3,7 @@
 
 var exec = require('child_process').exec;
 var reqreload = require('./reqreload.js');
+var fs = require('fs');
 var c = require('chalk');
 
 var wrapper;
@@ -22,6 +23,22 @@ module.exports = {
                 WR(data);
             }
         });
+    },
+    sync: (core) => {
+        WR('Syncing...');
+        var db = JSON.parse(fs.readFileSync('../wrapper/sankakudb.json'));
+        for (i in db) {
+            if (db[i].filename != "") {
+                var WaifuCloudPost = {
+                    url: 'https://chan.sankakucomplex.com/post/show/' + db[i].id,
+                    tags: db[i].tags,
+                    filename: db[i].filename,
+                    filepath: db[i].filepath
+                }
+                WR('Sending post: ' + db[i].url);
+                reqreload('./waifucloud.js').addPost(core, WaifuCloudPost);
+            }
+        }
     }
 }
 

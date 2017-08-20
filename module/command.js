@@ -197,6 +197,8 @@ module.exports = (core, message, callback) => {
             var mode = lower.split(' ')[1];
             var tag = lower.split(' ')[2];
             reqreload('./wrapper.js').wrap(core, mode, tag);
+        } else if (lower.startsWith(cmdpref + 'waifusync')) {
+            reqreload('./wrapper.js').sync(core);
         }
 
         // üzenetküldés
