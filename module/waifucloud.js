@@ -33,6 +33,8 @@ module.exports = {
                     } else if (resp.name == 'stats') {
                         WC('STATS');
                         core.waifucloud.waifuEmitter.emit('stats', resp.response);
+                    } else {
+                        core.waifucloud.waifuEmitter.emit('message', resp);
                     }
                 }
             });
@@ -77,6 +79,20 @@ module.exports = {
             job_id: 'teszt2'
         });
     },
+    addPost: (core, post) => {
+        sendCommand(core, {
+            name: 'add_post',
+            post: post,
+            job_id: post.filename
+        });
+        core.waifucloud.waifuEmitter.once('message', (response) => {
+            if (response.error) {
+                WC(response);
+            } else {
+                WC('post succesfully added.');
+            }
+        });
+    },
     save: (core) => {
         sendCommand(core, {
             name: 'save',
@@ -108,19 +124,17 @@ module.exports = {
                 if (message != undefined) {
                     reqreload('./webpconvert.js').file(post.filepath, (converted_path) => {
                         console.log(converted_path);
-                        reqreload('./upload.js').upload(post.filepath, (original_url) => {
-                            core.bot.channels.get(core.ch.gekkylog).send({ files: [converted_path] }).then(converted => {
-                                message.channel.send({
-                                    embed: {
-                                        "title": "WaifuCloud",
-                                        "description": "**Post Link:** " + post.url + "\n**Tags:** " + post.tags,
-                                        "image": {
-                                            "url": converted.attachments.first().url
-                                        },
-                                        "url": original_url,
-                                        "color": message.member.highestRole.color
-                                    }
-                                });
+                        core.bot.channels.get(core.ch.gekkylog).send({ files: [converted_path] }).then(converted => {
+                            message.channel.send({
+                                embed: {
+                                    "title": "WaifuCloud",
+                                    "description": "**Post Link:** " + post.url + "\n**Tags:** " + post.tags,
+                                    "image": {
+                                        "url": converted.attachments.first().url
+                                    },
+                                    "url": post.fileurl,
+                                    "color": message.member.highestRole.color
+                                }
                             });
                         });
                     });

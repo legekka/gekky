@@ -48,8 +48,9 @@ function httpGet(url, filename, callback) {
 module.exports = {
     file: (filePath, callback) => {
         var fpwe = filePath.substr(0, filePath.length - 3);
-        webp.cwebp(filePath, fpwe + 'webp', '-q 100', () => {
-            return callback(fpwe + 'webp');
+        var filename = fpwe.split('/')[fpwe.split('/').length - 1];
+        webp.cwebp(filePath, path + filename + 'webp', '-q 100', () => {
+            return callback(path + filename + 'webp');
         });
     },
 
@@ -67,23 +68,25 @@ module.exports = {
                     if (extensions.indexOf(ext) >= 0) {
                         httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
-                                core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.' + ext]}).then((fileoriginalmsg) => {
-                                    core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.webp']}).then((filemsg) => {
+                                core.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.' + ext] }).then((fileoriginalmsg) => {
+                                    core.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
                                         if (message.channel.type != 'dm') {
                                             if (message.channel.permissionsFor(core.bot.user).hasPermission("MANAGE_MESSAGES")) {
                                                 message.delete();
                                                 var str = '';
                                                 if (message.content != '<attachment>') { str = message.content; }
                                                 //message.channel.send('`' + (message.member != null ? message.member.displayName : message.author.username) + '` ' + str, { file: filemsg.attachments.first().url });
-                                                message.channel.send({embed:{
-                                                    "title": "Original Image",
-                                                    "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
-                                                    "image": {
-                                                        "url": filemsg.attachments.first().url
-                                                    },
-                                                    "url": fileoriginalmsg.attachments.first().url,
-                                                    "color": message.member.highestRole.color
-                                                }}
+                                                message.channel.send({
+                                                    embed: {
+                                                        "title": "Original Image",
+                                                        "description": (message.member != null ? '`' + message.member.displayName + '`' : '`' + message.author.username + '`') + (str != '' ? " " + str : ""),
+                                                        "image": {
+                                                            "url": filemsg.attachments.first().url
+                                                        },
+                                                        "url": fileoriginalmsg.attachments.first().url,
+                                                        "color": message.member.highestRole.color
+                                                    }
+                                                }
                                                 );
                                                 /*message.channel.send({embed: {
                                                     title: "",
@@ -112,7 +115,7 @@ module.exports = {
                         if (url.indexOf('https') >= 0) {
                             httpsGet(url, message.id + '.' + ext, () => {
                                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                    core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.webp']}).then((filemsg) => {
+                                    core.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
                                         core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                     });
                                 });
@@ -120,7 +123,7 @@ module.exports = {
                         } else {
                             httpGet(url, message.id + '.' + ext, () => {
                                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                    core.bot.channels.get(core.ch.gekkylog).send({files:[path + message.id + '.webp']}).then((filemsg) => {
+                                    core.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
                                         core.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                     });
                                 });

@@ -192,6 +192,13 @@ module.exports = (core, message, callback) => {
             // !ircstop|osu irc leállítása
             core.client = reqreload('./osuirc.js').stop(core, message);
         }
+        // WaifuCloud sitewrap
+        else if (lower.startsWith(cmdpref + 'waifuwrap')) {
+            var mode = lower.split(' ')[1];
+            var tag = lower.split(' ')[2];
+            reqreload('./wrapper.js').wrap(core, mode, tag);
+        }
+
         // üzenetküldés
         else if (core.client != undefined && message.channel.id == core.ch.osuirc) {
             if (lower.startsWith(cmdpref + 'to')) {
