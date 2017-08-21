@@ -85,19 +85,18 @@ module.exports = {
             post: post,
             job_id: post.filename
         });
-        core.waifucloud.waifuEmitter.once('message', (response) => {
-            if (response.error == true) {
-                //WC(response.response);
-            } else {
-                WC('post succesfully added.');
-            }
-        });
     },
     save: (core) => {
         sendCommand(core, {
             name: 'save',
             job_id: 'teszt3',
         });
+    },
+    reloadDB: (core) => {
+        sendCommand(core, {
+            name: 'reload',
+            job_id: 'tesztReload'
+        })
     },
     searchAllFilePath: (core) => {
         sendCommand(core, {

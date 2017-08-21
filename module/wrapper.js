@@ -27,6 +27,9 @@ module.exports = {
     sync: (core) => {
         WR('Syncing...');
         var db = JSON.parse(fs.readFileSync('../wrapper/sankakudb.json'));
+        var next = 0;
+        var divider = 10;
+        var k = 1;
         for (i in db) {
             if (db[i].filename != "") {
                 var WaifuCloudPost = {
@@ -35,10 +38,15 @@ module.exports = {
                     filename: db[i].filename,
                     filepath: db[i].filepath
                 }
-                WR('Sending post: ' + WaifuCloudPost.url);
                 reqreload('./waifucloud.js').addPost(core, WaifuCloudPost);
             }
+            if (i > next) {
+                WR(Math.round(i / db.length * 100) + '% complete');
+                next = db.length / divider * k;
+                k++;
+            }
         }
+        WR('Sync complete!');
     }
 }
 
