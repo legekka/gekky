@@ -109,6 +109,7 @@ module.exports = function (core) {
             }*/
 
             // HAGYD UTOLSÓNAK!!!
+            // Miért?
             else if (cmd.startsWith('motd')) {
                 core.bot.user.setGame(d.toString().trim().substr(5));
                 console.log('New motd: ' + d.toString().trim().substr(5));

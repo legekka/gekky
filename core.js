@@ -11,7 +11,11 @@ var core = {
     'autorun': {
         'irc': true,
         'osutrack': true,
-        'heartbeat': true
+        'heartbeat': true,
+        'cachemanager': true,
+        'yrexia': true,
+        'waifucloud': true,
+        'memwatch': true
     },
     'bot': new Discord.Client(),
     'ready': false,
@@ -100,12 +104,22 @@ process.on('uncaughtException', function (error) {
     }
 })
 
+//starting default tasks
 
 require('./module/console.js')(core);
-require('./module/cachemanager.js').start(core);
-require('./module/yrexia.js').start(core);
-require('./module/waifucloud.js').start(core);
 
+if (core.autorun.cachemanager) {
+    require('./module/cachemanager.js').start(core);
+}
+if (core.autorun.yrexia) {
+    require('./module/yrexia.js').start(core);
+}
+if (core.autorun.waifucloud) {
+    require('./module/waifucloud.js').start(core);
+}
+if (core.autorun.memwatch) {
+    require('./module/memwatch.js').start(core);
+}
 core.bot.login(core.token);
 
 core.bot.on('ready', function () {
