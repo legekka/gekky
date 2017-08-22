@@ -70,14 +70,10 @@ module.exports = function (core) {
             } else if (cmd == 'go') {
                 reqreload('./channelpicker.js').go(core);
             } else if (cmd == 'dnd') {
-                core.bot.user.setPresence({
-                    "status": "dnd",
-                });
+                core.bot.user.setStatus("dnd");
                 console.log('Presence: dnd');
             } else if (cmd == 'online') {
-                core.bot.user.setPresence({
-                    "status": "online",
-                });
+                core.bot.user.setStatus("online");
                 console.log('Presence: online');
             } else if (cmd == 'waifu:connect') {
                 reqreload('./waifucloud.js').connect(core);
@@ -110,6 +106,7 @@ module.exports = function (core) {
 
             // HAGYD UTOLSÓNAK!!!
             // Miért?
+            // Idk.
             else if (cmd.startsWith('motd')) {
                 core.bot.user.setGame(d.toString().trim().substr(5));
                 console.log('New motd: ' + d.toString().trim().substr(5));

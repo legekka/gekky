@@ -20,8 +20,10 @@ var core = {
     'bot': new Discord.Client(),
     'ready': false,
     'cachelimit': 50,
-    'tsun': true,       // tsundere mode
-    'cmdpref': fs.readFileSync('../pref.txt').toString(),     // default command prefix
+
+
+
+    'gsettings': reqreload('./guilds.js'),
     'token': fs.readFileSync('../profile.txt').toString(),
     'ch': {
         'main': '281188840084078594',
@@ -40,7 +42,7 @@ var core = {
         'id': '',
         'channel': false
     },
-    'deadlist': [],
+    
     // osu!irc part
     'osuirc': {
         'client': undefined,
@@ -148,10 +150,10 @@ core.bot.on('message', (message) => {
     var is_a_command = false;
 
     // commands with prefix
-    reqreload('./command.js')(core, message, resp => {
+    reqreload('./dcommand.js')(core, message, resp => {
         is_a_command = resp.is_a_command;
-        core.tsun = resp.tsun;
-        core.cmdpref = resp.cmdpref;
+        core.gsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
+        core.gsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, resp.cmdpref);
     });
 
     // message logger
@@ -163,7 +165,8 @@ core.bot.on('message', (message) => {
     reqreload('./kill.js').kill(core, message);
 
     // kilépés
-    if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == '!stop' || message.content.toLowerCase() == '!close')) {
+    var prefix = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+    if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
         if (core.irc_online) {
             reqreload('./osuirc.js').stop(core, message);
             setTimeout(() => {
@@ -177,7 +180,7 @@ core.bot.on('message', (message) => {
             });
         }
     }
-    if (message.author.id == '143399021740818432' && message.content.toLowerCase() == '!reload') {
+    if (message.author.id == '143399021740818432' && message.content.toLowerCase() == `${prefix}reload`) {
         if (core.irc_online) {
             reqreload('./osuirc.js').stop(core, message);
             setTimeout(() => {

@@ -1,4 +1,5 @@
 // nyugi csak egy vicc
+var reqreload = require('./reqreload.js');
 
 function getID(message) {
     var id = message.content.split('@')[1].split('>')[0];
@@ -11,16 +12,16 @@ function getID(message) {
 
 module.exports = {
     kill: (core, message) => {
-        if (core.deadlist.indexOf(message.author.id) >= 0) {
+        if (core.gsettings.deadContains(message.guild ? message.guild.id : message.channel.id, message.author.id)) {
             message.delete();
         }
     },
     adddeadlist: (core, message) => {
-        core.deadlist.push(getID(message));
+        core.gsettings.addDead(message.guild ? message.guild.id : message.channel.id, getID(message));
         return core;
     },
     remdeadlist: (core, message) => {
-        core.deadlist.splice(core.deadlist.indexOf(getID(message)));
+        core.gsettings.removeDead(message.guild ? message.guild.id : message.channel.id, getID(message));
         return core;
     }
 }

@@ -51,8 +51,8 @@ function loadDialogs() {
 loadDialogs();
 module.exports = {
     default: (core, message) => {
-        tsun = core.tsun;
-        cmdpref = core.cmdpref;
+        tsun = core.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
+        cmdpref = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
         var lower = message.content.toLowerCase();
         if (lower.indexOf('gekky') >= 0 &&
             message.channel.id != core.ch.gekkylog &&
