@@ -58,7 +58,10 @@ var core = {
     'waifucloud': {
         "client": undefined,
         "connection": undefined,
-        "waifuEmitter": undefined
+        "waifuEmitter": undefined,
+        "sync": undefined,
+        "autoconnect": undefined,
+        //"speed": undefined
     },
     // heartbeat interval
     'heartbeat': {

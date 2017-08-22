@@ -37,5 +37,28 @@ module.exports = {
             }
             memrss = null;
         }, 1000);
+    },
+    stats: (core, message) => {
+        var memrss = process.memoryUsage().rss;
+        memrss = (memrss / 1024 / 1024).toFixed(2);
+        if (message != undefined) {
+            message.channel.send({embed:
+                {
+                    'title': 'Gekky-Status',
+                    'description': 'Uptime: ' + format(process.uptime()) +'\nRam usage: ' + memrss + ' MB'
+                }
+            })
+        }
     }
+}
+
+function format(seconds) {
+    function pad(s) {
+        return (s < 10 ? '0' : '') + s;
+    }
+    var hours = Math.floor(seconds / (60 * 60));
+    var minutes = Math.floor(seconds % (60 * 60) / 60);
+    var seconds = Math.floor(seconds % 60);
+
+    return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
 }

@@ -13,6 +13,11 @@ var serverip = 'ws://127.0.0.1:4243/';
 
 module.exports = {
     start: (core) => {
+        core.waifucloud.autoconnect = setInterval(() => {
+            if (core.waifucloud.connection == undefined) {
+                reqreload('./waifucloud.js').connect(core);
+            }
+        }, 1000);
         core.waifucloud.client = new WebSocketClient();
         core.waifucloud.client.on('connectFailed', function (error) {
             WC('Connect Error: ' + error.toString());
@@ -107,6 +112,7 @@ module.exports = {
     },
     search_tags: (core, mode, tags, message) => {
         WC('image search: ' + tags);
+        //core.waifucloud.speed = new Date()
         sendCommand(core, {
             name: 'search_tags',
             mode: mode,
@@ -114,6 +120,8 @@ module.exports = {
             job_id: 'teszt5'
         });
         core.waifucloud.waifuEmitter.once('post', (err, post) => {
+            //var now = new Date();
+            //var ping = parseDate(now) - parseDate(core.waifucloud.speed);
             if (err) {
                 console.log(post);
                 if (message != undefined) {
@@ -124,6 +132,7 @@ module.exports = {
                     reqreload('./webpconvert.js').file(post.filepath, (converted_path) => {
                         console.log(converted_path);
                         core.bot.channels.get(core.ch.gekkylog).send({ files: [converted_path] }).then(converted => {
+                            //message.channel.send(ping + 'ms');
                             message.channel.send({
                                 embed: {
                                     "title": "WaifuCloud",
@@ -133,7 +142,7 @@ module.exports = {
                                     },
                                     "url": post.fileurl,
                                     "color": message.member.highestRole.color,
-                                    "footer" : {
+                                    "footer": {
                                         "text": "Tags: " + formatTags(post.tags)
                                     }
                                 }
@@ -154,7 +163,7 @@ module.exports = {
                 message.channel.send({
                     embed: {
                         "title": stat.name,
-                        "description": `**Version:** *${stat.version}*\n**GitHub:** *${stat.git}*\n\n**Post count:** *${stat.post_count}*\n**File count:** *${stat.filepath_count}*\n**Database Size:** *${stat.size}*\n**db.json's Size:** *${stat.dbsize}*\n**Uptime:** *${stat.uptime}*`,
+                        "description": `**Version:** *${stat.version}*\n**GitHub:** *${stat.git}*\n\n**Post count:** *${stat.post_count}*\n**File count:** *${stat.filepath_count}*\n**Database Size:** *${stat.size}*\n**db.json's Size:** *${stat.dbsize}*\n**Uptime:** *${stat.uptime}*\n**Ram usage:** *${stat.usage} MB*`,
                         "color": parseInt('7aef34', 16)
                     }
                 })
@@ -163,7 +172,7 @@ module.exports = {
                 console.log(stat);
             }
         });
-    }
+    },
 };
 
 
@@ -187,4 +196,8 @@ function sendCommand(core, commandObj) {
 
 function WC(string) {
     return console.log(c.cyan('[WaifuCloud] ') + string);
+}
+
+function parseDate(date) {
+    return date.getMilliseconds() + date.getSeconds() * 1000 + date.getMinutes() * 60000 + date.getHours() * 3600000 + date.getDate() * 86400000;
 }

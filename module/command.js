@@ -62,14 +62,18 @@ module.exports = (core, message, callback) => {
     } else if (lower.startsWith(cmdpref + 'waifu2x')) {
         // !waifu2x|waifu2x-caffe imageupconvert. !waifu2x <image-url> [BETA]
         require('./yrexia.js').waifu2x(core, message, message.content.split(' ')[1].trim());
-    } else if (lower.startsWith(cmdpref + 'waifucloud')) {
-        // !waifucloud|waifuCloud kép kereső. !waifucloud <tagek>
+    } else if (lower.startsWith(cmdpref + 'waifucloud') || lower.split(' ')[0] == cmdpref + 'waifu') {
+        // !waifucloud|waifuCloud kép kereső. !waifucloud <tagek> vagy !waifu <tagek>
         var tags = lower.split(' ');
         tags.splice(0, 1);
         reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
     } else if (lower == cmdpref + 'waifustats') {
         // !waifustats|waifuCloud adatbázis adatok.
         reqreload('./waifucloud.js').stats(core, message);
+    } else if (lower == cmdpref + 'stats') {
+        // !stats|gekky adatai.
+        reqreload('./memwatch.js').stats(core, message);
+
     } else if (message.author.id == ownerid) {
         // legekka-only commands
         if (lower.startsWith(cmdpref + 'kill')) {
@@ -198,7 +202,7 @@ module.exports = (core, message, callback) => {
             var tag = lower.split(' ')[2];
             reqreload('./wrapper.js').wrap(core, mode, tag);
         } else if (lower.startsWith(cmdpref + 'waifusync')) {
-            reqreload('./wrapper.js').sync(core);
+            reqreload('./wrapper.js').sync(core, message);
         }
 
         // üzenetküldés
