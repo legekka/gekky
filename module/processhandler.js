@@ -1,8 +1,10 @@
 // processhandler.js
 // process error handling
 
+var reqreload = require('./reqreload.js');
+
 module.exports = {
-    start: (core, process) => {
+    start: (core) => {
         process.on('uncaughtException', function (error) {
             console.log(error.stack);
             if (core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog) != undefined) {
@@ -20,7 +22,7 @@ module.exports = {
                         }
                     })
                 } else {
-                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send(`<@${core.discord.dsettings.ownerID}>`).then(() => {
+                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send(`<@${core.discord.ownerID}>`).then(() => {
                         core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
                             if (core.osuirc.ready) {
                                 reqreload('./osuirc.js').stop(core);

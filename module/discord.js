@@ -25,7 +25,6 @@ module.exports = {
             });
             require('./channelpicker.js').build(core);
         });
-        
         core.discord.bot.on('message', (message) => {
             // tsundere messages
             reqreload('./talk.js').default(core, message);
@@ -37,7 +36,6 @@ module.exports = {
             reqreload('./webpconvert.js').message(core, message);
             // kill - message deleter
             reqreload('./kill.js').kill(core, message);
-        
             // exit
             var prefix = core.discord.dsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
             if (core.discord.ownerID == message.author.id && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
@@ -62,7 +60,7 @@ module.exports = {
                             process.exit(2);
                         });
                     }, 2000);
-        
+
                 } else {
                     core.discord.bot.destroy().then(() => {
                         process.exit(2);

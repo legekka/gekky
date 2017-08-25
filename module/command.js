@@ -2,7 +2,6 @@
 // commands
 
 var reqreload = require('./reqreload.js');
-gay
 module.exports = {
     lenny: {
         level: 0,
