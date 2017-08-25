@@ -23,10 +23,10 @@ module.exports = (core, message) => {
         command.help.run(core, message);
         is_a_command = true;
     } else if (lower.startsWith(cmdpref + 'git')) {
-        command.help.run(message);
+        command.git.run(message);
         is_a_command = true;
     } else if (lower.startsWith(cmdpref + 'ver')) {
-        command.help.run(message);
+        command.ver.run(message);
         is_a_command = true;
     } else if (lower.startsWith(cmdpref + 'nhentai')) {
         command.nhentai.run(core, message);
