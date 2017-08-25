@@ -61,7 +61,7 @@ module.exports = {
             } else {
                 var qual = "-q 80";
             }
-            if (message.content.indexOf(core.discord.dsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id) + 'waifu2x') == -1) {
+            if (message.content.indexOf(core.discord.dsettings.getCmdpref(message.guild.id) + 'waifu2x') == -1) {
                 if (message.attachments.first() != undefined) {
                     var fname = message.attachments.first().filename;
                     var ext = fname.substr(fname.length - 3, 3);

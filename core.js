@@ -76,10 +76,10 @@ var core = {
 }
 
 // starting modules
-core.autorun.processhandler ? require('./module/processhandler.js').start(core) : null
 core.autorun.console ? require('./module/console.js')(core) : null
 core.autorun.discord ? require('./module/discord.js').start(core) : null
 core.autorun.cachemanager ? require('./module/cachemanager.js').start(core) : null
 core.autorun.yrexia ? require('./module/yrexia.js').start(core) : null
 core.autorun.waifucloud ? require('./module/waifucloud.js').start(core) : null
 core.autorun.memwatch ? require('./module/memwatch.js').start(core) : null
+core.autorun.processhandler ? require('./module/processhandler.js').start(core) : null

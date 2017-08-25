@@ -37,7 +37,7 @@ module.exports = {
             // kill - message deleter
             reqreload('./kill.js').kill(core, message);
             // exit
-            var prefix = core.discord.dsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+            var prefix = core.discord.dsettings.getCmdpref(message.guild.id);
             if (core.discord.ownerID == message.author.id && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
                 if (core.osuirc.ready) {
                     reqreload('./osuirc.js').stop(core, message);

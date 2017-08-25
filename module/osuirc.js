@@ -36,7 +36,6 @@ module.exports = {
                     }
                     core.discord.bot.channels.get(ch.osuirc).send('**[IRC] is connected**').then((message) => {
                         core.osuirc.pin = message.id;
-                        message.pin();
                     });
                 }
             });
@@ -110,6 +109,7 @@ module.exports = {
                         str += userlist[i] + '\n';
                     }
                     core.discord.bot.channels.get(ch.osuirc).messages.get(core.osuirc.pin).edit('Online: ' + (userlist.length - 1) + '\nChannel: `' + core.osuirc.channel + '`\n```' + str + '```');
+                    core.discord.bot.channels.get(ch.osuirc).setTopic("Current channel: " + core.osuirc.channel);
                 }
             }, 10000);
 

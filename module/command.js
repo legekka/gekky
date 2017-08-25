@@ -188,20 +188,20 @@ module.exports = {
                 cmdpref = '!';
             }
             message.channel.send('New prefix: `' + cmdpref + '`');
-            core.discord.dsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, cmdpref);
+            core.discord.dsettings.setCmdpref(message.guild.id, cmdpref);
         }
     },
     tsun: {
         level: 1,
         help: "!tsun|Tsundere mód kapcsoló.",
         run: (core, message) => {
-            var tsun = core.discord.dsettings.getTsun(message.guild ? message.guild.id : message.channel.id);;
+            var tsun = !core.discord.dsettings.getTsun(message.guild .id);;
             if (tsun) {
                 message.channel.send('Nah.');
             } else {
                 message.channel.send('O-okay.');
             }
-            core.discord.dsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
+            core.discord.dsettings.setTsun(message.guild.id, tsun);
         }
     },
     checkcache: {
@@ -303,6 +303,7 @@ module.exports = {
             message.delete();
             core.osuirc.channel = message.content.substr(cmdpref.length + 3);
             message.channel.send('[IRC] Címzett: `' + core.osuirc.channel + '`');
+            core.discord.bot.channels.get(core.discord.ch.osuirc).setTopic("Current channel: " + core.osuirc.channel);
         }
     },
     ircsay: {
@@ -325,7 +326,7 @@ module.exports = {
             else{
                 var names = [];
                 hls.forEach((value, key, map) => {
-                    core.discord.dsettings.addAdmin(message.guild ? message.guild.id : message.channel.id, key);
+                    core.discord.dsettings.addAdmin(message.guild.id, key);
                     names.push(value.displayName);
                 });
                 message.channel.send(names);
@@ -343,7 +344,7 @@ module.exports = {
             else{
                 var names = [];
                 hls.forEach((value, key, map) => {
-                    core.discord.dsettings.removeAdmin(message.guild ? message.guild.id : message.channel.id, key);
+                    core.discord.dsettings.removeAdmin(message.guild.id, key);
                     names.push(value.displayName);
                 });
                 message.channel.send(names);
