@@ -96,9 +96,18 @@ module.exports = {
             reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
         }
     },
-    waifustats: {
+    waifu: {
         level: 0,
-        help: "!waifustats|WaifuCloud adatbázis adatok.",
+        help: "!waifucloud|WaifuCloud kép kereső. !waifucloud <tagek> vagy !waifu <tagek>",
+        run: (core, message) => {
+            var tags = message.content.toLowerCase().split(' ');
+            tags.splice(0, 1);
+            reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
+        }
+    },
+    waifu_stats: {
+        level: 0,
+        help: "!waifu:stats|WaifuCloud adatbázis adatok.",
         run: (core, message) => {
             reqreload('./waifucloud.js').stats(core, message);
         }
@@ -280,7 +289,7 @@ module.exports = {
             core.client = reqreload('./osuirc.js').stop(core, message);
         }
     },
-    waifuwrap: {
+    waifu_wrap: {
         level: 2,
         help: "!waifu:wrap|WaifuCloud oldalwrapper. !waifu:wrap <mode> <tags>",
         run: (core, message) => {
@@ -289,7 +298,7 @@ module.exports = {
             reqreload('./wrapper.js').wrap(core, mode, tag);
         }
     },
-    waifusync: {
+    waifu_sync: {
         level: 2,
         help: "!waifu:sync|WaifuCloud wrapper szinkronizálás.",
         run: (core, message) => {
