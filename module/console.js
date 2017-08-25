@@ -10,7 +10,7 @@ module.exports = {
             if (core.discord.picker.server || core.discord.picker.channel) {
                 reqreload('./channelpicker.js').go(core, d);
             } else if (d.toString().startsWith('>')) {
-                core.discord.bot.channels.get(core.ch.current).send(d.toString().substr(1));
+                core.discord.bot.channels.get(core.discord.ch.current).send(d.toString().substr(1));
             } else {
                 var cmd = d.toString().toLowerCase().trim();
                 if (cmd == 'close' || cmd == 'stop') {
@@ -98,7 +98,7 @@ module.exports = {
                     var data = cmd.substr(13);
                     reqreload('./updater.js').fullver((resp) => {
                         core.discord.bot.user.setGame(resp.ver);
-                        core.discord.bot.channels.get(core.ch.main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + data + '```');
+                        core.discord.bot.channels.get(core.discord.ch.main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + data + '```');
                     });
                 }
                 /* else if (cmd == 'teszt2') {

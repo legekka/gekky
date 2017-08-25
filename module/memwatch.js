@@ -10,7 +10,7 @@ module.exports = {
             if (memrss / 1024 / 1024 > limit) {
                 console.log('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
                 if (core.discord.ready) {
-                    core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
+                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
                     if (core.osuirc.ready) {
                         reqreload('./osuirc.js').stop(core, message);
                         setTimeout(() => {

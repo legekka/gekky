@@ -7,8 +7,8 @@ const fs = require('fs');
 var ownerid = '143399021740818432';
 
 module.exports = (core, message) => {
-    var cmdpref = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
-    var tsun = core.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
+    var cmdpref = core.discord.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+    var tsun = core.discord.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
     var lower = message.content.toLowerCase();
     //if (!require('./blacklist.js').isBlacklisted(message)) {
     var command = reqreload('./command.js');
@@ -118,7 +118,7 @@ module.exports = (core, message) => {
         }
 
         // osu!irc üzenetküldés és channelváltás
-        else if (core.osuirc.client != undefined && message.channel.id == core.ch.osuirc) {
+        else if (core.osuirc.client != undefined && message.channel.id == core.discord.ch.osuirc) {
             if (lower.startsWith(cmdpref + 'to')) {
                 command.ircto.run(core, message);
             } else {

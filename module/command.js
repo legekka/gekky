@@ -189,20 +189,20 @@ module.exports = {
                 cmdpref = '!';
             }
             message.channel.send('New prefix: `' + cmdpref + '`');
-            core.gsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, cmdpref);
+            core.discord.gsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, cmdpref);
         }
     },
     tsun: {
         level: 1,
         help: "!tsun|Tsundere mód kapcsoló.",
         run: (core, message) => {
-            var tsun = core.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);;
+            var tsun = core.discord.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);;
             if (tsun) {
                 message.channel.send('Nah.');
             } else {
                 message.channel.send('O-okay.');
             }
-            core.gsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
+            core.discord.gsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
         }
     },
     checkcache: {

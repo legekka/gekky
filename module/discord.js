@@ -9,14 +9,14 @@ var c = require('chalk');
 module.exports = {
     start: (core) => {
         core.discord.bot = new Discord.Client();
-        core.discord.bot.login(core.token);
+        core.discord.bot.login(core.discord.token);
         core.discord.bot.on('ready', function () {
             if (!core.discord.ready) {
                 core.discord.ready = true;
                 if (core.autorun.irc) { core.client = require('./module/osuirc.js').start(core); }
-                if (core.autorun.osutrack) { core.osutrack = require('./module/osutrack.js').startChecker(core); }
+                if (core.autorun.osutrack) { core.osutrack.client = require('./module/osutrack.js').startChecker(core); }
                 if (core.autorun.heartbeat) { require('./module/heartbeat.js').start(core); }
-                core.discord.bot.channels.get(core.ch.main).send('[online]');
+                core.discord.bot.channels.get(core.discord.ch.main).send('[online]');
                 console.log(c.gray('[Discord]') + ' online');
             }
             core.discord.bot.user.setStatus("online");
@@ -39,7 +39,7 @@ module.exports = {
             reqreload('./kill.js').kill(core, message);
         
             // exit
-            var prefix = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+            var prefix = core.discord.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
             if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
                 if (core.osuirc.ready) {
                     reqreload('./osuirc.js').stop(core, message);

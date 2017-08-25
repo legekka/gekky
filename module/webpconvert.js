@@ -55,21 +55,21 @@ module.exports = {
     },
 
     message: (core, message) => {
-        if (message.channel.id != core.ch.gekkylog && message.channel.id != core.ch.hun_scores && message.channel.id != "157644576939704320" && message.author.id != '267741038230110210') {
+        if (message.channel.id != core.discord.ch.gekkylog && message.channel.id != core.discord.ch.hun_scores && message.channel.id != "157644576939704320" && message.author.id != '267741038230110210') {
             if (message.channel.name.indexOf("nsfw") >= 0 || message.channel.name == "weeb") {
                 var qual = "-q 100";
             } else {
                 var qual = "-q 80";
             }
-            if (message.content.indexOf(core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id) + 'waifu2x') == -1) {
+            if (message.content.indexOf(core.discord.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id) + 'waifu2x') == -1) {
                 if (message.attachments.first() != undefined) {
                     var fname = message.attachments.first().filename;
                     var ext = fname.substr(fname.length - 3, 3);
                     if (extensions.indexOf(ext) >= 0) {
                         httpsGet(message.attachments.first().url, message.id + '.' + ext, () => {
                             webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', qual, () => {
-                                core.discord.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.' + ext] }).then((fileoriginalmsg) => {
-                                    core.discord.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
+                                core.discord.bot.channels.get(core.discord.ch.gekkylog).send({ files: [path + message.id + '.' + ext] }).then((fileoriginalmsg) => {
+                                    core.discord.bot.channels.get(core.discord.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
                                         if (message.channel.type != 'dm') {
                                             if (message.channel.permissionsFor(core.discord.bot.user).hasPermission("MANAGE_MESSAGES")) {
                                                 message.delete();
@@ -100,7 +100,7 @@ module.exports = {
                                   }
                                     });*/
                                             } else {
-                                                core.discord.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
+                                                core.discord.bot.channels.get(core.discord.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                             }
                                         }
                                     });
@@ -115,16 +115,16 @@ module.exports = {
                         if (url.indexOf('https') >= 0) {
                             httpsGet(url, message.id + '.' + ext, () => {
                                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                    core.discord.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
-                                        core.discord.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
+                                    core.discord.bot.channels.get(core.discord.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
+                                        core.discord.bot.channels.get(core.discord.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                     });
                                 });
                             });
                         } else {
                             httpGet(url, message.id + '.' + ext, () => {
                                 webp.cwebp(path + message.id + '.' + ext, path + message.id + '.webp', '-q 80', () => {
-                                    core.discord.bot.channels.get(core.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
-                                        core.discord.bot.channels.get(core.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
+                                    core.discord.bot.channels.get(core.discord.ch.gekkylog).send({ files: [path + message.id + '.webp'] }).then((filemsg) => {
+                                        core.discord.bot.channels.get(core.discord.ch.webps).send('`' + message.guild.name + ' #' + message.channel.name + ' ' + message.author.username + '`', { files: [filemsg.attachments.first().url] });
                                     });
                                 });
                             });

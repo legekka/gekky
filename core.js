@@ -17,40 +17,49 @@ var core = {
         'waifucloud': true,
         'memwatch': true
     },
+    'cachelimit': 50,
     'discord': {
         'bot': undefined,
         'ready': false,
+        'token': JSON.parse(fs.readFileSync('./data/passwords.json').toString()).discord,
+        // guild settings
+        'gsettings': reqreload('./guilds.js'),
         'servers': [],
         'picker': {
-            'server': false,
             'id': '',
+            'server': false,
             'channel': false
         },
-    },
-    'cachelimit': 50,
-    'gsettings': reqreload('./guilds.js'),
-    'token': fs.readFileSync('../profile.txt').toString(),
-    'ch': {
-        'main': '281188840084078594',
-        'gekkylog': '281189261355515915',
-        'gekkyerrorlog': '303610093226819584',
-        'osuirc': '289509321446916096',
-        'webps': '299862573078151178',
-        'hun_scores': '261144312387993610',
-        'hun_scorespam': '319115815783759872',
-        'current': '281188840084078594',
-        'osuscores': '347807562202218498'
+        'ch': {
+            'main': '281188840084078594',
+            'gekkylog': '281189261355515915',
+            'gekkyerrorlog': '303610093226819584',
+            'osuirc': '289509321446916096',
+            'webps': '299862573078151178',
+            'hun_scores': '261144312387993610',
+            'hun_scorespam': '319115815783759872',
+            'current': '281188840084078594',
+            'osuscores': '347807562202218498'
+        },
+        // heartbeat interval
+        'heartbeat': {
+            'interval': undefined,
+            'state': undefined
+        }
     },
     // osu!irc part
     'osuirc': {
         'client': undefined,
+        'pw': JSON.parse(fs.readFileSync('./data/passwords.json').toString()).osuirc,
         'ready': false,
         'channel': 'legekka',
         'pin': ''
     },
     // osu!track part
-    'osutrack_running': false,
-    'osutrack': undefined,
+    'osutrack': {
+        'client': undefined,
+        'ready': false,
+    },
     // yrexia part
     'holopadip': '',
     // waifucloud client
@@ -61,11 +70,6 @@ var core = {
         "sync": undefined,
         "autoconnect": undefined,
         //"speed": undefined
-    },
-    // heartbeat interval
-    'heartbeat': {
-        'interval': undefined,
-        'state': undefined
     }
 }
 

@@ -51,14 +51,14 @@ function loadDialogs() {
 loadDialogs();
 module.exports = {
     default: (core, message) => {
-        tsun = core.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
-        cmdpref = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+        tsun = core.discord.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
+        cmdpref = core.discord.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
         var lower = message.content.toLowerCase();
         if (lower.indexOf('gekky') >= 0 &&
-            message.channel.id != core.ch.gekkylog &&
-            message.channel.id != core.ch.osuirc &&
-            message.channel.id != core.ch.gekkyerrorlog &&
-            message.channel.id != core.ch.webps) {
+            message.channel.id != core.discord.ch.gekkylog &&
+            message.channel.id != core.discord.ch.osuirc &&
+            message.channel.id != core.discord.ch.gekkyerrorlog &&
+            message.channel.id != core.discord.ch.webps) {
             reqreload('./channelpicker.js').come(core, message);
         }
         if (!reqreload('./blacklist.js').isBlacklisted(message)) {

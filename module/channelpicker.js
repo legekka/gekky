@@ -55,14 +55,14 @@ module.exports = {
                 console.log('Wrong parameter.')
                 return core;
             } else {
-                core.ch.current = core.discord.servers[core.discord.picker.id].channels[cmd].id;
+                core.discord.ch.current = core.discord.servers[core.discord.picker.id].channels[cmd].id;
                 console.log('Gekky went to #' + core.discord.servers[core.discord.picker.id].channels[cmd].name + '@' + core.discord.servers[core.discord.picker.id].name);
                 core.discord.picker.id = '';
             }
         }
     },
     come: (core, message) => {
-        core.ch.current = message.channel.id;
+        core.discord.ch.current = message.channel.id;
         console.log('Gekky went to #' + message.channel.name + '@' + message.channel.guild.name);
     }
 }

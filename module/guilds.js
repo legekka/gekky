@@ -1,5 +1,5 @@
 var fs = require('fs');
-var settingsPath = './data/anyád.json';
+var settingsPath = './data/guildSettings.json';
 if (!fs.existsSync(settingsPath))
     fs.writeFileSync(settingsPath, "{}");
 //var settings = require(settingsPath); // ennek mennie kellene...

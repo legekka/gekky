@@ -9,7 +9,7 @@ var path = '../log.txt';
 
 module.exports = {
     messageConsoleLog: (core, message, is_a_command) => {
-        var ch = core.ch;
+        var ch = core.discord.ch;
         //if (!reqreload('./blacklist.js').isBlacklisted(message)) {
             var chID = message.channel.id;
             if (chID == undefined) { chname = '#private#'; } else { chname = '#'+message.channel.name+'@'+message.channel.guild.name; }

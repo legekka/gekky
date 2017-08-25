@@ -131,7 +131,7 @@ module.exports = {
                 if (message != undefined) {
                     reqreload('./webpconvert.js').file(post.filepath, (converted_path) => {
                         console.log(converted_path);
-                        core.discord.bot.channels.get(core.ch.gekkylog).send({ files: [converted_path] }).then(converted => {
+                        core.discord.bot.channels.get(core.discord.ch.gekkylog).send({ files: [converted_path] }).then(converted => {
                             //message.channel.send(ping + 'ms');
                             message.channel.send({
                                 embed: {

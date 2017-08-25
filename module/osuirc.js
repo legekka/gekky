@@ -20,12 +20,11 @@ function afkmessage() {
 module.exports = {
     start: (core, messag) => {
         if (!core.osuirc.ready) {
-            var ch = core.ch;
-            var ircpw = fs.readFileSync('../ircpw.txt').toString();
+            var ch = core.discord.ch;
             var userlist = [];
 
             core.osuirc.client = new irc.Client('irc.ppy.sh', 'legekka', {
-                password: ircpw,
+                password: core.osuirc.pw,
                 channels: [/*'#osu',*/'#hungarian']
             });
             core.osuirc.client.addListener('registered', (message) => {
@@ -135,7 +134,7 @@ module.exports = {
     stop: (core, messag) => {
         if (core.osuirc.ready) {
             core.osuirc.ready = false;
-            var ch = core.ch;
+            var ch = core.discord.ch;
             core.discord.bot.channels.get(ch.osuirc).messages.get(core.osuirc.pin).delete();
             clearInterval(core.osuirc.ready_users);
             core.osuirc.client.disconnect();
@@ -162,7 +161,7 @@ module.exports = {
             var msg2 = '`' + timeStamp() + '` `PM ' + core.osuirc.channel + '` `legekka:` ' + text;
         }
         console.log(c.yellow('[IRC] ') + msg);
-        core.discord.bot.channels.get(core.ch.osuirc).send(msg2);
+        core.discord.bot.channels.get(core.discord.ch.osuirc).send(msg2);
         return core.osuirc.client;
     },
     teszt: (core) => {
