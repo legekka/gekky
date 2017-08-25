@@ -143,7 +143,7 @@ module.exports = {
                                     "url": post.fileurl,
                                     "color": message.member.highestRole.color,
                                     "footer": {
-                                        "text": "Tags: " + formatTags(post.tags)
+                                        "text": "Tags: " + post.tags.join(" ")
                                     }
                                 }
                             });
@@ -174,17 +174,6 @@ module.exports = {
         });
     },
 };
-
-
-function formatTags(tags) {
-    var str = tags[0];
-    var i = 1;
-    while (i < tags.length) {
-        str = str + ' ' + tags[i];
-        i++;
-    }
-    return str;
-}
 
 function sendCommand(core, commandObj) {
     if (core.waifucloud.connection != undefined) {

@@ -195,7 +195,7 @@ module.exports = {
         level: 1,
         help: "!tsun|Tsundere mód kapcsoló.",
         run: (core, message) => {
-            var tsun = !core.discord.dsettings.getTsun(message.guild .id);;
+            var tsun = !core.discord.dsettings.getTsun(message.guild.id);;
             if (tsun) {
                 message.channel.send('Nah.');
             } else {
@@ -248,7 +248,7 @@ module.exports = {
     remblchannel: {
         level: 1,
         help: "!remblchannel|ChannelID eltávolítása a blacklistből",
-        run: (core, message) => { 
+        run: (core, message) => {
             reqreload('./blacklist.js').remChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
@@ -320,16 +320,16 @@ module.exports = {
         help: "",
         run: (core, message) => {
             var hls = message.mentions.members;
-            if (hls.size == 0){
-                message.channel.send("anyád");
+            if (hls.size == 0) {
+                message.channel.send("Nem adtál meg senkit.");
             }
-            else{
+            else {
                 var names = [];
                 hls.forEach((value, key, map) => {
                     core.discord.dsettings.addAdmin(message.guild.id, key);
                     names.push(value.displayName);
                 });
-                message.channel.send(names);
+                reqreload('./command.js').admins.run(core, message);
             }
         }
     },
@@ -338,16 +338,28 @@ module.exports = {
         help: "",
         run: (core, message) => {
             var hls = message.mentions.members;
-            if (hls.size == 0){
-                message.channel.send("apád");
+            if (hls.size == 0) {
+                message.channel.send("Nem adtál meg senkit.");
             }
-            else{
+            else {
                 var names = [];
                 hls.forEach((value, key, map) => {
                     core.discord.dsettings.removeAdmin(message.guild.id, key);
                     names.push(value.displayName);
                 });
-                message.channel.send(names);
+                reqreload('./command.js').admins.run(core, message);
+            }
+        }
+    },
+    admins: {
+        level: 0,
+        help: "",
+        run: (core, message) => {
+            var admins = core.discord.dsettings.admins(message.guild.id).map((v, i, a) => message.guild.members.get(v).displayName);
+            if (admins.length == 0) {
+                message.channel.send('Adminjaim: senki :^)');
+            } else {
+                message.channel.send(`Adminjaim: \`${admins.join('`, `')}\` `);
             }
         }
     }

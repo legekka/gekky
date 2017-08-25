@@ -5,12 +5,12 @@ if (!fs.existsSync(guildSettingsPath))
 
 var guildSettings;
 
-if (fs.existsSync(guildSettingsPath)){
+if (fs.existsSync(guildSettingsPath)) {
     guildSettings = JSON.parse(fs.readFileSync(guildSettingsPath).toString());
 }
-function get(guildID){
+function get(guildID) {
     var guildSetting = guildSettings[guildID];
-    if (!guildSetting){
+    if (!guildSetting) {
         guildSetting = {
             cmdpref: "!",
             tsun: true,
@@ -22,41 +22,42 @@ function get(guildID){
     }
     return guildSetting;
 }
-function getValue(guildID, type){
+function getValue(guildID, type) {
     return get(guildID)[type];
 }
-function setValue(guildID, type, value){
+function setValue(guildID, type, value) {
     var guildSetting = get(guildID);
-    if(guildSetting[type] instanceof Array){
+    if (guildSetting[type] instanceof Array) {
         if (!contains(guildID, type, value))
             guildSetting[type].push(value);
     }
-    else{
+    else {
         guildSetting[type] = value;
     }
     guildSettings[guildID] = guildSetting;
     save();
 }
-function removeValue(guildID, type, value){
+function removeValue(guildID, type, value) {
     var guildSetting = get(guildID);
-    if(guildSetting[type] instanceof Array){
+    if (guildSetting[type] instanceof Array) {
         var index = guildSetting[type].indexOf(value);
+        console.log(index);
         if (index >= 0)
-            guildSetting[type] = guildSetting[type].splice(index, 1);
+            guildSetting[type].splice(index, 1);
     }
     guildSettings[guildID] = guildSetting;
     save();
 }
-function contains(guildID, type, value){
-    var guildSetting = get(guildSetting);
-    if(guildSetting[type] instanceof Array){
+function contains(guildID, type, value) {
+    var guildSetting = get(guildID);
+    if (guildSetting[type] instanceof Array) {
         return guildSetting[type].indexOf(value) >= 0;
     }
-    else{
+    else {
         return guildSetting[type] == value;
     }
 }
-function save(){
+function save() {
     if (fs.existsSync(guildSettingsPath))
         fs.unlinkSync(guildSettingsPath);
     fs.writeFileSync(guildSettingsPath, JSON.stringify(guildSettings));
@@ -74,6 +75,7 @@ module.exports = {
     addAdmin: (guildID, id) => setValue(guildID, "admins", id),
     removeAdmin: (guildID, id) => removeValue(guildID, "admins", id),
     hasAdmin: (guildID, id) => contains(guildID, "admins", id),
+    admins: (guildID) => get(guildID).admins,
     level: (core, userID, guildID) => {
         if (core.discord.creatorID == userID)
             return 3;
@@ -81,7 +83,7 @@ module.exports = {
             return 2;
         else if (contains(guildID, "admins", userID))
             return 1;
-        else 
+        else
             return 0;
     }
 }

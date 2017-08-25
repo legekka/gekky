@@ -25,7 +25,7 @@ var core = {
         'ownerID': JSON.parse(fs.readFileSync('./data/passwords.json').toString()).ownerID,
         'creatorID': "143399021740818432",
         // guild settings
-        'dsettings': reqreload('./dsettings.js'),
+        'dsettings': require('./module/dsettings.js'),
         'servers': [],
         'picker': {
             'id': '',
