@@ -232,7 +232,7 @@ module.exports = {
         level: 1,
         help: "!rembluser|UserID eltávolítása a blacklistből",
         run: (message) => {
-            reqreload('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            reqreload('./blacklist.js').remUser(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
@@ -241,7 +241,7 @@ module.exports = {
         level: 1,
         help: "!addblchannel|ChannelID hozzáadása a blacklisthez",
         run: (message) => {
-            reqreload('./blacklist.js').addChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            reqreload('./blacklist.js').addChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
@@ -250,7 +250,7 @@ module.exports = {
         level: 1,
         help: "!remblchannel|ChannelID eltávolítása a blacklistből",
         run: (message) => {
-            reqreload('./blacklist.js').remChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            reqreload('./blacklist.js').remChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
