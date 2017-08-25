@@ -1,5 +1,6 @@
 // discord.js
 // discord module
+
 var Discord = require('discord.js');
 var reqreload = require('./module/reqreload.js');
 var fs = require('fs');
@@ -40,7 +41,7 @@ module.exports = {
             // exit
             var prefix = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
             if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
-                if (core.irc_online) {
+                if (core.osuirc.ready) {
                     reqreload('./osuirc.js').stop(core, message);
                     setTimeout(() => {
                         core.discord.bot.destroy().then(() => {
@@ -54,7 +55,7 @@ module.exports = {
                 }
             }
             if (message.author.id == '143399021740818432' && message.content.toLowerCase() == `${prefix}reload`) {
-                if (core.irc_online) {
+                if (core.osuirc.ready) {
                     reqreload('./osuirc.js').stop(core, message);
                     setTimeout(() => {
                         core.discord.bot.destroy().then(() => {

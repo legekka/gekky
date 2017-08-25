@@ -19,7 +19,7 @@ function afkmessage() {
 
 module.exports = {
     start: (core, messag) => {
-        if (!core.osuirc.irc_online) {
+        if (!core.osuirc.ready) {
             var ch = core.ch;
             var ircpw = fs.readFileSync('../ircpw.txt').toString();
             var userlist = [];
@@ -29,14 +29,14 @@ module.exports = {
                 channels: [/*'#osu',*/'#hungarian']
             });
             core.osuirc.client.addListener('registered', (message) => {
-                core.osuirc.irc_online = true;
+                core.osuirc.ready = true;
                 if (message.rawCommand == '001') {
                     console.log(c.yellow('[IRC]') + ' is connected.');
                     if (messag != undefined) {
                         messag.channel.send('**[IRC] is connected**');
                     }
                     core.discord.bot.channels.get(ch.osuirc).send('**[IRC] is connected**').then((message) => {
-                        core.osuirc.irc_pin = message.id;
+                        core.osuirc.pin = message.id;
                         message.pin();
                     });
                 }
@@ -88,8 +88,8 @@ module.exports = {
                 }
             })
 
-            core.osuirc.irc_online_users = setInterval(() => {
-                if (core.osuirc.irc_online) {
+            core.osuirc.ready_users = setInterval(() => {
+                if (core.osuirc.ready) {
                     var nicks = core.osuirc.client.chans['#hungarian'].users;
                     var str = JSON.stringify(nicks);
                     while (str.indexOf('"') >= 0) {
@@ -110,7 +110,7 @@ module.exports = {
                     for (i in userlist) {
                         str += userlist[i] + '\n';
                     }
-                    core.discord.bot.channels.get(ch.osuirc).messages.get(core.osuirc.irc_pin).edit('Online: ' + (userlist.length - 1) + '\nChannel: `' + core.osuirc.irc_channel + '`\n```' + str + '```');
+                    core.discord.bot.channels.get(ch.osuirc).messages.get(core.osuirc.pin).edit('Online: ' + (userlist.length - 1) + '\nChannel: `' + core.osuirc.channel + '`\n```' + str + '```');
                 }
             }, 10000);
 
@@ -133,11 +133,11 @@ module.exports = {
         return core.osuirc.client;
     },
     stop: (core, messag) => {
-        if (core.osuirc.irc_online) {
-            core.osuirc.irc_online = false;
+        if (core.osuirc.ready) {
+            core.osuirc.ready = false;
             var ch = core.ch;
-            core.discord.bot.channels.get(ch.osuirc).messages.get(core.osuirc.irc_pin).delete();
-            clearInterval(core.osuirc.irc_online_users);
+            core.discord.bot.channels.get(ch.osuirc).messages.get(core.osuirc.pin).delete();
+            clearInterval(core.osuirc.ready_users);
             core.osuirc.client.disconnect();
             console.log(c.yellow('[IRC]') + ' is disconnected.');
             if (messag != undefined) {
@@ -153,13 +153,13 @@ module.exports = {
         return core.osuirc.client;
     },
     say: (core, text) => {
-        core.osuirc.client.say(core.osuirc.irc_channel, text);
-        if (core.osuirc.irc_channel[0] == '#') {
-            var msg = timeStamp() + ' ' + core.osuirc.irc_channel + c.magenta(' legekka: ') + text;
-            var msg2 = '`' + timeStamp() + '` `' + core.osuirc.irc_channel + '` `legekka:` ' + text;
+        core.osuirc.client.say(core.osuirc.channel, text);
+        if (core.osuirc.channel[0] == '#') {
+            var msg = timeStamp() + ' ' + core.osuirc.channel + c.magenta(' legekka: ') + text;
+            var msg2 = '`' + timeStamp() + '` `' + core.osuirc.channel + '` `legekka:` ' + text;
         } else {
-            var msg = timeStamp() + ' PM ' + core.osuirc.irc_channel + c.magenta(' legekka: ') + text;
-            var msg2 = '`' + timeStamp() + '` `PM ' + core.osuirc.irc_channel + '` `legekka:` ' + text;
+            var msg = timeStamp() + ' PM ' + core.osuirc.channel + c.magenta(' legekka: ') + text;
+            var msg2 = '`' + timeStamp() + '` `PM ' + core.osuirc.channel + '` `legekka:` ' + text;
         }
         console.log(c.yellow('[IRC] ') + msg);
         core.discord.bot.channels.get(core.ch.osuirc).send(msg2);

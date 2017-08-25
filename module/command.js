@@ -259,7 +259,7 @@ module.exports = {
         level: 2,
         help: "!irc:reload|osu irc újraindítása",
         run: (core, message) => {
-            if (core.irc_online) {
+            if (core.osuirc.ready) {
                 reqreload('./osuirc.js').stop(core, message);
                 reqreload('./osuirc.js').start(core, message);
             } else {
@@ -302,8 +302,8 @@ module.exports = {
         help: "!to|osu!irc címzett váltása.",
         run: (core, message) => {
             message.delete();
-            core.osuirc.irc_channel = message.content.substr(cmdpref.length + 3);
-            message.channel.send('[IRC] Címzett: `' + core.osuirc.irc_channel + '`');
+            core.osuirc.channel = message.content.substr(cmdpref.length + 3);
+            message.channel.send('[IRC] Címzett: `' + core.osuirc.channel + '`');
         }
     },
     ircsay: {

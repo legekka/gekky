@@ -6,6 +6,8 @@ var fs = require('fs');
 
 var core = {
     'autorun': {
+        'processhandler': true,
+        'console': true,
         'discord': true,
         'irc': true,
         'osutrack': true,
@@ -42,10 +44,9 @@ var core = {
     // osu!irc part
     'osuirc': {
         'client': undefined,
-        'irc_online': false,
-        'irc_channel': 'legekka',
-        'irc_pin': '',
-        'irc_online_users': '',  // online user interval-timer
+        'ready': false,
+        'channel': 'legekka',
+        'pin': ''
     },
     // osu!track part
     'osutrack_running': false,
@@ -68,46 +69,10 @@ var core = {
     }
 }
 
-// process handling
-process.on('uncaughtException', function (error) {
-    console.log(error.stack);
-    if (core.discord.bot.channels.get(core.ch.gekkyerrorlog) != undefined) {
-        if (error.message.startsWith('Heartbeat missed.')) {
-            core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
-                if (core.irc_online) {
-                    reqreload('./osuirc.js').stop(core);
-                    setTimeout(() => {
-                        core.discord.bot.destroy().then(() => {
-                            process.exit(3);
-                        });
-                    }, 2000);
-                } else {
-                    process.exit(3);
-                }
-            })
-        } else {
-            core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
-                core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
-                    if (core.irc_online) {
-                        reqreload('./osuirc.js').stop(core);
-                        setTimeout(() => {
-                            core.discord.bot.destroy().then(() => {
-                                process.exit(3);
-                            });
-                        }, 2000);
-                    } else {
-                        process.exit(3);
-                    }
-                })
-            });
-        }
-    } else {
-        process.exit(3);
-    }
-})
+// starting modules
 
-//starting default tasks
-require('./module/console.js')(core);
+core.autorun.processhandler ? require('./module/processhandler.js').start(core) : null
+core.autorun.console ? require('./module/console.js').start(core) : null
 core.autorun.discord ? require('./module/discord.js').start(core) : null
 core.autorun.cachemanager ? require('./module/cachemanager.js').start(core) : null
 core.autorun.yrexia ? require('./module/yrexia.js').start(core) : null
