@@ -22,8 +22,10 @@ var core = {
         'bot': undefined,
         'ready': false,
         'token': JSON.parse(fs.readFileSync('./data/passwords.json').toString()).discord,
+        'ownerID': JSON.parse(fs.readFileSync('./data/passwords.json').toString()).ownerID,
+        'creatorID': "143399021740818432",
         // guild settings
-        'gsettings': reqreload('./guilds.js'),
+        'dsettings': reqreload('./dsettings.js'),
         'servers': [],
         'picker': {
             'id': '',
@@ -73,10 +75,50 @@ var core = {
     }
 }
 
+// errorhandling
+
+process.on('uncaughtException', function (error) {
+    console.log(error.stack);
+    if (core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog) != undefined) {
+        if (error.message.startsWith('Heartbeat missed.')) {
+            core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
+                if (core.osuirc.ready) {
+                    reqreload('./osuirc.js').stop(core);
+                    setTimeout(() => {
+                        core.discord.bot.destroy().then(() => {
+                            process.exit(3);
+                        });
+                    }, 2000);
+                } else {
+                    process.exit(3);
+                }
+            })
+        } else {
+            core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send(`<@${core.discord.dsettings.ownerID}>`).then(() => {
+                core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
+                    if (core.osuirc.ready) {
+                        reqreload('./osuirc.js').stop(core);
+                        setTimeout(() => {
+                            core.discord.bot.destroy().then(() => {
+                                process.exit(3);
+                            });
+                        }, 2000);
+                    } else {
+                        process.exit(3);
+                    }
+                })
+            });
+        }
+    } else {
+        process.exit(3);
+    }
+});
+
+
 // starting modules
 
-core.autorun.processhandler ? require('./module/processhandler.js').start(core) : null
-core.autorun.console ? require('./module/console.js').start(core) : null
+//core.autorun.processhandler ? require('./module/processhandler.js').start(core, process) : null
+core.autorun.console ? require('./module/console.js')(core) : null
 core.autorun.discord ? require('./module/discord.js').start(core) : null
 core.autorun.cachemanager ? require('./module/cachemanager.js').start(core) : null
 core.autorun.yrexia ? require('./module/yrexia.js').start(core) : null

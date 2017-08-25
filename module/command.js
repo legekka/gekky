@@ -2,7 +2,7 @@
 // commands
 
 var reqreload = require('./reqreload.js');
-
+gay
 module.exports = {
     lenny: {
         level: 0,
@@ -45,14 +45,14 @@ module.exports = {
     git: {
         level: 0,
         help: "!git|Kiírja gekky githubját.",
-        run: (message) => {
+        run: (core, message) => {
             message.channel.send('http://github.com/legekka/gekky');
         }
     },
     ver: {
         level: 0,
         help: "!ver|Kiírja a jelenlegi verziót.",
-        run: (message) => {
+        run: (core, message) => {
             reqreload('./updater.js').fullver((resp) => {
                 message.channel.send({
                     embed: {
@@ -176,7 +176,7 @@ module.exports = {
     inv: {
         level: 1,
         help: "!inv|Gekky invite linkje.",
-        run: (message) => {
+        run: (core, message) => {
             message.channel.send('https://discordapp.com/oauth2/authorize?&client_id=267741038230110210&scope=bot');
         }
     },
@@ -189,20 +189,20 @@ module.exports = {
                 cmdpref = '!';
             }
             message.channel.send('New prefix: `' + cmdpref + '`');
-            core.discord.gsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, cmdpref);
+            core.discord.dsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, cmdpref);
         }
     },
     tsun: {
         level: 1,
         help: "!tsun|Tsundere mód kapcsoló.",
         run: (core, message) => {
-            var tsun = core.discord.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);;
+            var tsun = core.discord.dsettings.getTsun(message.guild ? message.guild.id : message.channel.id);;
             if (tsun) {
                 message.channel.send('Nah.');
             } else {
                 message.channel.send('O-okay.');
             }
-            core.discord.gsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
+            core.discord.dsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
         }
     },
     checkcache: {
@@ -215,14 +215,14 @@ module.exports = {
     delcache: {
         level: 2,
         help: "!delcache|Cache mappa ürítése.",
-        run: (message) => {
+        run: (core, message) => {
             reqreload('./cachemanager.js').del(message);
         }
     },
     addbluser: {
         level: 1,
         help: "!addbluser|Felhasználó hozzáadása a blacklisthez.",
-        run: (message) => {
+        run: (core, message) => {
             reqreload('./blacklist.js').addUser(message.content.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
@@ -231,7 +231,7 @@ module.exports = {
     rembluser: {
         level: 1,
         help: "!rembluser|UserID eltávolítása a blacklistből",
-        run: (message) => {
+        run: (core, message) => {
             reqreload('./blacklist.js').remUser(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
@@ -240,7 +240,7 @@ module.exports = {
     addblchannel: {
         level: 1,
         help: "!addblchannel|ChannelID hozzáadása a blacklisthez",
-        run: (message) => {
+        run: (core, message) => {
             reqreload('./blacklist.js').addChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
@@ -249,13 +249,13 @@ module.exports = {
     remblchannel: {
         level: 1,
         help: "!remblchannel|ChannelID eltávolítása a blacklistből",
-        run: (message) => {
+        run: (core, message) => { 
             reqreload('./blacklist.js').remChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
     },
-    ircreload: {
+    irc_reload: {
         level: 2,
         help: "!irc:reload|osu irc újraindítása",
         run: (core, message) => {
@@ -267,14 +267,14 @@ module.exports = {
             }
         }
     },
-    ircstart: {
+    irc_start: {
         level: 2,
         help: "!irc:start|osu irc elindítása",
         run: (core, message) => {
             core.client = reqreload('./osuirc.js').start(core, message);
         }
     },
-    ircstop: {
+    irc_stop: {
         level: 2,
         help: "!irc:stop|osu irc leállítása",
         run: (core, message) => {
@@ -313,6 +313,42 @@ module.exports = {
             message.delete();
             var text = message.content;
             reqreload('./osuirc.js').say(core, text);
+        }
+    },
+    addadmin: {
+        level: 2,
+        help: "",
+        run: (core, message) => {
+            var hls = message.mentions.members;
+            if (hls.size == 0){
+                message.channel.send("anyád");
+            }
+            else{
+                var names = [];
+                hls.forEach((value, key, map) => {
+                    core.discord.dsettings.addAdmin(message.guild ? message.guild.id : message.channel.id, key);
+                    names.push(value.displayName);
+                });
+                message.channel.send(names);
+            }
+        }
+    },
+    remadmin: {
+        level: 2,
+        help: "",
+        run: (core, message) => {
+            var hls = message.mentions.members;
+            if (hls.size == 0){
+                message.channel.send("apád");
+            }
+            else{
+                var names = [];
+                hls.forEach((value, key, map) => {
+                    core.discord.dsettings.removeAdmin(message.guild ? message.guild.id : message.channel.id, key);
+                    names.push(value.displayName);
+                });
+                message.channel.send(names);
+            }
         }
     }
 }

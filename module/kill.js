@@ -12,16 +12,16 @@ function getID(message) {
 
 module.exports = {
     kill: (core, message) => {
-        if (core.discord.gsettings.deadContains(message.guild ? message.guild.id : message.channel.id, message.author.id)) {
+        if (core.discord.dsettings.deadContains(message.guild ? message.guild.id : message.channel.id, message.author.id)) {
             message.delete();
         }
     },
     adddeadlist: (core, message) => {
-        core.discord.gsettings.addDead(message.guild ? message.guild.id : message.channel.id, getID(message));
+        core.discord.dsettings.addDead(message.guild ? message.guild.id : message.channel.id, getID(message));
         return core;
     },
     remdeadlist: (core, message) => {
-        core.discord.gsettings.removeDead(message.guild ? message.guild.id : message.channel.id, getID(message));
+        core.discord.dsettings.removeDead(message.guild ? message.guild.id : message.channel.id, getID(message));
         return core;
     }
 }

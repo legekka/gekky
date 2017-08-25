@@ -3,12 +3,10 @@
 
 const reqreload = require('./reqreload.js');
 const fs = require('fs');
-
-var ownerid = '143399021740818432';
-
+/*
 module.exports = (core, message) => {
-    var cmdpref = core.discord.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
-    var tsun = core.discord.gsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
+    var cmdpref = core.discord.dsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+    var tsun = core.discord.dsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
     var lower = message.content.toLowerCase();
     //if (!require('./blacklist.js').isBlacklisted(message)) {
     var command = reqreload('./command.js');
@@ -46,7 +44,7 @@ module.exports = (core, message) => {
     } else if (lower == cmdpref + 'stats') {
         command.stats.run(core, message);
         is_a_command = true;
-    } else if (message.author.id == ownerid) {
+    } else if (core.discord.creatorID == message.author.id) {
         // legekka-only commands
         if (lower.split(' ')[0] == cmdpref + 'kill') {
             command.kill.run(core, message);
@@ -130,4 +128,23 @@ module.exports = (core, message) => {
     }
     return is_a_command;
     //}
+}
+*/
+module.exports = (core, message) => {
+    var cmdpref = core.discord.dsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+    var tsun = core.discord.dsettings.getTsun(message.guild ? message.guild.id : message.channel.id);
+    var lower = message.content.toLowerCase();
+
+    var commandModule = reqreload('./command.js');
+    var is_a_command = false;
+    var command = commandModule[lower.split(' ')[0].substr(cmdpref.length).replace(':', '_')];
+
+    if (command) {
+        if (core.discord.dsettings.level(core, message.author.id, message.guild ? message.guild.id : message.channel.id) >= command.level) {
+            command.run(core, message);
+            is_a_command = true;
+        }
+    }
+
+    return is_a_command;
 }

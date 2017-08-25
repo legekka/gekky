@@ -39,8 +39,8 @@ module.exports = {
             reqreload('./kill.js').kill(core, message);
         
             // exit
-            var prefix = core.discord.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
-            if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
+            var prefix = core.discord.dsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
+            if (core.discord.ownerID == message.author.id && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
                 if (core.osuirc.ready) {
                     reqreload('./osuirc.js').stop(core, message);
                     setTimeout(() => {
@@ -54,7 +54,7 @@ module.exports = {
                     });
                 }
             }
-            if (message.author.id == '143399021740818432' && message.content.toLowerCase() == `${prefix}reload`) {
+            if (core.discord.ownerID == message.author.id && message.content.toLowerCase() == `${prefix}reload`) {
                 if (core.osuirc.ready) {
                     reqreload('./osuirc.js').stop(core, message);
                     setTimeout(() => {

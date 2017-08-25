@@ -2,7 +2,7 @@
 // process error handling
 
 module.exports = {
-    start: (core) => {
+    start: (core, process) => {
         process.on('uncaughtException', function (error) {
             console.log(error.stack);
             if (core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog) != undefined) {
@@ -20,7 +20,7 @@ module.exports = {
                         }
                     })
                 } else {
-                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
+                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send(`<@${core.discord.dsettings.ownerID}>`).then(() => {
                         core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
                             if (core.osuirc.ready) {
                                 reqreload('./osuirc.js').stop(core);
