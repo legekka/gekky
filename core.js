@@ -1,14 +1,12 @@
 // core.js
-// core of the bot
+// core of gekky
 
-
-var Discord = require('discord.js');
 var reqreload = require('./module/reqreload.js');
 var fs = require('fs');
-var c = require('chalk');
 
 var core = {
     'autorun': {
+        'discord': true,
         'irc': true,
         'osutrack': true,
         'heartbeat': true,
@@ -17,12 +15,17 @@ var core = {
         'waifucloud': true,
         'memwatch': true
     },
-    'bot': new Discord.Client(),
-    'ready': false,
+    'discord': {
+        'bot': undefined,
+        'ready': false,
+        'servers': [],
+        'picker': {
+            'server': false,
+            'id': '',
+            'channel': false
+        },
+    },
     'cachelimit': 50,
-
-
-
     'gsettings': reqreload('./guilds.js'),
     'token': fs.readFileSync('../profile.txt').toString(),
     'ch': {
@@ -36,13 +39,6 @@ var core = {
         'current': '281188840084078594',
         'osuscores': '347807562202218498'
     },
-    'servers': [],
-    'picker': {
-        'server': false,
-        'id': '',
-        'channel': false
-    },
-    
     // osu!irc part
     'osuirc': {
         'client': undefined,
@@ -72,15 +68,16 @@ var core = {
     }
 }
 
+// process handling
 process.on('uncaughtException', function (error) {
     console.log(error.stack);
-    if (core.bot.channels.get(core.ch.gekkyerrorlog) != undefined) {
+    if (core.discord.bot.channels.get(core.ch.gekkyerrorlog) != undefined) {
         if (error.message.startsWith('Heartbeat missed.')) {
-            core.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
+            core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
                     setTimeout(() => {
-                        core.bot.destroy().then(() => {
+                        core.discord.bot.destroy().then(() => {
                             process.exit(3);
                         });
                     }, 2000);
@@ -89,12 +86,12 @@ process.on('uncaughtException', function (error) {
                 }
             })
         } else {
-            core.bot.channels.get(core.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
-                core.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
+            core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('<@143399021740818432>').then(() => {
+                core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('```' + error.stack + '```').then(() => {
                     if (core.irc_online) {
                         reqreload('./osuirc.js').stop(core);
                         setTimeout(() => {
-                            core.bot.destroy().then(() => {
+                            core.discord.bot.destroy().then(() => {
                                 process.exit(3);
                             });
                         }, 2000);
@@ -110,89 +107,9 @@ process.on('uncaughtException', function (error) {
 })
 
 //starting default tasks
-
 require('./module/console.js')(core);
-
-if (core.autorun.cachemanager) {
-    require('./module/cachemanager.js').start(core);
-}
-if (core.autorun.yrexia) {
-    require('./module/yrexia.js').start(core);
-}
-if (core.autorun.waifucloud) {
-    require('./module/waifucloud.js').start(core);
-}
-if (core.autorun.memwatch) {
-    require('./module/memwatch.js').start(core);
-}
-core.bot.login(core.token);
-
-core.bot.on('ready', function () {
-    if (!core.ready) {
-        core.ready = true;
-        if (core.autorun.irc) { core.client = require('./module/osuirc.js').start(core); }
-        if (core.autorun.osutrack) { core.osutrack = require('./module/osutrack.js').startChecker(core); }
-        if (core.autorun.heartbeat) { require('./module/heartbeat.js').start(core); }
-        core.bot.channels.get(core.ch.main).send('[online]');
-        console.log(c.gray('[Discord]') + ' online');
-    }
-    core.bot.user.setStatus("online");
-    reqreload('./updater.js').ver((motd) => {
-        core.bot.user.setGame(motd);
-    });
-    require('./module/channelpicker.js').build(core);
-});
-
-core.bot.on('message', (message) => {
-    // talking messages
-    reqreload('./talk.js').default(core, message);
-
-    var is_a_command = false;
-
-    // commands with prefix
-    reqreload('./dcommand.js')(core, message, resp => {
-        is_a_command = resp.is_a_command;
-        core.gsettings.setTsun(message.guild ? message.guild.id : message.channel.id, resp.tsun);
-        core.gsettings.setCmdpref(message.guild ? message.guild.id : message.channel.id, resp.cmdpref);
-    });
-
-    // message logger
-    reqreload('./log.js').messageConsoleLog(core, message, is_a_command);
-
-    // webp converter when image attachment
-    reqreload('./webpconvert.js').message(core, message);
-
-    reqreload('./kill.js').kill(core, message);
-
-    // kilépés
-    var prefix = core.gsettings.getCmdpref(message.guild ? message.guild.id : message.channel.id);
-    if (message.author.id == '143399021740818432' && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
-        if (core.irc_online) {
-            reqreload('./osuirc.js').stop(core, message);
-            setTimeout(() => {
-                core.bot.destroy().then(() => {
-                    process.exit(4);
-                });
-            }, 2000);
-        } else {
-            core.bot.destroy().then(() => {
-                process.exit(4);
-            });
-        }
-    }
-    if (message.author.id == '143399021740818432' && message.content.toLowerCase() == `${prefix}reload`) {
-        if (core.irc_online) {
-            reqreload('./osuirc.js').stop(core, message);
-            setTimeout(() => {
-                core.bot.destroy().then(() => {
-                    process.exit(2);
-                });
-            }, 2000);
-
-        } else {
-            core.bot.destroy().then(() => {
-                process.exit(2);
-            })
-        }
-    }
-})
+core.autorun.discord ? require('./module/discord.js').start(core) : null
+core.autorun.cachemanager ? require('./module/cachemanager.js').start(core) : null
+core.autorun.yrexia ? require('./module/yrexia.js').start(core) : null
+core.autorun.waifucloud ? require('./module/waifucloud.js').start(core) : null
+core.autorun.memwatch ? require('./module/memwatch.js').start(core) : null

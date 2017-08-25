@@ -58,19 +58,19 @@ function checkForNewScores(core) {
                                 var filePath = '../cache/' + fnamefix(output[i].user_id + '_' + output[i].date) + '.png';
                                 createPlayCard(output[i], playcard => {
                                     if (playcard.map.background == 'Err' || playcard.player.username == 'Err') {
-                                        core.bot.channels.get(core.ch.hun_scorespam).send('[osu!api error]');
+                                        core.discord.bot.channels.get(core.ch.hun_scorespam).send('[osu!api error]');
                                         console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' osu!api error');
                                     } else {
                                         reqreload('./playcard.js')(playcard, filePath).then(() => {
                                             reqreload('./webpconvert.js').file(filePath, (filep) => {
                                                 var ppvalue = parseFloat(playcard.play.pp.substr(0, playcard.play.pp.length - 2));
                                                 if (ppvalue > 300) {
-                                                    core.bot.channels.get(core.ch.hun_scores).send({ files: [filep] });
+                                                    core.discord.bot.channels.get(core.ch.hun_scores).send({ files: [filep] });
                                                 } else {
-                                                    core.bot.channels.get(core.ch.hun_scorespam).send({ files: [filep] });
+                                                    core.discord.bot.channels.get(core.ch.hun_scorespam).send({ files: [filep] });
                                                 }
                                                 if (ppvalue >= 200) {
-                                                    core.bot.channels.get(core.ch.osuscores).send({ files: [filep] });
+                                                    core.discord.bot.channels.get(core.ch.osuscores).send({ files: [filep] });
                                                 } 
                                                 saveScore(playcard);
                                                 console.log(c.green('[OT] ') + reqreload('./getTime.js')() + ' | New score by ' + playcard.player.username + ' | ' + playcard.play.pp);

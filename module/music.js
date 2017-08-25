@@ -4,7 +4,7 @@
 
 module.exports = {
     teszt: (core) => {
-        var vchannels = core.bot.channels.findAll('type', 'voice');
+        var vchannels = core.discord.bot.channels.findAll('type', 'voice');
         var i = -1;
         var megvan = false;
         do {

@@ -213,7 +213,7 @@ function parseMessage(message, id, core) {
     } else if (msg.type == 'file') {
         parseFile(msg);
     } else if (msg.type == 'convert') {
-        core.bot.channels.get(msg.channel_id).send({embed:{
+        core.discord.bot.channels.get(msg.channel_id).send({embed:{
             "title": "waifu2x boosted",
             "description": "Original url: " + msg.original_url + '\nWaifu2x url: ' + msg.url,
             "image": {

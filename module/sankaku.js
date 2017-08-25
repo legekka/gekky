@@ -175,7 +175,7 @@ function sankakuSearch(core, message, searchword, callback) {
                     teszt = true;
                     reqreload('./webpconvert.js').file(path + message.fname3, (image) => {
                         console.log(image);
-                        core.bot.channels.get(core.ch.gekkylog).send({ files: [image] }).then(response => {
+                        core.discord.bot.channels.get(core.ch.gekkylog).send({ files: [image] }).then(response => {
                             message.channel.send({
                                 embed: {
                                     "title": "Full size",

@@ -62,12 +62,12 @@ module.exports = {
             reqreload('./channelpicker.js').come(core, message);
         }
         if (!reqreload('./blacklist.js').isBlacklisted(message)) {
-            if (lower == ':dddddd' && message.author.username == core.bot.user.username) {
+            if (lower == ':dddddd' && message.author.username == core.discord.bot.user.username) {
                 setTimeout(() => {
                     message.edit('Nope.');
                 }, 1000);
             }
-            else if (message.author.username != core.bot.user.username) {
+            else if (message.author.username != core.discord.bot.user.username) {
                 if (lower == 'ping') {
                     message.channel.send('Pong!');
                 }
@@ -121,7 +121,7 @@ module.exports = {
                         message.channel.send('De!');
                     }
                     //TODO
-                    else if ((lower.indexOf(core.bot.user.username) >= 0 ||/* lower.indexOf('momi') >= 0 ||*/ lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(core.bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
+                    else if ((lower.indexOf(core.discord.bot.user.username) >= 0 ||/* lower.indexOf('momi') >= 0 ||*/ lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(core.discord.bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
                         message.channel.send(dg.random(dg.emlites));
                     }
                     else if (lower.startsWith('kus')) {

@@ -170,7 +170,7 @@ module.exports = {
         help: "!motd|'playing <game>' megváltoztatására. !motd <szó>",
         run: (core, message) => {
             motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
-            core.bot.user.setGame(motd);
+            core.discord.bot.user.setGame(motd);
         }
     },
     inv: {
@@ -222,37 +222,97 @@ module.exports = {
     addbluser: {
         level: 1,
         help: "!addbluser|Felhasználó hozzáadása a blacklisthez.",
-        run: (core, message) => {
+        run: (message) => {
             reqreload('./blacklist.js').addUser(message.content.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
     },
     rembluser: {
-
+        level: 1,
+        help: "!rembluser|UserID eltávolítása a blacklistből",
+        run: (message) => {
+            reqreload('./blacklist.js').remUser(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                message.channel.send(msg);
+            });
+        }
     },
     addblchannel: {
-
+        level: 1,
+        help: "!addblchannel|ChannelID hozzáadása a blacklisthez",
+        run: (message) => {
+            reqreload('./blacklist.js').addChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                message.channel.send(msg);
+            });
+        }
     },
     remblchannel: {
-        
+        level: 1,
+        help: "!remblchannel|ChannelID eltávolítása a blacklistből",
+        run: (message) => {
+            reqreload('./blacklist.js').remChannel(lower.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+                message.channel.send(msg);
+            });
+        }
     },
     ircreload: {
-
+        level: 2,
+        help: "!irc:reload|osu irc újraindítása",
+        run: (core, message) => {
+            if (core.irc_online) {
+                reqreload('./osuirc.js').stop(core, message);
+                reqreload('./osuirc.js').start(core, message);
+            } else {
+                message.channel.send('**[IRC] is not connected.**');
+            }
+        }
     },
     ircstart: {
-
+        level: 2,
+        help: "!irc:start|osu irc elindítása",
+        run: (core, message) => {
+            core.client = reqreload('./osuirc.js').start(core, message);
+        }
     },
     ircstop: {
-
+        level: 2,
+        help: "!irc:stop|osu irc leállítása",
+        run: (core, message) => {
+            core.client = reqreload('./osuirc.js').stop(core, message);
+        }
     },
     waifuwrap: {
-
+        level: 2,
+        help: "!waifu:wrap|WaifuCloud oldalwrapper. !waifu:wrap <mode> <tags>",
+        run: (core, message) => {
+            var mode = message.content.toLowerCase().split(' ')[1];
+            var tag = message.content.toLowerCase().split(' ')[2];
+            reqreload('./wrapper.js').wrap(core, mode, tag);
+        }
     },
     waifusync: {
-
+        level: 2,
+        help: "!waifu:sync|WaifuCloud wrapper szinkronizálás.",
+        run: (core, message) => {
+            reqreload('./wrapper.js').sync(core, message);
+        }
     },
     ircto: {
-        
+        level: 2,
+        help: "!to|osu!irc címzett váltása.",
+        run: (core, message) => {
+            message.delete();
+            core.osuirc.irc_channel = message.content.substr(cmdpref.length + 3);
+            message.channel.send('[IRC] Címzett: `' + core.osuirc.irc_channel + '`');
+        }
+    },
+    ircsay: {
+        level: 2,
+        help: "ircsay|osu!irc discord channelben automata üzenetküldés",
+        run: (core, message) => {
+            message.delete();
+            var text = message.content;
+            reqreload('./osuirc.js').say(core, text);
+        }
     }
 }

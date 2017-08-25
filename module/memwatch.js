@@ -9,17 +9,17 @@ module.exports = {
             var memrss = process.memoryUsage().rss;
             if (memrss / 1024 / 1024 > limit) {
                 console.log('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
-                if (core.ready) {
-                    core.bot.channels.get(core.ch.gekkyerrorlog).send('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
+                if (core.discord.ready) {
+                    core.discord.bot.channels.get(core.ch.gekkyerrorlog).send('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
                     if (core.irc_online) {
                         reqreload('./osuirc.js').stop(core, message);
                         setTimeout(() => {
-                            core.bot.destroy().then(() => {
+                            core.discord.bot.destroy().then(() => {
                                 process.exit(2);
                             });
                         }, 2000);
                     } else {
-                        core.bot.destroy().then(() => {
+                        core.discord.bot.destroy().then(() => {
                             process.exit(2);
                         })
                     }

@@ -6,22 +6,22 @@ const c = require('chalk');
 module.exports = function (core) {
     var inp = process.openStdin();
     inp.addListener('data', (d) => {
-        if (core.picker.server || core.picker.channel) {
+        if (core.discord.picker.server || core.discord.picker.channel) {
             reqreload('./channelpicker.js').go(core, d);
         } else if (d.toString().startsWith('>')) {
-            core.bot.channels.get(core.ch.current).send(d.toString().substr(1));
+            core.discord.bot.channels.get(core.ch.current).send(d.toString().substr(1));
         } else {
             var cmd = d.toString().toLowerCase().trim();
             if (cmd == 'close' || cmd == 'stop') {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
                     setTimeout(() => {
-                        core.bot.destroy().then(() => {
+                        core.discord.bot.destroy().then(() => {
                             process.exit(4);
                         });
                     }, 2000);
                 } else {
-                    core.bot.destroy().then(() => {
+                    core.discord.bot.destroy().then(() => {
                         process.exit(4);
                     })
                 }
@@ -29,12 +29,12 @@ module.exports = function (core) {
                 if (core.irc_online) {
                     reqreload('./osuirc.js').stop(core);
                     setTimeout(() => {
-                        core.bot.destroy().then(() => {
+                        core.discord.bot.destroy().then(() => {
                             process.exit(2);
                         });
                     }, 2000);
                 } else {
-                    core.bot.destroy().then(() => {
+                    core.discord.bot.destroy().then(() => {
                         process.exit(2);
                     })
                 }
@@ -70,10 +70,10 @@ module.exports = function (core) {
             } else if (cmd == 'go') {
                 reqreload('./channelpicker.js').go(core);
             } else if (cmd == 'dnd') {
-                core.bot.user.setStatus("dnd");
+                core.discord.bot.user.setStatus("dnd");
                 console.log('Presence: dnd');
             } else if (cmd == 'online') {
-                core.bot.user.setStatus("online");
+                core.discord.bot.user.setStatus("online");
                 console.log('Presence: online');
             } else if (cmd == 'waifu:connect') {
                 reqreload('./waifucloud.js').connect(core);
@@ -91,13 +91,13 @@ module.exports = function (core) {
                 reqreload('./wrapper.js').sync(core);
             } else if (cmd == 'update') {
                 reqreload('./updater.js').ver((motd) => {
-                    core.bot.user.setGame(motd);
+                    core.discord.bot.user.setGame(motd);
                 });
             } else if (cmd.startsWith('update-frame')) {
                 var data = cmd.substr(13);
                 reqreload('./updater.js').fullver((resp) => {
-                    core.bot.user.setGame(resp.ver);
-                    core.bot.channels.get(core.ch.main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + data + '```');
+                    core.discord.bot.user.setGame(resp.ver);
+                    core.discord.bot.channels.get(core.ch.main).send('[UPDATING] => ' + resp.ver + '\n' + resp.desc + '\n```' + data + '```');
                 });
             }
             /* else if (cmd == 'teszt2') {
@@ -108,7 +108,7 @@ module.exports = function (core) {
             // Miért?
             // Idk.
             else if (cmd.startsWith('motd')) {
-                core.bot.user.setGame(d.toString().trim().substr(5));
+                core.discord.bot.user.setGame(d.toString().trim().substr(5));
                 console.log('New motd: ' + d.toString().trim().substr(5));
             }
             else if (cmd == '') {
