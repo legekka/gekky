@@ -2,7 +2,7 @@
 // discord module
 
 var Discord = require('discord.js');
-var reqreload = require('./module/reqreload.js');
+var reqreload = require('./reqreload.js');
 var fs = require('fs');
 var c = require('chalk');
 
@@ -13,9 +13,9 @@ module.exports = {
         core.discord.bot.on('ready', function () {
             if (!core.discord.ready) {
                 core.discord.ready = true;
-                if (core.autorun.irc) { core.client = require('./module/osuirc.js').start(core); }
-                if (core.autorun.osutrack) { core.osutrack.client = require('./module/osutrack.js').startChecker(core); }
-                if (core.autorun.heartbeat) { require('./module/heartbeat.js').start(core); }
+                if (core.autorun.irc) { core.client = require('./osuirc.js').start(core); }
+                if (core.autorun.osutrack) { core.osutrack.client = require('./osutrack.js').startChecker(core); }
+                if (core.autorun.heartbeat) { require('./heartbeat.js').start(core); }
                 core.discord.bot.channels.get(core.discord.ch.main).send('[online]');
                 console.log(c.gray('[Discord]') + ' online');
             }
@@ -23,7 +23,7 @@ module.exports = {
             reqreload('./updater.js').ver((motd) => {
                 core.discord.bot.user.setGame(motd);
             });
-            require('./module/channelpicker.js').build(core);
+            require('./channelpicker.js').build(core);
         });
         
         core.discord.bot.on('message', (message) => {
