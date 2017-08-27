@@ -46,7 +46,7 @@ module.exports = {
                         msg = c.grey(msg);
                     }
                     if (message.indexOf('gekka') >= 0 && from != 'legekka') {
-                        core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.dsettings.ownerID}>`).then((message) => {
+                        core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.ownerID}>`).then((message) => {
                             message.delete();
                         });
                     }
@@ -58,14 +58,14 @@ module.exports = {
 
             core.osuirc.client.addListener('pm', (from, text, message) => {
                 console.log(c.yellow('[IRC] ') + c.cyan(from) + ': ' + text);
-                if (core.discord.bot.users.get(core.discord.dsettings.ownerID).presence.status != 'online' || (
-                    core.discord.bot.users.get(core.discord.dsettings.ownerID).presence.status == 'online' &&
-                    core.discord.bot.users.get(core.discord.dsettings.ownerID).presence.game != 'osu!')) {
-                    core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.dsettings.ownerID}>`).then((message) => {
+                if (core.discord.bot.users.get(core.discord.ownerID).presence.status != 'online' || (
+                    core.discord.bot.users.get(core.discord.ownerID).presence.status == 'online' &&
+                    core.discord.bot.users.get(core.discord.ownerID).presence.game != 'osu!')) {
+                    core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.ownerID}>`).then((message) => {
                         message.delete();
                     });
                 }
-                if (core.discord.bot.users.get(core.discord.dsettings.ownerID).presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
+                if (core.discord.bot.users.get(core.discord.ownerID).presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
                     core.osuirc.client.say(from, afkmessage());
                     console.log(c.yellow('[IRC] ') + from + ' ' + c.green('gekky: ') + '[afk message]');
                     core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
@@ -80,7 +80,7 @@ module.exports = {
                 } else {
                     console.log(c.yellow('[IRC] ') + timeStamp() + ' PM' + from + ' ' + text);
                     core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM' + from + '` *' + text + '*');
-                    core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.dsettings.ownerID}>`).then((message) => {
+                    core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.ownerID}>`).then((message) => {
                         message.delete();
                     });
                 }
