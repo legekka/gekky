@@ -70,9 +70,7 @@ function nsfwFilter(core, message, searchword, mode) {
 function sankakuSearch(core, message, searchword, callback) {
     var ncounter = message.id;
     var url_link = 'https://chan.sankakucomplex.com/?tags=';
-    while (searchword != searchword.replace(' ', '+')) {
-        searchword = searchword.replace(' ', '+');
-    }
+    searchword = searchword.join('+');
     url_link = url_link + searchword;
 
     if (url_link.indexOf('order:') < 0) {
