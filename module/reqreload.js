@@ -1,9 +1,10 @@
 // reqreload.js
 // require cache reloader shortifier
 
-var decache = require('decache');
+//var decache = require('decache');
 
 module.exports = (modulename) => {
-    decache(modulename);
+    delete require.cache[require.resolve(modulename)];
+    //decache(modulename);
     return require(modulename);
 }

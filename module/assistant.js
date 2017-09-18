@@ -24,7 +24,7 @@ module.exports = {
             message.channel.send({embed:response});
         });
         delete require.cache[require.resolve('./workdayinfo.js')];
-        require('./workdayinfo')((response) => {
+        require('./workdayinfo.js')((response) => {
             message.channel.send({embed:response});
         });
     }

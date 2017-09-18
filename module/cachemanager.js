@@ -33,10 +33,10 @@ module.exports = {
 function delCache() {
     console.log('Clearing...');
     fs.readdir(path, (err, files) => {
-        if (err) { throw err; }
+        //if (err) { throw err; }
         for (const file of files) {
             fs.unlink(path + file, err => {
-                if (err) { throw err; }
+                //if (err) { throw err; }
             });
         }
     });
@@ -61,10 +61,10 @@ function manageSize(limit) {
         if (mb > limit) {
             console.log('Clearing...');
             fs.readdir(path, (err, files) => {
-                if (err) { throw err; }
+                //if (err) { throw err; }
                 for (const file of files) {
                     fs.unlink(path + file, err => {
-                        if (err) { throw err; }
+                        //if (err) { throw err; }
                     });
                 }
             });

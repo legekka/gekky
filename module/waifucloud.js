@@ -17,7 +17,7 @@ module.exports = {
             if (core.waifucloud.connection == undefined) {
                 reqreload('./waifucloud.js').connect(core);
             }
-        }, 1000);
+        }, 10000);
         core.waifucloud.client = new WebSocketClient();
         core.waifucloud.client.on('connectFailed', function (error) {
             WC('Connect Error: ' + error.toString());

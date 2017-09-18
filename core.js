@@ -75,8 +75,10 @@ var core = {
     }
 }
 
+// [CodeBuilder]
+
 // starting modules
-core.autorun.console ? require('./module/console.js')(core) : null
+core.autorun.console ? require('./module/jsconsole.js').start(core) : null
 core.autorun.discord ? require('./module/discord.js').start(core) : null
 core.autorun.cachemanager ? require('./module/cachemanager.js').start(core) : null
 core.autorun.yrexia ? require('./module/yrexia.js').start(core) : null

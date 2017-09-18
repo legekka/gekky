@@ -47,8 +47,8 @@ function httpGet(url, filename, callback) {
 
 module.exports = {
     file: (filePath, callback) => {
-        var fpwe = filePath.substr(0, filePath.length - 3);
-        var filename = fpwe.split('/')[fpwe.split('/').length - 1];
+        var filename = filePath.split('/')[filePath.split('/').length - 1];
+        filename = filename.substr(0, filename.length - filename.split('.')[filename.split('.').length - 1].length);
         webp.cwebp(filePath, path + filename + 'webp', '-q 100', () => {
             return callback(path + filename + 'webp');
         });

@@ -10,4 +10,5 @@ data/yrexia/bridge/private/*
 oppai_cache/
 data/guildSettings.json
 data/passwords.json
+complete.js
 /.vs

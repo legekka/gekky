@@ -15,7 +15,7 @@ module.exports = {
         level: 0,
         help: "!weather|Időjárás információ. !weather <város>",
         run: (core, message) => {
-            reqreload('./weather.js')(message.content.substr(cmdpref.length + 8), (response) => {
+            reqreload('./weather.js')(message.content.substr(core.discord.dsettings.getCmdpref(message.guild.id).length + 8), (response) => {
                 message.channel.send({ embed: response });
             });
         }
@@ -24,13 +24,13 @@ module.exports = {
         level: 0,
         help: "!help|Lista a parancsokról, leírással.",
         run: (core, message) => {
-            reqreload('./help.js').list(message, (list) => {
+            reqreload('./help.js').list(message, module.exports, core, (list) => {
                 var str = '';
                 for (i in list) {
-                    str += '**' + list[i].cmd + '**\n    *' + list[i].desc + '*\n';
+                    str += '`!' + list[i].cmd + '` - *' + list[i].desc + '*\n';
                 }
-                while (str.replace('!', cmdpref) != str) {
-                    str = str.replace('!', cmdpref);
+                while (str.replace('!', core.discord.dsettings.getCmdpref(message.guild.id)) != str) {
+                    str = str.replace('!', core.discord.dsettings.getCmdpref(message.guild.id));
                 }
                 message.channel.send({
                     embed: {
@@ -128,7 +128,7 @@ module.exports = {
     },
     unkill: {
         level: 1,
-        help: "!kill|Meggondolja magát.",
+        help: "!unkill|Meggondolja magát.",
         run: (core, message) => {
             reqreload('./kill.js').remdeadlist(core, message);
         }
@@ -177,7 +177,7 @@ module.exports = {
         level: 2,
         help: "!motd|'playing <game>' megváltoztatására. !motd <szó>",
         run: (core, message) => {
-            motd = message.content.substr(cmdpref.length + 'motd'.length + 1);
+            motd = message.content.substr(core.discord.dsettings.getCmdpref(message.guild.id).length + 'motd'.length + 1);
             core.discord.bot.user.setGame(motd);
         }
     },
@@ -310,7 +310,7 @@ module.exports = {
         help: "!to|osu!irc címzett váltása.",
         run: (core, message) => {
             message.delete();
-            core.osuirc.channel = message.content.substr(cmdpref.length + 3);
+            core.osuirc.channel = message.content.substr(core.discord.dsettings.getCmdpref(message.guild.id).length + 3);
             message.channel.send('[IRC] Címzett: `' + core.osuirc.channel + '`');
             core.discord.bot.channels.get(core.discord.ch.osuirc).setTopic("Current channel: " + core.osuirc.channel);
         }
@@ -326,7 +326,7 @@ module.exports = {
     },
     addadmin: {
         level: 2,
-        help: "",
+        help: "!addadmin|Szerver admin hozzáadása gekkyhez.",
         run: (core, message) => {
             var hls = message.mentions.members;
             if (hls.size == 0) {
@@ -344,7 +344,7 @@ module.exports = {
     },
     remadmin: {
         level: 2,
-        help: "",
+        help: "!remadmin|Szerver admin eltávolítása gekkyből.",
         run: (core, message) => {
             var hls = message.mentions.members;
             if (hls.size == 0) {
@@ -362,7 +362,7 @@ module.exports = {
     },
     admins: {
         level: 0,
-        help: "",
+        help: "!admins|Szerveradminok listája.",
         run: (core, message) => {
             var admins = core.discord.dsettings.admins(message.guild.id).map((v, i, a) => message.guild.members.get(v).displayName);
             if (admins.length == 0) {
