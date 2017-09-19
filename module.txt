@@ -1,0 +1,14 @@
+var fs = require('fs');
+var getSize = require('get-folder-size');
+var c = require('chalk');
+var exec = require('child_process').exec;
+var request = require("request");
+var os = require("os");
+var irc = require('irc');
+var https = require('https');
+var osuapi = require('osu-api');
+var osu = new osuapi.Api(JSON.parse(fs.readFileSync('./data/passwords.json').toString()).osuapi);
+var jimp = require('jimp');
+var execSync = require('child_process').execSync;
+var http = require('http');
+var githook = require('github-webhook-handler');

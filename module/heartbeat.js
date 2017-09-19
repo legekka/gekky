@@ -1,8 +1,8 @@
 // heartbeat.js
 // anti discord silent disconnect module
-var c = require('chalk');
 
-module.exports = {
+
+var heartbeat = {
     start: (core) => {
         var role = '347072149451833344';
         core.discord.heartbeat.state = core.discord.bot.guilds.get('281188840084078594').members.get('267741038230110210')._roles.indexOf(role) >= 0;

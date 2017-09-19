@@ -1,17 +1,15 @@
 // dcommand.js
 // specified commands
 
-const reqreload = require('./reqreload.js');
-const fs = require('fs');
 
-module.exports = (core, message) => {
+var dcommand = (core, message) => {
     if (message.channel.type != "text")
         return;
     var cmdpref = core.discord.dsettings.getCmdpref(message.guild.id);
     var tsun = core.discord.dsettings.getTsun(message.guild.id);
     var lower = message.content.toLowerCase();
 
-    var commandModule = reqreload('./command.js');
+    var commandModule = command;
     var is_a_command = false;
     var cmd = lower.split(' ')[0].substr(cmdpref.length).replace(':', '_');
 
@@ -31,10 +29,10 @@ module.exports = (core, message) => {
                 is_a_command = true;
             }
             else{
-                reqreload('./talk.js').wrongcommand(message);
+                talk.wrongcommand(message);
             }
         } else if (message.author.id != core.discord.creatorID) {
-            reqreload('./talk.js').wrongcommand(message);
+            talk.wrongcommand(message);
         }
     }
     return is_a_command;

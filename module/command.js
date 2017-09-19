@@ -1,8 +1,8 @@
 // command.js
 // commands
 
-var reqreload = require('./reqreload.js');
-module.exports = {
+
+var command = {
     lenny: {
         level: 0,
         help: "!lenny|Beszúr egy lenny fejet.",
@@ -15,7 +15,7 @@ module.exports = {
         level: 0,
         help: "!weather|Időjárás információ. !weather <város>",
         run: (core, message) => {
-            reqreload('./weather.js')(message.content.substr(core.discord.dsettings.getCmdpref(message.guild.id).length + 8), (response) => {
+            weather(message.content.substr(core.discord.dsettings.getCmdpref(message.guild.id).length + 8), (response) => {
                 message.channel.send({ embed: response });
             });
         }
@@ -24,7 +24,7 @@ module.exports = {
         level: 0,
         help: "!help|Lista a parancsokról, leírással.",
         run: (core, message) => {
-            reqreload('./help.js').list(message, module.exports, core, (list) => {
+            help.list(message, module.exports, core, (list) => {
                 var str = '';
                 for (i in list) {
                     str += '`!' + list[i].cmd + '` - *' + list[i].desc + '*\n';
@@ -52,7 +52,7 @@ module.exports = {
         level: 0,
         help: "!ver|Kiírja a jelenlegi verziót.",
         run: (core, message) => {
-            reqreload('./updater.js').fullver((resp) => {
+            updater.fullver((resp) => {
                 message.channel.send({
                     embed: {
                         'title': resp.ver,
@@ -68,7 +68,7 @@ module.exports = {
         run: (core, message) => {
             var tags = message.content.toLowerCase().split(' ');
             tags.splice(0, 1);
-            reqreload('./sankaku.js').search(core, message, tags, "nhentai");
+            sankaku.search(core, message, tags, "nhentai");
         }
     },
     sankaku: {
@@ -77,14 +77,14 @@ module.exports = {
         run: (core, message) => {
             var tags = message.content.toLowerCase().split(' ');
             tags.splice(0, 1);
-            reqreload('./sankaku.js').search(core, message, tags, "sankaku");
+            sankaku.search(core, message, tags, "sankaku");
         }
     },
     waifu2x: {
         level: 0,
         help: "!waifu2x|Waifu2x-caffe imageupconvert. !waifu2x <image-url> [BETA]",
         run: (core, message) => {
-            require('./yrexia.js').waifu2x(core, message, message.content.split(' ')[1].trim());
+            yrexia.waifu2x(core, message, message.content.split(' ')[1].trim());
         }
     },
     waifucloud: {
@@ -93,44 +93,44 @@ module.exports = {
         run: (core, message) => {
             var tags = message.content.toLowerCase().split(' ');
             tags.splice(0, 1);
-            reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
+            sankaku.search(core, message, tags, "waifucloud", "random");
         }
     },
     waifu: {
         level: 0,
-        help: "!waifucloud|WaifuCloud kép kereső. !waifucloud <tagek> vagy !waifu <tagek>",
+        help: "!waifu|WaifuCloud kép kereső. !waifucloud <tagek> vagy !waifu <tagek>",
         run: (core, message) => {
             var tags = message.content.toLowerCase().split(' ');
             tags.splice(0, 1);
-            reqreload('./sankaku.js').search(core, message, tags, "waifucloud", "random");
+            sankaku.search(core, message, tags, "waifucloud", "random");
         }
     },
     waifu_stats: {
         level: 0,
         help: "!waifu:stats|WaifuCloud adatbázis adatok.",
         run: (core, message) => {
-            reqreload('./waifucloud.js').stats(core, message);
+            waifucloud.stats(core, message);
         }
     },
     stats: {
         level: 0,
         help: "!stats|Gekky adatai.",
         run: (core, message) => {
-            reqreload('./memwatch.js').stats(core, message);
+            memwatch.stats(core, message);
         }
     },
     kill: {
         level: 1,
         help: "!kill|Megöli gekky az alanyt. !kill @user#1234",
         run: (core, message) => {
-            reqreload('./kill.js').adddeadlist(core, message);
+            kill.adddeadlist(core, message);
         }
     },
     unkill: {
         level: 1,
         help: "!unkill|Meggondolja magát.",
         run: (core, message) => {
-            reqreload('./kill.js').remdeadlist(core, message);
+            kill.remdeadlist(core, message);
         }
     },
     del: {
@@ -161,7 +161,7 @@ module.exports = {
         level: 3,
         help: "!workdayinfo|Munkanappal kapcsolatos információk.",
         run: (core, message) => {
-            reqreload('./workdayinfo.js')((response) => {
+            workdayinfo((response) => {
                 message.channel.send({ embed: response });
             });
         }
@@ -170,7 +170,7 @@ module.exports = {
         level: 3,
         help: "ohayo owo",
         run: (core, message) => {
-            reqreload('./assistant.js').ohio(message);
+            assistant.ohio(message);
         }
     },
     motd: {
@@ -217,21 +217,21 @@ module.exports = {
         level: 2,
         help: "!checkcache|Cache méret ellenőrzése.",
         run: (core, message) => {
-            reqreload('./cachemanager.js').check(core, message);
+            cachemanager.check(core, message);
         }
     },
     delcache: {
         level: 2,
         help: "!delcache|Cache mappa ürítése.",
         run: (core, message) => {
-            reqreload('./cachemanager.js').del(message);
+            cachemanager.del(message);
         }
     },
     addbluser: {
         level: 1,
         help: "!addbluser|Felhasználó hozzáadása a blacklisthez.",
         run: (core, message) => {
-            reqreload('./blacklist.js').addUser(message.content.split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            blacklist.addUser(message.content.split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
@@ -240,7 +240,7 @@ module.exports = {
         level: 1,
         help: "!rembluser|UserID eltávolítása a blacklistből",
         run: (core, message) => {
-            reqreload('./blacklist.js').remUser(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            blacklist.remUser(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
@@ -249,7 +249,7 @@ module.exports = {
         level: 1,
         help: "!addblchannel|ChannelID hozzáadása a blacklisthez",
         run: (core, message) => {
-            reqreload('./blacklist.js').addChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            blacklist.addChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
@@ -258,7 +258,7 @@ module.exports = {
         level: 1,
         help: "!remblchannel|ChannelID eltávolítása a blacklistből",
         run: (core, message) => {
-            reqreload('./blacklist.js').remChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
+            blacklist.remChannel(message.content.toLowerCase().split(' ')[1].substr(2).replace('>', ''), (msg) => {
                 message.channel.send(msg);
             });
         }
@@ -268,8 +268,8 @@ module.exports = {
         help: "!irc:reload|osu irc újraindítása",
         run: (core, message) => {
             if (core.osuirc.ready) {
-                reqreload('./osuirc.js').stop(core, message);
-                reqreload('./osuirc.js').start(core, message);
+                osuirc.stop(core, message);
+                osuirc.start(core, message);
             } else {
                 message.channel.send('**[IRC] is not connected.**');
             }
@@ -279,14 +279,14 @@ module.exports = {
         level: 2,
         help: "!irc:start|osu irc elindítása",
         run: (core, message) => {
-            core.client = reqreload('./osuirc.js').start(core, message);
+            core.osuirc.client = reqreload('./osuirc.js').start(core, message);
         }
     },
     irc_stop: {
         level: 2,
         help: "!irc:stop|osu irc leállítása",
         run: (core, message) => {
-            core.client = reqreload('./osuirc.js').stop(core, message);
+            core.osuirc.client = reqreload('./osuirc.js').stop(core, message);
         }
     },
     waifu_wrap: {
@@ -295,14 +295,14 @@ module.exports = {
         run: (core, message) => {
             var mode = message.content.toLowerCase().split(' ')[1];
             var tag = message.content.toLowerCase().split(' ')[2];
-            reqreload('./wrapper.js').wrap(core, mode, tag);
+            wrapper.wrap(core, mode, tag);
         }
     },
     waifu_sync: {
         level: 2,
         help: "!waifu:sync|WaifuCloud wrapper szinkronizálás.",
         run: (core, message) => {
-            reqreload('./wrapper.js').sync(core, message);
+            wrapper.sync(core, message);
         }
     },
     ircto: {
@@ -321,7 +321,7 @@ module.exports = {
         run: (core, message) => {
             message.delete();
             var text = message.content;
-            reqreload('./osuirc.js').say(core, text);
+            osuirc.say(core, text);
         }
     },
     addadmin: {
@@ -338,7 +338,7 @@ module.exports = {
                     core.discord.dsettings.addAdmin(message.guild.id, key);
                     names.push(value.displayName);
                 });
-                reqreload('./command.js').admins.run(core, message);
+                command.admins.run(core, message);
             }
         }
     },
@@ -356,7 +356,7 @@ module.exports = {
                     core.discord.dsettings.removeAdmin(message.guild.id, key);
                     names.push(value.displayName);
                 });
-                reqreload('./command.js').admins.run(core, message);
+                command.admins.run(core, message);
             }
         }
     },

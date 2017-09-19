@@ -1,14 +1,10 @@
 // discord.js
 // discord module
 
-var Discord = require('discord.js');
-var reqreload = require('./reqreload.js');
-var fs = require('fs');
-var c = require('chalk');
 
-module.exports = {
+var discord = {
     start: (core) => {
-        core.discord.bot = new Discord.Client();
+        core.discord.bot = new require('discord.js').Client();
         core.discord.bot.login(core.discord.token);
         core.discord.bot.on('ready', function () {
             if (!core.discord.ready) {
@@ -20,27 +16,27 @@ module.exports = {
                 console.log(c.gray('[Discord]') + ' online');
             }
             core.discord.bot.user.setStatus("online");
-            reqreload('./updater.js').ver((motd) => {
+            updater.ver((motd) => {
                 core.discord.bot.user.setGame(motd);
             });
-            require('./channelpicker.js').build(core);
+            channelpicker.build(core);
         });
         core.discord.bot.on('message', (message) => {
             // tsundere messages
-            reqreload('./talk.js').default(core, message);
+            talk.default(core, message);
             // commands with prefix
-            var is_a_command = reqreload('./dcommand.js')(core, message);
+            var is_a_command = dcommand(core, message);
             // message logger
-            reqreload('./log.js').messageConsoleLog(core, message, is_a_command);
+            log.messageConsoleLog(core, message, is_a_command);
             // webp converter when image attachment
-            reqreload('./webpconvert.js').message(core, message);
+            webpconvert.message(core, message);
             // kill - message deleter
-            reqreload('./kill.js').kill(core, message);
+            kill.kill(core, message);
             // exit
             var prefix = core.discord.dsettings.getCmdpref(message.guild.id);
             if (core.discord.ownerID == message.author.id && (message.content.toLowerCase() == `${prefix}stop` || message.content.toLowerCase() == `${prefix}close`)) {
                 if (core.osuirc.ready) {
-                    reqreload('./osuirc.js').stop(core, message);
+                    osuirc.stop(core, message);
                     setTimeout(() => {
                         core.discord.bot.destroy().then(() => {
                             process.exit(4);
@@ -54,7 +50,7 @@ module.exports = {
             }
             if (core.discord.ownerID == message.author.id && message.content.toLowerCase() == `${prefix}reload`) {
                 if (core.osuirc.ready) {
-                    reqreload('./osuirc.js').stop(core, message);
+                    osuirc.stop(core, message);
                     setTimeout(() => {
                         core.discord.bot.destroy().then(() => {
                             process.exit(2);

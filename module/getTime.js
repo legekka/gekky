@@ -1,5 +1,7 @@
+// getTime.js
+// simple timestamp module
 
-module.exports = function getTime(format) {
+var getTime = (format) => {
     var da = new Date();
     switch (format) {
         case 'time': return da.getHours() + ':' + da.getMinutes() + ':' + da.getSeconds();

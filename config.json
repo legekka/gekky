@@ -1,0 +1,26 @@
+{
+    "blacklist": {
+        "path1": "./data/blacklist.txt",
+        "path2": "./data/channel_blacklist.txt"
+    },
+    "cachemanager": {
+        "path": "../cache/"
+    },
+    "dsettings": {
+        "guildSettingsPath": "./data/guildSettings.json"
+    },
+    "log": {
+        "path": "../log.txt"
+    },
+    "osutrack": {
+        "path": "./data/osu_scores.txt",
+        "userlistpath": "./data/osu_scores_userlist.txt",
+        "playpath" : "./data/osu_plays.txt"
+    },
+    "sankaku": {
+        "path": "../cache/"
+    },
+    "talk": {
+        "path": ".data/dialogs.json"
+    }
+}

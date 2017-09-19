@@ -1,16 +1,16 @@
 // memwatch.js
 // memory-leak watcher
 
-var limit = 500;
 
-module.exports = {
+var memwatch = {
+    limit: 500,
     start: (core) => {
         setInterval(() => {
             var memrss = process.memoryUsage().rss;
-            if (memrss / 1024 / 1024 > limit) {
-                console.log('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
+            if (memrss / 1024 / 1024 > memwatch.limit) {
+                console.log('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + memwatch.limit.toFixed(2) + " MB");
                 if (core.discord.ready) {
-                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + limit.toFixed(2) + " MB");
+                    core.discord.bot.channels.get(core.discord.ch.gekkyerrorlog).send('Memory overload: ' + (memrss / 1024 / 1024).toFixed(2) + ' MB / ' + memwatch.limit.toFixed(2) + " MB");
                     if (core.osuirc.ready) {
                         reqreload('./osuirc.js').stop(core, message);
                         setTimeout(() => {
@@ -42,23 +42,23 @@ module.exports = {
         var memrss = process.memoryUsage().rss;
         memrss = (memrss / 1024 / 1024).toFixed(2);
         if (message != undefined) {
-            message.channel.send({embed:
+            message.channel.send({
+                embed:
                 {
                     'title': 'Gekky-Status',
-                    'description': 'Uptime: ' + format(process.uptime()) +'\nRam usage: ' + memrss + ' MB'
+                    'description': 'Uptime: ' + memwatch.format(process.uptime()) + '\nRam usage: ' + memrss + ' MB'
                 }
             })
         }
-    }
-}
+    },
+    format: (seconds) => {
+        function pad(s) {
+            return (s < 10 ? '0' : '') + s;
+        }
+        var hours = Math.floor(seconds / (60 * 60));
+        var minutes = Math.floor(seconds % (60 * 60) / 60);
+        var seconds = Math.floor(seconds % 60);
 
-function format(seconds) {
-    function pad(s) {
-        return (s < 10 ? '0' : '') + s;
+        return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
     }
-    var hours = Math.floor(seconds / (60 * 60));
-    var minutes = Math.floor(seconds % (60 * 60) / 60);
-    var seconds = Math.floor(seconds % 60);
-
-    return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
 }

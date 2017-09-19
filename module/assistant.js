@@ -1,7 +1,7 @@
 // assistant.js
 // ohio function
 
-module.exports = {
+var assistant = {
     ohio: (message) => {
         var da = new Date();
         var str = '';

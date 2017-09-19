@@ -2,13 +2,11 @@
 // checking if message author or channel is blacklisted
 // updating lists in realtime
 
-var fs = require('fs');
-var path1 = './data/blacklist.txt';
-var path2 = './data/channel_blacklist.txt';
-
-module.exports = {
+var blacklist = {
+    path1: config.blacklist.path1,
+    path2: config.blacklist.path2,
     isBlacklisted: (message) => {
-        var text = fs.readFileSync(path1).toString().split('\n');
+        var text = fs.readFileSync(blacklist.path1).toString().split('\n');
         var i = 0;
         while (i < text.length && message.author.id != text[i]) {
             i++;
@@ -29,7 +27,7 @@ module.exports = {
     },
     addUser: (id, callback) => {
         if (!isNaN(id)) {
-            var text = fs.readFileSync(path1).toString().split('\n');
+            var text = fs.readFileSync(blacklist.path1).toString().split('\n');
             if (text.indexOf(id) < 0) {
                 text.push(id);
                 var msg = id + ' userID hozzáadva a blacklisthez.';
@@ -40,7 +38,7 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                fs.writeFileSync(path1, str);
+                fs.writeFileSync(blacklist.path1, str);
                 return callback(msg);
             } else {
                 var msg = id + ' userID már szerepel a blacklistben.';
@@ -54,7 +52,7 @@ module.exports = {
     },
     remUser: (id, callback) => {
         if (!isNaN(id)) {
-            text = fs.readFileSync(path1).toString().split('\n');
+            text = fs.readFileSync(blacklist.path1).toString().split('\n');
             if (text.indexOf(id) >= 0) {
                 text.splice(text.indexOf(id), 1);
                 var msg = id + ' userID eltávolítva a blacklistből.';
@@ -65,7 +63,7 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                fs.writeFileSync(path1, str);
+                fs.writeFileSync(blacklist.path1, str);
                 return callback(msg);
             } else {
                 var msg = id + ' userID nem szerepel a blacklistben.';
@@ -79,7 +77,7 @@ module.exports = {
     },
     addChannel: (id, callback) => {
         if (!isNaN(id)) {
-            text = fs.readFileSync(path2).toString().split('\n');
+            text = fs.readFileSync(blacklist.path2).toString().split('\n');
             if (text.indexOf(id) < 0) {
                 text.push(id);
                 var msg = id + ' channelD hozzáadva a blacklisthez.';
@@ -90,7 +88,7 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                fs.writeFileSync(path2, str);
+                fs.writeFileSync(blacklist.path2, str);
                 return callback(msg);
             } else {
                 var msg = id + ' channelID már szerepel a blacklistben.';
@@ -104,7 +102,7 @@ module.exports = {
     },
     remChannel: (id, callback) => {
         if (!isNaN(id)) {
-            text = fs.readFileSync(path2).toString().split('\n');
+            text = fs.readFileSync(blacklist.path2).toString().split('\n');
             if (text.indexOf(id) >= 0) {
                 text.splice(text.indexOf(id), 1);
                 var msg = id + ' channelID eltávolítva a blacklistből.';
@@ -115,7 +113,7 @@ module.exports = {
                     i++;
                 }
                 str += text[text.length - 1];
-                fs.writeFileSync(path2, str);
+                fs.writeFileSync(blacklist.path2, str);
                 return callback(msg);
             } else {
                 var msg = id + ' channelID nem szerepel a blacklistben.';

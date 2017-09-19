@@ -1,7 +1,7 @@
 // channelpicker.js
 // builds guild specified channel list for core
 
-module.exports = {
+var channelpicker = {
     build: (core) => {
         core.discord.servers = [];
         var guilds = core.discord.bot.guilds.array();

@@ -1,25 +1,19 @@
 // updater.js
 // checking and updating from github if needed
 
-var exec = require('child_process').exec;
-var execSync = require('child_process').execSync;
-const c = require('chalk');
-const githook = require('github-webhook-handler');
-var handler = githook({
-    path: '/webhook',
-    secret: 'kutya'
-});
-const http = require('http');
 
-var resp = {
-    'update': false,
-    'full': false,
-    'core': false,
-    'irc': false,
-    'data': ''
-}
-
-module.exports = {
+var updater = {
+    resp: {
+        'update': false,
+        'full': false,
+        'core': false,
+        'irc': false,
+        'data': ''
+    },
+    handler = githook({
+        path: '/webhook',
+        secret: 'kutya'
+    }),
     isRegistered: false,
     ver: (callback) => {
         lastcomm = exec('git log -n 1');
@@ -49,36 +43,36 @@ module.exports = {
 
     registerUpdate: (callback) => {
         http.createServer((request, result) => {
-            handler(request, result, function (error) {
+            updater.handler(request, result, function (error) {
                 result.statusCode = 404;
                 result.end("It's forbidden to do this!");
             });
         }).listen(4242);
 
-        handler.on('error', (error) => {
+        updater.handler.on('error', (error) => {
             console.log(c.green('[UPDATER] ') + 'ERROR: ' + error.message);
-            return callback(resp);
+            return callback(updater.resp);
         });
 
-        handler.on('push', (pushData) => {
+        updater.handler.on('push', (pushData) => {
             var output = execSync('git pull origin master');
-            resp.update = true;
+            updater.resp.update = true;
             if (output.indexOf('frame.js') >= 0) {
-                resp.full = true;
+                updater.resp.full = true;
             }
             if (output.indexOf('core.js') >= 0 ||
                 output.indexOf('jsconsole.js') >= 0 ||
-                output.indexOf('cachemanager.js') >= 0 || 
+                output.indexOf('cachemanager.js') >= 0 ||
                 output.indexOf('osutrack.js') >= 0 ||
                 output.indexOf('waifucloud.js') >= 0) {
-                resp.core = true;
+                updater.resp.core = true;
             }
             if (output.indexOf('osuirc.js') >= 0) {
-                resp.irc = true;
+                updater.resp.irc = true;
             }
-            resp.data = output;
+            updater.resp.data = output;
 
-            return callback(resp);
+            return callback(updater.resp);
         });
     }
 }

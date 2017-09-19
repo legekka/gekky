@@ -2,7 +2,7 @@
 // voice and music things
 
 
-module.exports = {
+var music = {
     teszt: (core) => {
         var vchannels = core.discord.bot.channels.findAll('type', 'voice');
         var i = -1;
@@ -26,7 +26,7 @@ module.exports = {
         } while (i < vchannels.length && !megvan);
         console.log(megvan);
         console.log(vchannels[i].name);
-        connect(vchannels[i]).then(connection => {
+        music.connect(vchannels[i]).then(connection => {
             console.log('connected.');
             const dispatcher = connection.playFile('../music.mp3');
             dispatcher.setVolume(0.1);
@@ -34,15 +34,14 @@ module.exports = {
                 connection.disconnect();
             });
         });
-    }
-}
-
-function connect(voiceChannel) {
-    return new Promise((resolve, reject) => {
-        voiceChannel.join().then(connection => {
-            resolve(connection);
-        }).catch(err => {
-            reject(err);
+    },
+    connect: (voiceChannel) => {
+        return new Promise((resolve, reject) => {
+            voiceChannel.join().then(connection => {
+                resolve(connection);
+            }).catch(err => {
+                reject(err);
+            })
         })
-    })
+    }
 }

@@ -1,23 +1,8 @@
 // osuirc.js
 // osu chat discord integration
-var irc = require('irc');
-var fs = require('fs');
-var c = require('chalk');
-
-function afkmessage() {
-    var da = new Date();
-    var str = "Oy. I'm gekky. legekka is currently offline. ";
-    if (da.getHours() > 23 || da.getHours() < 9) {
-        str += "He's probably sleeping so... I don't think he'll answer. ";
-    } else {
-        str += "He's probably at work. Idk. Maybe he'll answer in a few hours. ";
-    }
-    str += "Anyways I notified him.";
-    return str;
-}
 
 
-module.exports = {
+var osuirc = {
     start: (core, messag) => {
         if (!core.osuirc.ready) {
             var ch = core.discord.ch;
@@ -41,7 +26,7 @@ module.exports = {
             });
             core.osuirc.client.addListener('message', (from, to, message) => {
                 if (to[0] == '#') {
-                    var msg = timeStamp() + ' ' + to + ' ' + from + ': ' + message;
+                    var msg = osuirc.timeStamp() + ' ' + to + ' ' + from + ': ' + message;
                     if (to == '#osu') {
                         msg = c.grey(msg);
                     }
@@ -51,7 +36,7 @@ module.exports = {
                         });
                     }
                     console.log(c.yellow('[IRC] ') + msg);
-                    core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
+                    core.discord.bot.channels.get(ch.osuirc).send('`' + osuirc.timeStamp() + '` `' + to + '` `' + from + ':` ' + message);
                 }
             });
 
@@ -66,20 +51,20 @@ module.exports = {
                     });
                 }
                 if (core.discord.bot.users.get(core.discord.ownerID).presence.status == 'offline' && userlist.indexOf('legekka') < 0) {
-                    core.osuirc.client.say(from, afkmessage());
+                    core.osuirc.client.say(from, osuirc.afkmessage());
                     console.log(c.yellow('[IRC] ') + from + ' ' + c.green('gekky: ') + '[afk message]');
-                    core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
+                    core.discord.bot.channels.get(ch.osuirc).send('`' + osuirc.timeStamp() + '` `PM ' + from + '` `gekky:` [AFK MESSAGE]');
                 }
-                core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + from + ':` ' + text);
+                core.discord.bot.channels.get(ch.osuirc).send('`' + osuirc.timeStamp() + '` `' + from + ':` ' + text);
             });
 
             core.osuirc.client.addListener('action', (from, to, text, message) => {
                 if (to != 'legekka') {
-                    console.log(c.yellow('[IRC] ') + timeStamp() + ' ' + to + ' ' + from + ' ' + text);
-                    core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
+                    console.log(c.yellow('[IRC] ') + osuirc.timeStamp() + ' ' + to + ' ' + from + ' ' + text);
+                    core.discord.bot.channels.get(ch.osuirc).send('`' + osuirc.timeStamp() + '` `' + to + '` `' + from + '` *' + text + '*');
                 } else {
-                    console.log(c.yellow('[IRC] ') + timeStamp() + ' PM' + from + ' ' + text);
-                    core.discord.bot.channels.get(ch.osuirc).send('`' + timeStamp() + '` `PM' + from + '` *' + text + '*');
+                    console.log(c.yellow('[IRC] ') + osuirc.timeStamp() + ' PM' + from + ' ' + text);
+                    core.discord.bot.channels.get(ch.osuirc).send('`' + osuirc.timeStamp() + '` `PM' + from + '` *' + text + '*');
                     core.discord.bot.channels.get(ch.osuirc).send(`<@${core.discord.ownerID}>`).then((message) => {
                         message.delete();
                     });
@@ -154,11 +139,11 @@ module.exports = {
     say: (core, text) => {
         core.osuirc.client.say(core.osuirc.channel, text);
         if (core.osuirc.channel[0] == '#') {
-            var msg = timeStamp() + ' ' + core.osuirc.channel + c.magenta(' legekka: ') + text;
-            var msg2 = '`' + timeStamp() + '` `' + core.osuirc.channel + '` `legekka:` ' + text;
+            var msg = osuirc.timeStamp() + ' ' + core.osuirc.channel + c.magenta(' legekka: ') + text;
+            var msg2 = '`' + osuirc.timeStamp() + '` `' + core.osuirc.channel + '` `legekka:` ' + text;
         } else {
-            var msg = timeStamp() + ' PM ' + core.osuirc.channel + c.magenta(' legekka: ') + text;
-            var msg2 = '`' + timeStamp() + '` `PM ' + core.osuirc.channel + '` `legekka:` ' + text;
+            var msg = osuirc.timeStamp() + ' PM ' + core.osuirc.channel + c.magenta(' legekka: ') + text;
+            var msg2 = '`' + osuirc.timeStamp() + '` `PM ' + core.osuirc.channel + '` `legekka:` ' + text;
         }
         console.log(c.yellow('[IRC] ') + msg);
         core.discord.bot.channels.get(core.discord.ch.osuirc).send(msg2);
@@ -167,16 +152,26 @@ module.exports = {
     teszt: (core) => {
         console.log(core.osuirc.client.chans['#hungarian'].users);
         return core.osuirc.client;
+    },
+    afkmessage: () => {
+        var da = new Date();
+        var str = "Oy. I'm gekky. legekka is currently offline. ";
+        if (da.getHours() > 23 || da.getHours() < 9) {
+            str += "He's probably sleeping so... I don't think he'll answer. ";
+        } else {
+            str += "He's probably at work. Idk. Maybe he'll answer in a few hours. ";
+        }
+        str += "Anyways I notified him.";
+        return str;
+    },
+    timeStamp: () => {
+        var da = new Date();
+        var h = da.getHours();
+        var m = da.getMinutes();
+        var s = da.getSeconds();
+        if (h < 10) { h = '0' + h }
+        if (m < 10) { m = '0' + m }
+        if (s < 10) { s = '0' + s }
+        return h + ':' + m + ':' + s;
     }
-}
-
-function timeStamp() {
-    var da = new Date();
-    var h = da.getHours();
-    var m = da.getMinutes();
-    var s = da.getSeconds();
-    if (h < 10) { h = '0' + h }
-    if (m < 10) { m = '0' + m }
-    if (s < 10) { s = '0' + s }
-    return h + ':' + m + ':' + s;
 }

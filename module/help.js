@@ -1,13 +1,11 @@
 // help.js
 // getting command list
 
-const fs = require('fs');
-var path = './module/command.js';
 
-module.exports = {
+var help = {
     list: (message, commands, core, callback) => {
         var entrylist = [];
-        text = fs.readFileSync(path).toString().split('\n');
+        text = fs.readFileSync('./module/command.js').toString().split('\n');
         var legekka_only = false;
         for (i in text) {
             //text[i] = text[i].trim();

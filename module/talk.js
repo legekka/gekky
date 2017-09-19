@@ -1,55 +1,10 @@
 // talk.js
 // talking part, including tsundere mode
 
-var fs = require('fs');
-var reqreload = require('./reqreload.js');
 
-var path = './data/dialogs.txt';
-var dg = {
-    'def': [], 'hi': [], 'eye': [],
-    'xd': [], 'proba': [], 'emlites': [],
-    'kus': [], 'zsolt': [], 'nana': [], 'szabi': [], 'ante': [], 'mark': [], 'sono': [],
-    'random': function (array) {
-        return array[Math.round(Math.random() * array.length) - 1];
-    }
-};
-
-function loadDialogs() {
-    text = fs.readFileSync(path).toString().split('\n');
-    for (i in text) {
-        switch (text[i].split('	')[0].trim()) {
-            case 's_tsun_def': dg.def.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_hi': dg.hi.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_eye': dg.eye.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_xd': dg.xd.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_proba': dg.proba.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_emlites': dg.emlites.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_kus': dg.kus.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_zsolt': dg.zsolt.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_nana': dg.nana.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_ante': dg.ante.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_szabi': dg.szabi.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_mark': dg.mark.push(text[i].split('	')[1].trim());
-                break;
-            case 's_tsun_sono': dg.sono.push(text[i].split('	')[1].trim());
-                break;
-        }
-    }
-}
-
-loadDialogs();
-module.exports = {
+var talk = {
+    path: config.talk.path,
+    dg: JSON.parse(fs.readFileSync(talk.path).toString()),
     default: (core, message) => {
         tsun = core.discord.dsettings.getTsun(message.guild.id);
         cmdpref = core.discord.dsettings.getCmdpref(message.guild.id);
@@ -59,9 +14,9 @@ module.exports = {
             message.channel.id != core.discord.ch.osuirc &&
             message.channel.id != core.discord.ch.gekkyerrorlog &&
             message.channel.id != core.discord.ch.webps) {
-            reqreload('./channelpicker.js').come(core, message);
+            channelpicker.come(core, message);
         }
-        if (!reqreload('./blacklist.js').isBlacklisted(message)) {
+        if (!blacklist.isBlacklisted(message)) {
             if (lower == ':dddddd' && message.author.username == core.discord.bot.user.username) {
                 setTimeout(() => {
                     message.edit('Nope.');
@@ -91,28 +46,28 @@ module.exports = {
                         message.channel.send('A gmod nem szar.');
                     }
                     else if (lower.indexOf('tsun') >= 0 && lower.indexOf('bot') > 0) {
-                        message.channel.send(dg.random(dg.def));
+                        message.channel.send(talk.random(dg.def));
                     }
                     else if (lower.indexOf('xd') >= 0) {
-                        message.channel.send(dg.random(dg.xd));
+                        message.channel.send(talk.random(dg.xd));
                     }
                     else if (lower.indexOf('zsolt') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.send(dg.random(dg.zsolt));
+                        message.channel.send(talk.random(dg.zsolt));
                     }
                     else if (lower.indexOf('ante') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.send(dg.random(dg.ante));
+                        message.channel.send(talk.random(dg.ante));
                     }
                     else if (lower.indexOf('nana') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.send(dg.random(dg.nana));
+                        message.channel.send(talk.random(dg.nana));
                     }
                     else if (lower.indexOf('szabi') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.send(dg.random(dg.szabi));
+                        message.channel.send(talk.random(dg.szabi));
                     }
                     else if (lower.indexOf('márk') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.send(dg.random(dg.mark));
+                        message.channel.send(talk.random(dg.mark));
                     }
                     else if (lower.indexOf('sono') >= 0 && message.channel.id == '144787515268661248') {
-                        message.channel.send(dg.random(dg.sono));
+                        message.channel.send(talk.random(dg.sono));
                     }
                     else if (lower == 'de') {
                         message.channel.send('Nem!');
@@ -122,19 +77,19 @@ module.exports = {
                     }
                     //TODO
                     else if ((lower.indexOf(core.discord.bot.user.username) >= 0 ||/* lower.indexOf('momi') >= 0 ||*/ lower.indexOf('m0mi') >= 0 || lower.indexOf('mom1') >= 0 || lower.indexOf('m0m1') >= 0 || lower.indexOf(core.discord.bot.user.id) >= 0) && (lower.indexOf("reggel") < 0 || lower.indexOf("ohio"))) {
-                        message.channel.send(dg.random(dg.emlites));
+                        message.channel.send(talk.random(dg.emlites));
                     }
                     else if (lower.startsWith('kus')) {
-                        message.channel.send(dg.random(dg.kus));
+                        message.channel.send(talk.random(dg.kus));
                     }
                     else if ((lower.indexOf('szia') >= 0 || lower == 'hi')) {
-                        message.channel.send(dg.random(dg.hi));
+                        message.channel.send(talk.random(dg.hi));
                     }
                     else if (lower.indexOf('jó éjt') >= 0) {
-                        message.channel.send(dg.random(dg.hi));
+                        message.channel.send(talk.random(dg.hi));
                     }
                     else if ((lower.indexOf('>.>') >= 0) || (lower.indexOf('<.<') >= 0)) {
-                        message.channel.send(dg.random(dg.eye));
+                        message.channel.send(talk.random(dg.eye));
                     }
                     else if (lower.indexOf('jajne') >= 0 || lower.indexOf('jaj ne') >= 0) {
                         message.channel.send('Jaj, de. :3');
@@ -152,6 +107,9 @@ module.exports = {
         }
     },
     wrongcommand: (message) => {
-        message.channel.send(dg.random(dg.proba));
+        message.channel.send(talk.random(dg.proba));
+    },
+    random: (array) => {
+        return array[Math.round(Math.random() * array.length) - 1];
     }
 }
